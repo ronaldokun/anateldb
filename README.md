@@ -1,5 +1,5 @@
 # Project name here
-> Este repositÛrio concentra um conjunto de scripts para navegar, atualizar e baixar informaÁıes dos principais sistemas web utilizados da ANATEL. O p˙blico alvo s„o os servidores do Ûrg„o, uma vez que a maioria dos sistemas utilizados aqui necessitam de autenticaÁ„o cujo acesso È restrito aos servidores da ANATEL.
+> Este reposit√≥rio concentra um conjunto de scripts para navegar, atualizar e baixar informa√ß√µes dos principais sistemas web utilizados da ANATEL. O p√∫blico alvo s√£o os servidores do √≥rg√£o, uma vez que a maioria dos sistemas utilizados aqui necessitam de autentica√ß√£o cujo acesso √© restrito aos servidores da ANATEL.
 
 
 This file will become your README and also the index of your documentation.
