@@ -1,4 +1,5 @@
 repository: ronaldokun/anatelsurf
+encoding: cp1252
 output: web
 topnav_title: anatelsurf
 site_title: anatelsurf
