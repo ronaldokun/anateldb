@@ -1,6 +1,7 @@
 {
-  "anatelsurf": {
+  "anatelspyder": {
     "Overview": "/",
-    "module name here": "core.html"
+    "module name here": "core.html",
+    "Title": "queries.html"
   }
 }
