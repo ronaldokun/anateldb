@@ -21,6 +21,7 @@ def filter_database(path):
     radcom = radcom.loc[:, RADIODIFUSAO]
     mosaico = mosaico.loc[:, RADIODIFUSAO]
     radiodifusao = mosaico.append(radcom).sort_values('Frequência')
+    radiodi
     slma = (stel.Frequência >= 108) & (stel.Frequência <= 137)
     telecom = stel[~slma].reset_index()
     slma = stel[slma].reset_index()

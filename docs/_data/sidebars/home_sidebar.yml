@@ -10,12 +10,12 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
-      title: module name here
-      url: core.html
-    - output: web,pdf
       title: Title
+      url: parser.html
+    - output: web,pdf
+      title: Queries SQL e MongoDB
       url: queries.html
     output: web
-    title: anatelspyder
+    title: anateldb
   output: web
   title: Sidebar

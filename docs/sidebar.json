@@ -1,7 +1,7 @@
 {
-  "anatelspyder": {
+  "anateldb": {
     "Overview": "/",
-    "module name here": "core.html",
-    "Title": "queries.html"
+    "Title": "parser.html",
+    "Queries SQL e MongoDB": "queries.html"
   }
 }
