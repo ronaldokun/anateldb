@@ -36,8 +36,6 @@ update_radcom('D:\OneDrive - ANATEL\GR01FI3\BaseDados')
     Wall time: 1 s
 
 
-A função `update_stel` é bem mais lenta que as demais, dado que o banco de dados do STEL é antigo e abarca todos os registros de outorga de serviços de telecomunicações da ANATEL, com mais de **400.000** registros ativos. Esse banco de dados é atualizado 1 vez ao dia à meia-noite e remete ao estado do dia anterior, portanto não faz sentido atualizá-lo mais de 1 vez por dia.
-
 ```python
 %%time
 update_stel('D:\OneDrive - ANATEL\GR01FI3\BaseDados')
@@ -171,10 +169,6 @@ radcom = read_radcom(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; radcom.he
 </div>
 
 
-Se o argumento `update=True` for fornecido ou arquivo local não existir, a base de dados é atualizada por meio da função `update_radcom`. 
-
-{% include warning.html content='A função `update_radcom` somente irá funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.' %}
-
 ```
 radcom = read_radcom(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados', update=True) ; radcom.tail()
 ```
@@ -305,9 +299,6 @@ stel = read_stel(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados', update=True)
 
 
 **Os dados do Stel não serão ilustrados aqui por se tratar de dados de telecomunicação privados, os demais dados de radiodifusão são públicos e disponíveis para qualquer interessado consultar**
-
-Se o argumento `update=True` for fornecido ou arquivo local não existir, a base de dados é atualizada por meio da função `update_stel`. 
-{% include warning.html content='A função `update_stel` somente irá funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.' %}
 
 
 ```
@@ -459,6 +450,3 @@ mosaico = read_mosaico(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; mosaico
 </table>
 </div>
 
-
-Se o argumento `update=True` for fornecido ou o arquivo local não existir, a base de dados é atualizada por meio da função `update_mosaico`. 
-{% include tip.html content='A função `update_mosaico` usa a base de dados Pública do Spectrum E, portanto basta ter conexão com a internet .' %}
