@@ -10,13 +10,13 @@
 
 ### Métodos para baixar ou atualizar os arquivos das bases de dados
 
-```
+```python
 from anateldb.query import update_mosaico, update_radcom, update_stel
 ```
 
-A função seguinta baixa os dados diretamente da interface pública online do [Spectrum E](http://sistemas.anatel.gov.br/se/public/view/b/srd.php) 
+A função seguinte baixa os dados diretamente da interface pública online do [Spectrum E](http://sistemas.anatel.gov.br/se/public/view/b/srd.php) 
 
-```
+```python
 %%time
 update_mosaico(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados')
 ```
@@ -27,8 +27,7 @@ update_mosaico(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados')
     Kbô
     Wall time: 8.12 s
 
-
-```
+```python
 %%time
 update_radcom('D:\OneDrive - ANATEL\GR01FI3\BaseDados')
 ```
@@ -39,7 +38,7 @@ update_radcom('D:\OneDrive - ANATEL\GR01FI3\BaseDados')
 
 A função `update_stel` é bem mais lenta que as demais, dado que o banco de dados do STEL é antigo e abarca todos os registros de outorga de serviços de telecomunicações da ANATEL, com mais de **400.000** registros ativos. Esse banco de dados é atualizado 1 vez ao dia à meia-noite e remete ao estado do dia anterior, portanto não faz sentido atualizá-lo mais de 1 vez por dia.
 
-```
+```python
 %%time
 update_stel('D:\OneDrive - ANATEL\GR01FI3\BaseDados')
 ```
@@ -50,7 +49,8 @@ update_stel('D:\OneDrive - ANATEL\GR01FI3\BaseDados')
 
 ### Métodos para ler as Bases de Dados
 
-```
+
+```python
 from anateldb.parser import read_radcom, read_stel, read_mosaico
 radcom = read_radcom(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; radcom.head()
 ```
@@ -169,7 +169,6 @@ radcom = read_radcom(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; radcom.he
   </tbody>
 </table>
 </div>
-
 
 
 Se o argumento `update=True` for fornecido ou arquivo local não existir, a base de dados é atualizada por meio da função `update_radcom`. 
@@ -300,14 +299,16 @@ radcom = read_radcom(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados', update=True
 
 
 
-```
+```python
 stel = read_stel(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados', update=True)
 ```
+
 
 **Os dados do Stel não serão ilustrados aqui por se tratar de dados de telecomunicação privados, os demais dados de radiodifusão são públicos e disponíveis para qualquer interessado consultar**
 
 Se o argumento `update=True` for fornecido ou arquivo local não existir, a base de dados é atualizada por meio da função `update_stel`. 
 {% include warning.html content='A função `update_stel` somente irá funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.' %}
+
 
 ```
 mosaico = read_mosaico(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; mosaico.tail()
@@ -457,7 +458,6 @@ mosaico = read_mosaico(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; mosaico
   </tbody>
 </table>
 </div>
-
 
 
 Se o argumento `update=True` for fornecido ou o arquivo local não existir, a base de dados é atualizada por meio da função `update_mosaico`. 

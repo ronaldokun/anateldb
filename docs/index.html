@@ -73,80 +73,38 @@ nb_path: "index.ipynb"
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>A função seguinta baixa os dados diretamente da interface pública online do <a href="http://sistemas.anatel.gov.br/se/public/view/b/srd.php">Spectrum E</a></p>
+<p>A função seguinte baixa os dados diretamente da interface pública online do <a href="http://sistemas.anatel.gov.br/se/public/view/b/srd.php">Spectrum E</a></p>
 
 </div>
 </div>
 </div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">time</span>
 <span class="n">update_mosaico</span><span class="p">(</span><span class="n">pasta</span><span class="o">=</span><span class="s1">&#39;D:\OneDrive - ANATEL\GR01FI3\BaseDados&#39;</span><span class="p">)</span>
 </pre></div>
 
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Baixando as Estações do Mosaico...
+<pre><code>Baixando as Estações do Mosaico...
 Baixando o Plano Básico das Estações...
 Baixando o Histórico de Atualizações...
 Kbô
-Wall time: 8.12 s
-</pre>
-</div>
-</div>
+Wall time: 8.12 s</code></pre>
 
 </div>
 </div>
-
 </div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">time</span>
 <span class="n">update_radcom</span><span class="p">(</span><span class="s1">&#39;D:\OneDrive - ANATEL\GR01FI3\BaseDados&#39;</span><span class="p">)</span>
 </pre></div>
 
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Lendo o Banco de Dados de Radcom
-Wall time: 1 s
-</pre>
-</div>
-</div>
+<pre><code>Lendo o Banco de Dados de Radcom
+Wall time: 1 s</code></pre>
 
 </div>
 </div>
-
 </div>
-    {% endraw %}
-
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>A função <a href="/anateldb/queries.html#update_stel"><code>update_stel</code></a> é bem mais lenta que as demais, dado que o banco de dados do STEL é antigo e abarca todos os registros de outorga de serviços de telecomunicações da ANATEL, com mais de <strong>400.000</strong> registros ativos. Esse banco de dados é atualizado 1 vez ao dia à meia-noite e remete ao estado do dia anterior, portanto não faz sentido atualizá-lo mais de 1 vez por dia.</p>
@@ -154,67 +112,29 @@ Wall time: 1 s
 </div>
 </div>
 </div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">time</span>
 <span class="n">update_stel</span><span class="p">(</span><span class="s1">&#39;D:\OneDrive - ANATEL\GR01FI3\BaseDados&#39;</span><span class="p">)</span>
 </pre></div>
 
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Lendo o Banco de Dados do STEL. Processo Lento, aguarde...
-Wall time: 38.5 s
-</pre>
-</div>
-</div>
+<pre><code>Lendo o Banco de Dados do STEL. Processo Lento, aguarde...
+Wall time: 38.5 s</code></pre>
 
 </div>
 </div>
-
 </div>
-    {% endraw %}
-
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="M&#233;todos-para-ler-as-Bases-de-Dados">M&#233;todos para ler as Bases de Dados<a class="anchor-link" href="#M&#233;todos-para-ler-as-Bases-de-Dados"> </a></h3>
 </div>
 </div>
 </div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">anateldb.parser</span> <span class="kn">import</span> <span class="n">read_radcom</span><span class="p">,</span> <span class="n">read_stel</span><span class="p">,</span> <span class="n">read_mosaico</span>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">anateldb.parser</span> <span class="kn">import</span> <span class="n">read_radcom</span><span class="p">,</span> <span class="n">read_stel</span><span class="p">,</span> <span class="n">read_mosaico</span>
 <span class="n">radcom</span> <span class="o">=</span> <span class="n">read_radcom</span><span class="p">(</span><span class="n">pasta</span><span class="o">=</span><span class="s1">&#39;D:\OneDrive - ANATEL\GR01FI3\BaseDados&#39;</span><span class="p">)</span> <span class="p">;</span> <span class="n">radcom</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
 <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -327,15 +247,8 @@ Wall time: 38.5 s
 </table>
 </div>
 </div>
-
-</div>
-
 </div>
 </div>
-
-</div>
-    {% endraw %}
-
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Se o argumento <code>update=True</code> for fornecido ou arquivo local não existir, a base de dados é atualizada por meio da função <a href="/anateldb/queries.html#update_radcom"><code>update_radcom</code></a>.</p>
@@ -350,35 +263,18 @@ Wall time: 38.5 s
 </div>
 </div>
 </div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">radcom</span> <span class="o">=</span> <span class="n">read_radcom</span><span class="p">(</span><span class="n">pasta</span><span class="o">=</span><span class="s1">&#39;D:\OneDrive - ANATEL\GR01FI3\BaseDados&#39;</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="p">;</span> <span class="n">radcom</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>
-</pre></div>
+<pre><code>radcom = read_radcom(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados', update=True) ; radcom.tail()</code></pre>
 
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Lendo o Banco de Dados de Radcom
-</pre>
-</div>
-</div>
-
-<div class="output_area">
+<pre><code>Lendo o Banco de Dados de Radcom
 
 
-<div class="output_html rendered_html output_subarea output_execute_result">
+
+
+
+</code></pre>
 <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -491,32 +387,16 @@ Wall time: 38.5 s
 </table>
 </div>
 </div>
-
-</div>
-
 </div>
 </div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">stel</span> <span class="o">=</span> <span class="n">read_stel</span><span class="p">(</span><span class="n">pasta</span><span class="o">=</span><span class="s1">&#39;D:\OneDrive - ANATEL\GR01FI3\BaseDados&#39;</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span><span class="n">stel</span> <span class="o">=</span> <span class="n">read_stel</span><span class="p">(</span><span class="n">pasta</span><span class="o">=</span><span class="s1">&#39;D:\OneDrive - ANATEL\GR01FI3\BaseDados&#39;</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
-    </div>
 </div>
 </div>
-
 </div>
-    {% endraw %}
-
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Os dados do Stel não serão ilustrados aqui por se tratar de dados de telecomunicação privados, os demais dados de radiodifusão são públicos e disponíveis para qualquer interessado consultar</strong></p>
@@ -532,38 +412,21 @@ Wall time: 38.5 s
 </div>
 </div>
 </div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">mosaico</span> <span class="o">=</span> <span class="n">read_mosaico</span><span class="p">(</span><span class="n">pasta</span><span class="o">=</span><span class="s1">&#39;D:\OneDrive - ANATEL\GR01FI3\BaseDados&#39;</span><span class="p">)</span> <span class="p">;</span> <span class="n">mosaico</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>
-</pre></div>
+<pre><code>mosaico = read_mosaico(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; mosaico.tail()</code></pre>
 
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Baixando as Estações do Mosaico...
+<pre><code>Baixando as Estações do Mosaico...
 Baixando o Plano Básico das Estações...
 Baixando o Histórico de Atualizações...
 Kbô
-</pre>
-</div>
-</div>
-
-<div class="output_area">
 
 
-<div class="output_html rendered_html output_subarea output_execute_result">
+
+
+
+</code></pre>
 <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -700,15 +563,8 @@ Kbô
 </table>
 </div>
 </div>
-
-</div>
-
 </div>
 </div>
-
-</div>
-    {% endraw %}
-
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Se o argumento <code>update=True</code> for fornecido ou o arquivo local não existir, a base de dados é atualizada por meio da função <a href="/anateldb/queries.html#update_mosaico"><code>update_mosaico</code></a>. 
