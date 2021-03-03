@@ -6,14 +6,8 @@ title: Anatel - Consulta e Processamento do Banco de Dados
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "Este repositório concentra um conjunto de scripts para navegar e baixar informações dos principais bancos de
-dados da Anatel. Cujo dados serão utilizados em tarefas fiscalizatórias. O público alvo são os servidores do órgão, uma
-vez que a maioria dos sistemas utilizados aqui necessitam de autenticação cujo acesso é restrito aos servidores da
-ANATEL."
-description: "Este repositório concentra um conjunto de scripts para navegar e baixar informações dos principais bancos
-de dados da Anatel. Cujo dados serão utilizados em tarefas fiscalizatórias. O público alvo são os servidores do órgão,
-uma vez que a maioria dos sistemas utilizados aqui necessitam de autenticação cujo acesso é restrito aos servidores da
-ANATEL."
+summary: "Este repositório concentra um conjunto de scripts para navegar e baixar informações dos principais bancos de dados da Anatel. Cujo dados serão utilizados em tarefas fiscalizatórias. O público alvo são os servidores do órgão, uma vez que a maioria dos sistemas utilizados aqui necessitam de autenticação cujo acesso é restrito aos servidores da ANATEL."
+description: "Este repositório concentra um conjunto de scripts para navegar e baixar informações dos principais bancos de dados da Anatel. Cujo dados serão utilizados em tarefas fiscalizatórias. O público alvo são os servidores do órgão, uma vez que a maioria dos sistemas utilizados aqui necessitam de autenticação cujo acesso é restrito aos servidores da ANATEL."
 nb_path: "index.ipynb"
 ---
 <!--
@@ -27,744 +21,702 @@ nb_path: "index.ipynb"
 -->
 
 <div class="container" id="notebook-container">
+        
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
-  {% raw %}
+</div>
+    {% endraw %}
 
-  <div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Instala&#231;&#227;o">Instala&#231;&#227;o<a class="anchor-link" href="#Instala&#231;&#227;o"> </a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>pip install anateldb</code></p>
 
-  </div>
-  {% endraw %}
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Como-utilizar">Como utilizar<a class="anchor-link" href="#Como-utilizar"> </a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="M&#233;todos-para-baixar-ou-atualizar-os-arquivos-das-bases-de-dados">M&#233;todos para baixar ou atualizar os arquivos das bases de dados<a class="anchor-link" href="#M&#233;todos-para-baixar-ou-atualizar-os-arquivos-das-bases-de-dados"> </a></h3>
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
 
-  <div class="cell border-box-sizing text_cell rendered">
-    <div class="inner_cell">
-      <div class="text_cell_render border-box-sizing rendered_html">
-        <h2 id="Instala&#231;&#227;o">Instala&#231;&#227;o<a class="anchor-link" href="#Instala&#231;&#227;o"> </a></h2>
-      </div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">anateldb.query</span> <span class="kn">import</span> <span class="n">update_mosaico</span><span class="p">,</span> <span class="n">update_radcom</span><span class="p">,</span> <span class="n">update_stel</span>
+</pre></div>
+
     </div>
-  </div>
-  <div class="cell border-box-sizing text_cell rendered">
-    <div class="inner_cell">
-      <div class="text_cell_render border-box-sizing rendered_html">
-        <p><code>pip install anateldb</code></p>
+</div>
+</div>
 
-      </div>
-    </div>
-  </div>
-  <div class="cell border-box-sizing text_cell rendered">
-    <div class="inner_cell">
-      <div class="text_cell_render border-box-sizing rendered_html">
-        <h2 id="Como-utilizar">Como utilizar<a class="anchor-link" href="#Como-utilizar"> </a></h2>
-      </div>
-    </div>
-  </div>
-  <div class="cell border-box-sizing text_cell rendered">
-    <div class="inner_cell">
-      <div class="text_cell_render border-box-sizing rendered_html">
-        <h3 id="M&#233;todos-para-baixar-ou-atualizar-os-arquivos-das-bases-de-dados">M&#233;todos para baixar ou
-          atualizar os arquivos das bases de dados<a class="anchor-link"
-            href="#M&#233;todos-para-baixar-ou-atualizar-os-arquivos-das-bases-de-dados"> </a></h3>
-      </div>
-    </div>
-  </div>
-  {% raw %}
+</div>
+    {% endraw %}
 
-  <div class="cell border-box-sizing code_cell rendered">
-    <div class="input">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>A função seguinta baixa os dados diretamente da interface pública online do <a href="http://sistemas.anatel.gov.br/se/public/view/b/srd.php">Spectrum E</a></p>
 
-      <div class="inner_cell">
-        <div class="input_area">
-          <div class=" highlight hl-ipython3">
-            <pre><span></span><span class="kn">from</span> <span class="nn">anateldb.query</span> <span class="kn">import</span> <span class="n">update_mosaico</span><span class="p">,</span> <span class="n">update_radcom</span><span class="p">,</span> <span class="n">update_stel</span>
-</pre>
-          </div>
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
 
-        </div>
-      </div>
-    </div>
-
-  </div>
-  {% endraw %}
-
-  <div class="cell border-box-sizing text_cell rendered">
-    <div class="inner_cell">
-      <div class="text_cell_render border-box-sizing rendered_html">
-        <p>A função seguinta baixa os dados diretamente da interface pública online do <a
-            href="http://sistemas.anatel.gov.br/se/public/view/b/srd.php">Spectrum E</a></p>
-
-      </div>
-    </div>
-  </div>
-  {% raw %}
-
-  <div class="cell border-box-sizing code_cell rendered">
-    <div class="input">
-
-      <div class="inner_cell">
-        <div class="input_area">
-          <div class=" highlight hl-ipython3">
-            <pre><span></span><span class="o">%%time</span>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
 <span class="n">update_mosaico</span><span class="p">(</span><span class="n">pasta</span><span class="o">=</span><span class="s1">&#39;D:\OneDrive - ANATEL\GR01FI3\BaseDados&#39;</span><span class="p">)</span>
-</pre>
-          </div>
+</pre></div>
 
-        </div>
-      </div>
     </div>
+</div>
+</div>
 
-    <div class="output_wrapper">
-      <div class="output">
+<div class="output_wrapper">
+<div class="output">
 
-        <div class="output_area">
+<div class="output_area">
 
-          <div class="output_subarea output_stream output_stdout output_text">
-            <pre>Baixando as Estações do Mosaico...
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Baixando as Estações do Mosaico...
 Baixando o Plano Básico das Estações...
 Baixando o Histórico de Atualizações...
 Kbô
 Wall time: 8.12 s
 </pre>
-          </div>
-        </div>
+</div>
+</div>
 
-      </div>
-    </div>
+</div>
+</div>
 
-  </div>
-  {% endraw %}
+</div>
+    {% endraw %}
 
-  {% raw %}
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
 
-  <div class="cell border-box-sizing code_cell rendered">
-    <div class="input">
-
-      <div class="inner_cell">
-        <div class="input_area">
-          <div class=" highlight hl-ipython3">
-            <pre><span></span><span class="o">%%time</span>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
 <span class="n">update_radcom</span><span class="p">(</span><span class="s1">&#39;D:\OneDrive - ANATEL\GR01FI3\BaseDados&#39;</span><span class="p">)</span>
-</pre>
-          </div>
+</pre></div>
 
-        </div>
-      </div>
     </div>
+</div>
+</div>
 
-    <div class="output_wrapper">
-      <div class="output">
+<div class="output_wrapper">
+<div class="output">
 
-        <div class="output_area">
+<div class="output_area">
 
-          <div class="output_subarea output_stream output_stdout output_text">
-            <pre>Lendo o Banco de Dados de Radcom
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Lendo o Banco de Dados de Radcom
 Wall time: 1 s
 </pre>
-          </div>
-        </div>
+</div>
+</div>
 
-      </div>
-    </div>
+</div>
+</div>
 
-  </div>
-  {% endraw %}
+</div>
+    {% endraw %}
 
-  <div class="cell border-box-sizing text_cell rendered">
-    <div class="inner_cell">
-      <div class="text_cell_render border-box-sizing rendered_html">
-        <p>A função <a href="/queries.html#update_stel"><code>update_stel</code></a> é bem mais lenta que as demais,
-          dado que o banco de dados do STEL é antigo e abarca todos os registros de outorga de serviços de
-          telecomunicações da ANATEL, com mais de <strong>400.000</strong> registros ativos. Esse banco de dados é
-          atualizado 1 vez ao dia à meia-noite e remete ao estado do dia anterior, portanto não faz sentido atualizá-lo
-          mais de 1 vez por dia.</p>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>A função <a href="/anateldb/queries.html#update_stel"><code>update_stel</code></a> é bem mais lenta que as demais, dado que o banco de dados do STEL é antigo e abarca todos os registros de outorga de serviços de telecomunicações da ANATEL, com mais de <strong>400.000</strong> registros ativos. Esse banco de dados é atualizado 1 vez ao dia à meia-noite e remete ao estado do dia anterior, portanto não faz sentido atualizá-lo mais de 1 vez por dia.</p>
 
-      </div>
-    </div>
-  </div>
-  {% raw %}
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
 
-  <div class="cell border-box-sizing code_cell rendered">
-    <div class="input">
-
-      <div class="inner_cell">
-        <div class="input_area">
-          <div class=" highlight hl-ipython3">
-            <pre><span></span><span class="o">%%time</span>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
 <span class="n">update_stel</span><span class="p">(</span><span class="s1">&#39;D:\OneDrive - ANATEL\GR01FI3\BaseDados&#39;</span><span class="p">)</span>
-</pre>
-          </div>
+</pre></div>
 
-        </div>
-      </div>
     </div>
+</div>
+</div>
 
-    <div class="output_wrapper">
-      <div class="output">
+<div class="output_wrapper">
+<div class="output">
 
-        <div class="output_area">
+<div class="output_area">
 
-          <div class="output_subarea output_stream output_stdout output_text">
-            <pre>Lendo o Banco de Dados do STEL. Processo Lento, aguarde...
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Lendo o Banco de Dados do STEL. Processo Lento, aguarde...
 Wall time: 38.5 s
 </pre>
-          </div>
-        </div>
+</div>
+</div>
 
-      </div>
-    </div>
+</div>
+</div>
 
-  </div>
-  {% endraw %}
+</div>
+    {% endraw %}
 
-  <div class="cell border-box-sizing text_cell rendered">
-    <div class="inner_cell">
-      <div class="text_cell_render border-box-sizing rendered_html">
-        <h3 id="M&#233;todos-para-ler-as-Bases-de-Dados">M&#233;todos para ler as Bases de Dados<a class="anchor-link"
-            href="#M&#233;todos-para-ler-as-Bases-de-Dados"> </a></h3>
-      </div>
-    </div>
-  </div>
-  {% raw %}
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="M&#233;todos-para-ler-as-Bases-de-Dados">M&#233;todos para ler as Bases de Dados<a class="anchor-link" href="#M&#233;todos-para-ler-as-Bases-de-Dados"> </a></h3>
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
 
-  <div class="cell border-box-sizing code_cell rendered">
-    <div class="input">
-
-      <div class="inner_cell">
-        <div class="input_area">
-          <div class=" highlight hl-ipython3">
-            <pre><span></span><span class="kn">from</span> <span class="nn">anateldb.parser</span> <span class="kn">import</span> <span class="n">read_radcom</span><span class="p">,</span> <span class="n">read_stel</span><span class="p">,</span> <span class="n">read_mosaico</span>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">anateldb.parser</span> <span class="kn">import</span> <span class="n">read_radcom</span><span class="p">,</span> <span class="n">read_stel</span><span class="p">,</span> <span class="n">read_mosaico</span>
 <span class="n">radcom</span> <span class="o">=</span> <span class="n">read_radcom</span><span class="p">(</span><span class="n">pasta</span><span class="o">=</span><span class="s1">&#39;D:\OneDrive - ANATEL\GR01FI3\BaseDados&#39;</span><span class="p">)</span> <span class="p">;</span> <span class="n">radcom</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Frequência</th>
+      <th>Unidade</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
+      <th>Fase</th>
+      <th>Situação</th>
+      <th>Numero da Estação</th>
+      <th>CNPJ</th>
+      <th>Fistel</th>
+      <th>Entidade</th>
+      <th>Município</th>
+      <th>UF</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>104.9</td>
+      <td>MHz</td>
+      <td>-24.861389</td>
+      <td>-54.334722</td>
+      <td>3</td>
+      <td>A</td>
+      <td>641168764</td>
+      <td>00104477000117</td>
+      <td>50011685115</td>
+      <td>ACADEMIA CULTURAL DE SANTA HELENA - ACULT - ST...</td>
+      <td>Santa Helena</td>
+      <td>PR</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>87.9</td>
+      <td>MHz</td>
+      <td>-7.074444</td>
+      <td>-36.731111</td>
+      <td>3</td>
+      <td>M</td>
+      <td>682699349</td>
+      <td>00284576000128</td>
+      <td>50012524409</td>
+      <td>ASSOCIACAO DOS MORADORES E PRODUT. RURAIS DE A...</td>
+      <td>Assunção</td>
+      <td>PB</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>87.9</td>
+      <td>MHz</td>
+      <td>-20.323611</td>
+      <td>-44.246944</td>
+      <td>3</td>
+      <td>H</td>
+      <td>659028590</td>
+      <td>00575697000129</td>
+      <td>50011824689</td>
+      <td>ASSOCIACAO BONFIM ESPERANCA- ABESPE</td>
+      <td>Bonfim</td>
+      <td>MG</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>104.9</td>
+      <td>MHz</td>
+      <td>-18.843611</td>
+      <td>-46.792778</td>
+      <td>3</td>
+      <td>B</td>
+      <td>631410937</td>
+      <td>00792795000118</td>
+      <td>50011398132</td>
+      <td>ASSOCIACAO DOS TRABALHADORES DE GUIMARANIA (ATG)</td>
+      <td>Guimarânia</td>
+      <td>MG</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>87.9</td>
+      <td>MHz</td>
+      <td>-19.466667</td>
+      <td>-45.600000</td>
+      <td>3</td>
+      <td>M</td>
+      <td>631412301</td>
+      <td>00794510000188</td>
+      <td>50011398990</td>
+      <td>FUNDACAO ASSISTENCIAL LAR DA PAZ - FALP</td>
+      <td>Dores do Indaiá</td>
+      <td>MG</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Se o argumento <code>update=True</code> for fornecido ou arquivo local não existir, a base de dados é atualizada por meio da função <a href="/anateldb/queries.html#update_radcom"><code>update_radcom</code></a>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>{% include warning.html content='A função <a href="/anateldb/queries.html#update_radcom"><code>update_radcom</code></a> somente irá funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.' %}</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">radcom</span> <span class="o">=</span> <span class="n">read_radcom</span><span class="p">(</span><span class="n">pasta</span><span class="o">=</span><span class="s1">&#39;D:\OneDrive - ANATEL\GR01FI3\BaseDados&#39;</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="p">;</span> <span class="n">radcom</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Lendo o Banco de Dados de Radcom
 </pre>
-          </div>
+</div>
+</div>
 
-        </div>
-      </div>
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Frequência</th>
+      <th>Unidade</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
+      <th>Fase</th>
+      <th>Situação</th>
+      <th>Numero da Estação</th>
+      <th>CNPJ</th>
+      <th>Fistel</th>
+      <th>Entidade</th>
+      <th>Município</th>
+      <th>UF</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>4639</th>
+      <td>87.9</td>
+      <td>MHz</td>
+      <td>-10.311667</td>
+      <td>-48.162222</td>
+      <td>1</td>
+      <td>K</td>
+      <td>1011036964</td>
+      <td>08931976000190</td>
+      <td>50411347829</td>
+      <td>ASSOCIACAO AMIGOS DA CULTURA E DO MEIO AMBIENT...</td>
+      <td>Palmas</td>
+      <td>TO</td>
+    </tr>
+    <tr>
+      <th>4640</th>
+      <td>104.9</td>
+      <td>MHz</td>
+      <td>-10.005000</td>
+      <td>-48.988889</td>
+      <td>1</td>
+      <td>A</td>
+      <td>1011037472</td>
+      <td>19001721000144</td>
+      <td>50416345301</td>
+      <td>ASSOCIACAO RADIO COMUNITARIA MONTE SANTO FM</td>
+      <td>Monte Santo do Tocantins</td>
+      <td>TO</td>
+    </tr>
+    <tr>
+      <th>4641</th>
+      <td>104.9</td>
+      <td>MHz</td>
+      <td>-5.586389</td>
+      <td>-48.061111</td>
+      <td>P</td>
+      <td>M</td>
+      <td>1011044797</td>
+      <td>19332116000156</td>
+      <td>50416480004</td>
+      <td>ASSOCIACAO RADIO COMUNITARIA TOP FM</td>
+      <td>Araguatins</td>
+      <td>TO</td>
+    </tr>
+    <tr>
+      <th>4642</th>
+      <td>98.3</td>
+      <td>MHz</td>
+      <td>-28.682222</td>
+      <td>-53.610278</td>
+      <td>2</td>
+      <td>K</td>
+      <td>1011044940</td>
+      <td>97538346000180</td>
+      <td>50416390609</td>
+      <td>ASSOCIACAO DE RADIODIFUSAO CIDADE DE CRUZ ALTA</td>
+      <td>Cruz Alta</td>
+      <td>RS</td>
+    </tr>
+    <tr>
+      <th>4643</th>
+      <td>104.9</td>
+      <td>MHz</td>
+      <td>-6.594722</td>
+      <td>-35.055278</td>
+      <td>1</td>
+      <td>K</td>
+      <td>1011110250</td>
+      <td>10877144000184</td>
+      <td>50411382063</td>
+      <td>ASSOCIAÇÃO DE DESENVOLVIMENTO CULTURAL DA RÁDI...</td>
+      <td>Mataraca</td>
+      <td>PB</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">stel</span> <span class="o">=</span> <span class="n">read_stel</span><span class="p">(</span><span class="n">pasta</span><span class="o">=</span><span class="s1">&#39;D:\OneDrive - ANATEL\GR01FI3\BaseDados&#39;</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
     </div>
+</div>
+</div>
 
-    <div class="output_wrapper">
-      <div class="output">
+</div>
+    {% endraw %}
 
-        <div class="output_area">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Os dados do Stel não serão ilustrados aqui por se tratar de dados de telecomunicação privados, os demais dados de radiodifusão são públicos e disponíveis para qualquer interessado consultar</strong></p>
 
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Se o argumento <code>update=True</code> for fornecido ou arquivo local não existir, a base de dados é atualizada por meio da função <a href="/anateldb/queries.html#update_stel"><code>update_stel</code></a>. 
+{% include warning.html content='A função <a href="/anateldb/queries.html#update_stel"><code>update_stel</code></a> somente irá funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.' %}</p>
 
-          <div class="output_html rendered_html output_subarea output_execute_result">
-            <div>
-              <style scoped>
-                .dataframe tbody tr th:only-of-type {
-                  vertical-align: middle;
-                }
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
 
-                .dataframe tbody tr th {
-                  vertical-align: top;
-                }
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">mosaico</span> <span class="o">=</span> <span class="n">read_mosaico</span><span class="p">(</span><span class="n">pasta</span><span class="o">=</span><span class="s1">&#39;D:\OneDrive - ANATEL\GR01FI3\BaseDados&#39;</span><span class="p">)</span> <span class="p">;</span> <span class="n">mosaico</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>
+</pre></div>
 
-                .dataframe thead th {
-                  text-align: right;
-                }
-              </style>
-              <table border="1" class="dataframe">
-                <thead>
-                  <tr style="text-align: right;">
-                    <th></th>
-                    <th>Frequência</th>
-                    <th>Unidade</th>
-                    <th>Latitude</th>
-                    <th>Longitude</th>
-                    <th>Fase</th>
-                    <th>Situação</th>
-                    <th>Numero da Estação</th>
-                    <th>CNPJ</th>
-                    <th>Fistel</th>
-                    <th>Entidade</th>
-                    <th>Município</th>
-                    <th>UF</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th>0</th>
-                    <td>104.9</td>
-                    <td>MHz</td>
-                    <td>-24.861389</td>
-                    <td>-54.334722</td>
-                    <td>3</td>
-                    <td>A</td>
-                    <td>641168764</td>
-                    <td>00104477000117</td>
-                    <td>50011685115</td>
-                    <td>ACADEMIA CULTURAL DE SANTA HELENA - ACULT - ST...</td>
-                    <td>Santa Helena</td>
-                    <td>PR</td>
-                  </tr>
-                  <tr>
-                    <th>1</th>
-                    <td>87.9</td>
-                    <td>MHz</td>
-                    <td>-7.074444</td>
-                    <td>-36.731111</td>
-                    <td>3</td>
-                    <td>M</td>
-                    <td>682699349</td>
-                    <td>00284576000128</td>
-                    <td>50012524409</td>
-                    <td>ASSOCIACAO DOS MORADORES E PRODUT. RURAIS DE A...</td>
-                    <td>Assunção</td>
-                    <td>PB</td>
-                  </tr>
-                  <tr>
-                    <th>2</th>
-                    <td>87.9</td>
-                    <td>MHz</td>
-                    <td>-20.323611</td>
-                    <td>-44.246944</td>
-                    <td>3</td>
-                    <td>H</td>
-                    <td>659028590</td>
-                    <td>00575697000129</td>
-                    <td>50011824689</td>
-                    <td>ASSOCIACAO BONFIM ESPERANCA- ABESPE</td>
-                    <td>Bonfim</td>
-                    <td>MG</td>
-                  </tr>
-                  <tr>
-                    <th>3</th>
-                    <td>104.9</td>
-                    <td>MHz</td>
-                    <td>-18.843611</td>
-                    <td>-46.792778</td>
-                    <td>3</td>
-                    <td>B</td>
-                    <td>631410937</td>
-                    <td>00792795000118</td>
-                    <td>50011398132</td>
-                    <td>ASSOCIACAO DOS TRABALHADORES DE GUIMARANIA (ATG)</td>
-                    <td>Guimarânia</td>
-                    <td>MG</td>
-                  </tr>
-                  <tr>
-                    <th>4</th>
-                    <td>87.9</td>
-                    <td>MHz</td>
-                    <td>-19.466667</td>
-                    <td>-45.600000</td>
-                    <td>3</td>
-                    <td>M</td>
-                    <td>631412301</td>
-                    <td>00794510000188</td>
-                    <td>50011398990</td>
-                    <td>FUNDACAO ASSISTENCIAL LAR DA PAZ - FALP</td>
-                    <td>Dores do Indaiá</td>
-                    <td>MG</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
     </div>
+</div>
+</div>
 
-  </div>
-  {% endraw %}
+<div class="output_wrapper">
+<div class="output">
 
-  <div class="cell border-box-sizing text_cell rendered">
-    <div class="inner_cell">
-      <div class="text_cell_render border-box-sizing rendered_html">
-        <p>Se o argumento <code>update=True</code> for fornecido ou arquivo local não existir, a base de dados é
-          atualizada por meio da função <a href="/queries.html#update_radcom"><code>update_radcom</code></a>.</p>
+<div class="output_area">
 
-      </div>
-    </div>
-  </div>
-  <div class="cell border-box-sizing text_cell rendered">
-    <div class="inner_cell">
-      <div class="text_cell_render border-box-sizing rendered_html">
-        <p>
-          {% include warning.html content='A função <a href="/queries.html#update_radcom"><code>update_radcom</code></a> somente irá funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.' %}
-        </p>
-
-      </div>
-    </div>
-  </div>
-  {% raw %}
-
-  <div class="cell border-box-sizing code_cell rendered">
-    <div class="input">
-
-      <div class="inner_cell">
-        <div class="input_area">
-          <div class=" highlight hl-ipython3">
-            <pre><span></span><span class="n">radcom</span> <span class="o">=</span> <span class="n">read_radcom</span><span class="p">(</span><span class="n">pasta</span><span class="o">=</span><span class="s1">&#39;D:\OneDrive - ANATEL\GR01FI3\BaseDados&#39;</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="p">;</span> <span class="n">radcom</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>
-</pre>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <div class="output_wrapper">
-      <div class="output">
-
-        <div class="output_area">
-
-          <div class="output_subarea output_stream output_stdout output_text">
-            <pre>Lendo o Banco de Dados de Radcom
-</pre>
-          </div>
-        </div>
-
-        <div class="output_area">
-
-
-          <div class="output_html rendered_html output_subarea output_execute_result">
-            <div>
-              <style scoped>
-                .dataframe tbody tr th:only-of-type {
-                  vertical-align: middle;
-                }
-
-                .dataframe tbody tr th {
-                  vertical-align: top;
-                }
-
-                .dataframe thead th {
-                  text-align: right;
-                }
-              </style>
-              <table border="1" class="dataframe">
-                <thead>
-                  <tr style="text-align: right;">
-                    <th></th>
-                    <th>Frequência</th>
-                    <th>Unidade</th>
-                    <th>Latitude</th>
-                    <th>Longitude</th>
-                    <th>Fase</th>
-                    <th>Situação</th>
-                    <th>Numero da Estação</th>
-                    <th>CNPJ</th>
-                    <th>Fistel</th>
-                    <th>Entidade</th>
-                    <th>Município</th>
-                    <th>UF</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th>4639</th>
-                    <td>87.9</td>
-                    <td>MHz</td>
-                    <td>-10.311667</td>
-                    <td>-48.162222</td>
-                    <td>1</td>
-                    <td>K</td>
-                    <td>1011036964</td>
-                    <td>08931976000190</td>
-                    <td>50411347829</td>
-                    <td>ASSOCIACAO AMIGOS DA CULTURA E DO MEIO AMBIENT...</td>
-                    <td>Palmas</td>
-                    <td>TO</td>
-                  </tr>
-                  <tr>
-                    <th>4640</th>
-                    <td>104.9</td>
-                    <td>MHz</td>
-                    <td>-10.005000</td>
-                    <td>-48.988889</td>
-                    <td>1</td>
-                    <td>A</td>
-                    <td>1011037472</td>
-                    <td>19001721000144</td>
-                    <td>50416345301</td>
-                    <td>ASSOCIACAO RADIO COMUNITARIA MONTE SANTO FM</td>
-                    <td>Monte Santo do Tocantins</td>
-                    <td>TO</td>
-                  </tr>
-                  <tr>
-                    <th>4641</th>
-                    <td>104.9</td>
-                    <td>MHz</td>
-                    <td>-5.586389</td>
-                    <td>-48.061111</td>
-                    <td>P</td>
-                    <td>M</td>
-                    <td>1011044797</td>
-                    <td>19332116000156</td>
-                    <td>50416480004</td>
-                    <td>ASSOCIACAO RADIO COMUNITARIA TOP FM</td>
-                    <td>Araguatins</td>
-                    <td>TO</td>
-                  </tr>
-                  <tr>
-                    <th>4642</th>
-                    <td>98.3</td>
-                    <td>MHz</td>
-                    <td>-28.682222</td>
-                    <td>-53.610278</td>
-                    <td>2</td>
-                    <td>K</td>
-                    <td>1011044940</td>
-                    <td>97538346000180</td>
-                    <td>50416390609</td>
-                    <td>ASSOCIACAO DE RADIODIFUSAO CIDADE DE CRUZ ALTA</td>
-                    <td>Cruz Alta</td>
-                    <td>RS</td>
-                  </tr>
-                  <tr>
-                    <th>4643</th>
-                    <td>104.9</td>
-                    <td>MHz</td>
-                    <td>-6.594722</td>
-                    <td>-35.055278</td>
-                    <td>1</td>
-                    <td>K</td>
-                    <td>1011110250</td>
-                    <td>10877144000184</td>
-                    <td>50411382063</td>
-                    <td>ASSOCIAÇÃO DE DESENVOLVIMENTO CULTURAL DA RÁDI...</td>
-                    <td>Mataraca</td>
-                    <td>PB</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-    </div>
-
-  </div>
-  {% endraw %}
-
-  {% raw %}
-
-  <div class="cell border-box-sizing code_cell rendered">
-    <div class="input">
-
-      <div class="inner_cell">
-        <div class="input_area">
-          <div class=" highlight hl-ipython3">
-            <pre><span></span><span class="n">stel</span> <span class="o">=</span> <span class="n">read_stel</span><span class="p">(</span><span class="n">pasta</span><span class="o">=</span><span class="s1">&#39;D:\OneDrive - ANATEL\GR01FI3\BaseDados&#39;</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-  </div>
-  {% endraw %}
-
-  <div class="cell border-box-sizing text_cell rendered">
-    <div class="inner_cell">
-      <div class="text_cell_render border-box-sizing rendered_html">
-        <p><strong>Os dados do Stel não serão ilustrados aqui por se tratar de dados de telecomunicação privados, os
-            demais dados de radiodifusão são públicos e disponíveis para qualquer interessado consultar</strong></p>
-
-      </div>
-    </div>
-  </div>
-  <div class="cell border-box-sizing text_cell rendered">
-    <div class="inner_cell">
-      <div class="text_cell_render border-box-sizing rendered_html">
-        <p>Se o argumento <code>update=True</code> for fornecido ou arquivo local não existir, a base de dados é
-          atualizada por meio da função <a href="/queries.html#update_stel"><code>update_stel</code></a>.
-          {% include warning.html content='A função <a href="/queries.html#update_stel"><code>update_stel</code></a> somente irá funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.' %}
-        </p>
-
-      </div>
-    </div>
-  </div>
-  {% raw %}
-
-  <div class="cell border-box-sizing code_cell rendered">
-    <div class="input">
-
-      <div class="inner_cell">
-        <div class="input_area">
-          <div class=" highlight hl-ipython3">
-            <pre><span></span><span class="n">mosaico</span> <span class="o">=</span> <span class="n">read_mosaico</span><span class="p">(</span><span class="n">pasta</span><span class="o">=</span><span class="s1">&#39;D:\OneDrive - ANATEL\GR01FI3\BaseDados&#39;</span><span class="p">)</span> <span class="p">;</span> <span class="n">mosaico</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>
-</pre>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <div class="output_wrapper">
-      <div class="output">
-
-        <div class="output_area">
-
-          <div class="output_subarea output_stream output_stdout output_text">
-            <pre>Baixando as Estações do Mosaico...
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Baixando as Estações do Mosaico...
 Baixando o Plano Básico das Estações...
 Baixando o Histórico de Atualizações...
 Kbô
 </pre>
-          </div>
-        </div>
-
-        <div class="output_area">
-
-
-          <div class="output_html rendered_html output_subarea output_execute_result">
-            <div>
-              <style scoped>
-                .dataframe tbody tr th:only-of-type {
-                  vertical-align: middle;
-                }
-
-                .dataframe tbody tr th {
-                  vertical-align: top;
-                }
-
-                .dataframe thead th {
-                  text-align: right;
-                }
-              </style>
-              <table border="1" class="dataframe">
-                <thead>
-                  <tr style="text-align: right;">
-                    <th></th>
-                    <th>Serviço</th>
-                    <th>Situação</th>
-                    <th>Entidade</th>
-                    <th>Fistel</th>
-                    <th>CNPJ</th>
-                    <th>Município</th>
-                    <th>UF</th>
-                    <th>Id</th>
-                    <th>Número da Estação</th>
-                    <th>Classe</th>
-                    <th>Frequência</th>
-                    <th>Latitude</th>
-                    <th>Longitude</th>
-                    <th>Num_Ato</th>
-                    <th>Órgao</th>
-                    <th>Data_Ato</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th>21146</th>
-                    <td>RTVD</td>
-                    <td>TV-C2</td>
-                    <td>M. V. L - COMMUNICARE TELECOMUNICACOES LTDA</td>
-                    <td>50419656170</td>
-                    <td>12071310000186</td>
-                    <td>Parauapebas</td>
-                    <td>PA</td>
-                    <td>5f2068e65ace5</td>
-                    <td></td>
-                    <td>C</td>
-                    <td>503</td>
-                    <td>-6,0678</td>
-                    <td>-49,9037</td>
-                    <td>7588</td>
-                    <td>ORLE</td>
-                    <td>2020-12-10 18:21:09</td>
-                  </tr>
-                  <tr>
-                    <th>21147</th>
-                    <td>RTVD</td>
-                    <td>TV-C1</td>
-                    <td>MERCES COMUNICACOES LTDA</td>
-                    <td>50419663118</td>
-                    <td>11322505000199</td>
-                    <td>Delmiro Gouveia</td>
-                    <td>AL</td>
-                    <td>5f218fcfb0d84</td>
-                    <td></td>
-                    <td>C</td>
-                    <td>545</td>
-                    <td>-9,3853</td>
-                    <td>-37,9987</td>
-                    <td>9430</td>
-                    <td>ORLE</td>
-                    <td>2017-06-09 00:00:00</td>
-                  </tr>
-                  <tr>
-                    <th>21148</th>
-                    <td>RTVD</td>
-                    <td>TV-C1</td>
-                    <td>FUNDACAO EDUCACIONAL E CULTURAL DE IPANEMA</td>
-                    <td>50433856696</td>
-                    <td>04608796000110</td>
-                    <td>Sabará</td>
-                    <td>MG</td>
-                    <td>5f32c1c918e6b</td>
-                    <td></td>
-                    <td>C</td>
-                    <td>207</td>
-                    <td>-19,89667</td>
-                    <td>-43,80722</td>
-                    <td>3301</td>
-                    <td>ORLE</td>
-                    <td>2020-06-23 00:00:00</td>
-                  </tr>
-                  <tr>
-                    <th>21149</th>
-                    <td>FM</td>
-                    <td>FM-C2</td>
-                    <td>RADIO ITAPIRANGA LTDA</td>
-                    <td>50433860456</td>
-                    <td>84375872000124</td>
-                    <td>Itapiranga</td>
-                    <td>SC</td>
-                    <td>5f68d432841a5</td>
-                    <td></td>
-                    <td>B1</td>
-                    <td>105,1</td>
-                    <td>-27,15778</td>
-                    <td>-53,69583</td>
-                    <td>567</td>
-                    <td>ORLE</td>
-                    <td>2021-01-26 17:20:30</td>
-                  </tr>
-                  <tr>
-                    <th>21150</th>
-                    <td>FM</td>
-                    <td>FM-C1</td>
-                    <td>EMISSORAS SUL BRASILEIRAS LTDA</td>
-                    <td>50433937009</td>
-                    <td>95818506000119</td>
-                    <td>Horizontina</td>
-                    <td>RS</td>
-                    <td>5f8dcc96f23f9</td>
-                    <td></td>
-                    <td>B1</td>
-                    <td>100,3</td>
-                    <td>-27,62833</td>
-                    <td>-54,30528</td>
-                    <td>3166</td>
-                    <td>ORLE</td>
-                    <td>2020-06-13 00:00:00</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-    </div>
-
-  </div>
-  {% endraw %}
-
-  <div class="cell border-box-sizing text_cell rendered">
-    <div class="inner_cell">
-      <div class="text_cell_render border-box-sizing rendered_html">
-        <p>Se o argumento <code>update=True</code> for fornecido ou o arquivo local não existir, a base de dados é
-          atualizada por meio da função <a href="/queries.html#update_mosaico"><code>update_mosaico</code></a>.
-          {% include tip.html content='A função <a href="/queries.html#update_mosaico"><code>update_mosaico</code></a> usa a base de dados Pública do Spectrum E, portanto basta ter conexão com a internet .' %}
-        </p>
-
-      </div>
-    </div>
-  </div>
 </div>
+</div>
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Serviço</th>
+      <th>Situação</th>
+      <th>Entidade</th>
+      <th>Fistel</th>
+      <th>CNPJ</th>
+      <th>Município</th>
+      <th>UF</th>
+      <th>Id</th>
+      <th>Número da Estação</th>
+      <th>Classe</th>
+      <th>Frequência</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
+      <th>Num_Ato</th>
+      <th>Órgao</th>
+      <th>Data_Ato</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>21146</th>
+      <td>RTVD</td>
+      <td>TV-C2</td>
+      <td>M. V. L - COMMUNICARE TELECOMUNICACOES LTDA</td>
+      <td>50419656170</td>
+      <td>12071310000186</td>
+      <td>Parauapebas</td>
+      <td>PA</td>
+      <td>5f2068e65ace5</td>
+      <td></td>
+      <td>C</td>
+      <td>503</td>
+      <td>-6,0678</td>
+      <td>-49,9037</td>
+      <td>7588</td>
+      <td>ORLE</td>
+      <td>2020-12-10 18:21:09</td>
+    </tr>
+    <tr>
+      <th>21147</th>
+      <td>RTVD</td>
+      <td>TV-C1</td>
+      <td>MERCES COMUNICACOES LTDA</td>
+      <td>50419663118</td>
+      <td>11322505000199</td>
+      <td>Delmiro Gouveia</td>
+      <td>AL</td>
+      <td>5f218fcfb0d84</td>
+      <td></td>
+      <td>C</td>
+      <td>545</td>
+      <td>-9,3853</td>
+      <td>-37,9987</td>
+      <td>9430</td>
+      <td>ORLE</td>
+      <td>2017-06-09 00:00:00</td>
+    </tr>
+    <tr>
+      <th>21148</th>
+      <td>RTVD</td>
+      <td>TV-C1</td>
+      <td>FUNDACAO EDUCACIONAL E CULTURAL DE IPANEMA</td>
+      <td>50433856696</td>
+      <td>04608796000110</td>
+      <td>Sabará</td>
+      <td>MG</td>
+      <td>5f32c1c918e6b</td>
+      <td></td>
+      <td>C</td>
+      <td>207</td>
+      <td>-19,89667</td>
+      <td>-43,80722</td>
+      <td>3301</td>
+      <td>ORLE</td>
+      <td>2020-06-23 00:00:00</td>
+    </tr>
+    <tr>
+      <th>21149</th>
+      <td>FM</td>
+      <td>FM-C2</td>
+      <td>RADIO ITAPIRANGA LTDA</td>
+      <td>50433860456</td>
+      <td>84375872000124</td>
+      <td>Itapiranga</td>
+      <td>SC</td>
+      <td>5f68d432841a5</td>
+      <td></td>
+      <td>B1</td>
+      <td>105,1</td>
+      <td>-27,15778</td>
+      <td>-53,69583</td>
+      <td>567</td>
+      <td>ORLE</td>
+      <td>2021-01-26 17:20:30</td>
+    </tr>
+    <tr>
+      <th>21150</th>
+      <td>FM</td>
+      <td>FM-C1</td>
+      <td>EMISSORAS SUL BRASILEIRAS LTDA</td>
+      <td>50433937009</td>
+      <td>95818506000119</td>
+      <td>Horizontina</td>
+      <td>RS</td>
+      <td>5f8dcc96f23f9</td>
+      <td></td>
+      <td>B1</td>
+      <td>100,3</td>
+      <td>-27,62833</td>
+      <td>-54,30528</td>
+      <td>3166</td>
+      <td>ORLE</td>
+      <td>2020-06-13 00:00:00</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Se o argumento <code>update=True</code> for fornecido ou o arquivo local não existir, a base de dados é atualizada por meio da função <a href="/anateldb/queries.html#update_mosaico"><code>update_mosaico</code></a>. 
+{% include tip.html content='A função <a href="/anateldb/queries.html#update_mosaico"><code>update_mosaico</code></a> usa a base de dados Pública do Spectrum E, portanto basta ter conexão com a internet .' %}</p>
+
+</div>
+</div>
+</div>
+</div>
+ 
+
