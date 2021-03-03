@@ -173,6 +173,7 @@ radcom = read_radcom(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; radcom.he
 
 
 Se o argumento `update=True` for fornecido ou arquivo local não existir, a base de dados é atualizada por meio da função `update_radcom`. 
+
 {% include warning.html content='A função `update_radcom` somente irá funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.' %}
 
 ```python
