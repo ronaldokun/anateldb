@@ -170,7 +170,7 @@ radcom = read_radcom(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; radcom.he
 
 Se o argumento <code>update=True</code> for fornecido ou arquivo local não existir, a base de dados é atualizada por meio da função <code>update_radcom</code>. 
 
-{% include warning.html content='A função <code>update_radcom</code> somente irá funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.' %}
+*A função <code>update_radcom</code> somente irá funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.*
 
 ```python
 radcom = read_radcom(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados', update=True) ; radcom.tail()
@@ -301,7 +301,8 @@ stel = read_stel(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados', update=True)
 **Os dados do Stel não serão ilustrados aqui por se tratar de dados de telecomunicação privados, os demais dados de radiodifusão são públicos e disponíveis para qualquer interessado consultar**
 
 Se o argumento <code>update=True</code> for fornecido ou arquivo local não existir, a base de dados é atualizada por meio da função <code>update_stel</code>. 
-{% include warning.html content='A função  <code>update_stel</code> somente irá funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.' %}
+
+*A função  <code>update_stel</code> somente irá funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.*
 
 ```python
 mosaico = read_mosaico(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; mosaico.tail()
@@ -454,4 +455,5 @@ mosaico = read_mosaico(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; mosaico
 
 
 Se o argumento <code>update=True</code> for fornecido ou o arquivo local não existir, a base de dados é atualizada por meio da função <code>update_mosaico</code>. 
-{% include tip.html content='A função <code>update_mosaico</code> usa a base de dados Pública do Spectrum E, portanto basta somente estar conectado na internet &#x1F60E;.' %}
+
+> A função <code>update_mosaico</code> usa a base de dados Pública do Spectrum E, portanto basta somente estar conectado na internet &#x1F60E;.
