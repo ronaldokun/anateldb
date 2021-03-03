@@ -18,6 +18,9 @@ entries:
     - output: web,pdf
       title: Queries
       url: queries.html
+    - output: web,pdf
+      title: Tests
+      url: tests.html
     output: web
     title: anateldb
   output: web

@@ -16,9 +16,10 @@ index = {"filter_database": "filter.ipynb",
          "HISTORICO": "queries.ipynb",
          "COL_ESTACOES": "queries.ipynb",
          "COL_PLANO_BASICO": "queries.ipynb",
-         "STEL": "queries.ipynb",
+         "TELECOM": "queries.ipynb",
          "RADIODIFUSAO": "queries.ipynb",
          "RADCOM": "queries.ipynb",
+         "STEL": "queries.ipynb",
          "connect_db": "queries.ipynb",
          "update_radcom": "queries.ipynb",
          "update_stel": "queries.ipynb",
@@ -26,7 +27,8 @@ index = {"filter_database": "filter.ipynb",
 
 modules = ["filter.py",
            "parser.py",
-           "query.py"]
+           "query.py",
+           "tests.py"]
 
 doc_url = "https://ronaldokun.github.io/anateldb/"
 

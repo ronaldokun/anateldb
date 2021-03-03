@@ -4,34 +4,75 @@ __all__ = ['filter_database']
 
 # Cell
 from pathlib import Path
+import pandas as pd
 from datetime import datetime
 from .parser import *
+from .query import *
+from fastcore.test import *
 
 # Cell
 def filter_database(path):
     path = Path(path)
-    time = datetime.today().strftime("%Y-%m-%d_%H-%M")
-    mosaico = read_mosaico()
-    stel = read_stel().sort_values('Frequência')
-    radcom = read_radcom()
-    radcom['Serviço'] = 'RADCOM'
-    radcom['Classe'] = 'Até 25W'
-    radcom['Situação'] = radcom.Serviço + '-' + radcom.Situação
-    radcom.rename({'Numero da Estação': 'Número da Estação'}, axis=1, inplace=True)
+    dest = path / 'FiltroAppAnalise'
+    dest.mkdir(parents = True, exist_ok=True)
+    for p in dest.iterdir():
+        if p.is_file():
+            p.unlink()
+    time = datetime.today().strftime("%Y%m%d_%H%M")
+    mosaico = read_mosaico(path)
+    stel = read_stel(path).sort_values('Frequência').loc[:, TELECOM]
+    radcom = read_radcom(path)
+    radcom['Serviço'] = '231'
+    radcom['Status'] = 'RADCOM'
+    radcom['Classe'] = radcom.Fase + '-' + radcom.Situação
     radcom = radcom.loc[:, RADIODIFUSAO]
     mosaico = mosaico.loc[:, RADIODIFUSAO]
-    radiodifusao = mosaico.append(radcom).sort_values('Frequência')
-    radiodi
+    radiodifusao = mosaico.append(radcom)
+    radiodifusao['Frequência'] = radiodifusao['Frequência'].str.replace(',','.')
+    radiodifusao['Frequência'] = radiodifusao.Frequência.astype('float32')
+    radiodifusao = radiodifusao.sort_values('Frequência').reset_index(drop=True)
     slma = (stel.Frequência >= 108) & (stel.Frequência <= 137)
-    telecom = stel[~slma].reset_index()
-    slma = stel[slma].reset_index()
-    mosaico.to_csv(f'{path}/radiodifusao_{time}.csv', index=False)
-    slma.to_csv(f'{path}/108-137_{time}.csv', index=False)
-    telecom.to_csv(f'{path}/telecom_{time}.csv', index=False)
-    mosaico.to_feather(f'{path}/radiodifusao_{time}.fth')
-    slma.to_feather(f'{path}/108-137_{time}.fth')
-    telecom.to_feather(f'{path}/telecom_{time}.fth')
-    with pd.ExcelWriter(f'{path}/Base_de_Dados_{time}.xlsx') as workbook:
-        mosaico.to_excel(workbook, sheet_name='radiodifusão', index=False)
+    telecom = stel[~slma].reset_index(drop=True)
+    slma = stel[slma].reset_index(drop=True)
+    radiodifusao = radiodifusao[(radiodifusao.Latitude != '') & (radiodifusao.Longitude != '')].reset_index(drop=True)
+    radiodifusao['Latitude'] = radiodifusao.Latitude.str.replace(',', '.').astype('float32')
+    radiodifusao['Longitude'] = radiodifusao.Longitude.str.replace(',', '.').astype('float32')
+
+    for c in radiodifusao.columns:
+        if c in ('Latitude', 'Longitude'):
+            radiodifusao[c] = radiodifusao[c].astype('float32', errors='ignore')
+        else:
+            radiodifusao[c] = radiodifusao[c].astype('str')
+    for c in slma.columns:
+        if c in ('Latitude', 'Longitude'):
+            slma[c] = slma[c].astype('float32', errors='ignore')
+        else:
+            slma[c] = slma[c].astype('str')
+    for c in telecom.columns:
+        if c in ('Latitude', 'Longitude'):
+            telecom[c] = telecom[c].astype('float32', errors='ignore')
+        else:
+            telecom[c] = telecom[c].astype('str')
+
+    radiodifusao['Descrição'] = radiodifusao.Status + ', ' + radiodifusao.Classe + ', ' + radiodifusao.Entidade.str.title() + ' (' + \
+                                radiodifusao.Fistel + ', ' + radiodifusao['Número da Estação'] + '), ' + radiodifusao.Município + '/' + \
+                                radiodifusao.UF
+    slma['Descrição'] = slma.Serviço + ', ' + slma.Entidade.str.title() + ' (' + slma.Fistel + ', ' +  slma['Número da Estação'] + '), ' + \
+                        slma['Município'] + '/' + slma.UF
+    telecom['Descrição'] = telecom.Serviço + ', ' + telecom.Entidade.str.title() + ' (' + telecom.Fistel + ', ' + telecom['Número da Estação'] + '), ' + \
+                           telecom['Município'] + '/' + telecom.UF
+
+    export_columns = ['Frequência', 'Latitude', 'Longitude', 'Descrição']
+    radiodifusao = radiodifusao.loc[:, export_columns]
+    slma = slma.loc[:, export_columns]
+    telecom = telecom.loc[:, export_columns]
+    radiodifusao.to_csv(f'{dest}/radiodifusao_{time}.csv', index=False)
+    slma.to_csv(f'{dest}/108-137_{time}.csv', index=False)
+    telecom.to_csv(f'{dest}/telecom_{time}.csv', index=False)
+    radiodifusao.to_feather(f'{dest}/radiodifusao_{time}.fth')
+    slma.to_feather(f'{dest}/108-137_{time}.fth')
+    telecom.to_feather(f'{dest}/telecom_{time}.fth')
+    with pd.ExcelWriter(f'{dest}/Base_de_Dados_{time}.xlsx') as workbook:
+        radiodifusao.to_excel(workbook, sheet_name='Radiodifusão', index=False)
         slma.to_excel(workbook, sheet_name='108-137', index=False)
         telecom.to_excel(workbook, sheet_name='Telecom', index=False)

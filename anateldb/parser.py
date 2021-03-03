@@ -67,24 +67,25 @@ def parse_plano_basico(row, cols=COL_PLANO_BASICO):
 
 def read_estações(path, cols):
     df = pdx.read_xml(path, cols)
-    columns = ['Serviço', 'Situação', 'Entidade', 'Fistel', 'CNPJ', 'Município', 'UF', 'Id', 'Número da Estação']
+    columns = ['Serviço', 'Status', 'Entidade', 'Fistel', 'CNPJ', 'Município', 'UF', 'Id', 'Número da Estação']
     dtypes = ['category', 'category', 'str', 'str', 'str', 'str', 'category', 'str', 'str']
     df = pd.DataFrame(df['row'].apply(parse_estações).tolist())
     df.columns = columns
     for col, dtype in zip(columns, dtypes):
-        df[col] = df[col].astype(dtype)
+        df[col] = df[col].astype(dtype, errors='ignore')
     return df
 
 def read_plano_basico(path, cols):
     df = pdx.read_xml(path, cols)
     columns = ['Id', 'Classe', 'Frequência', 'Latitude', 'Longitude']
-    dtypes = ['str', 'category', 'str', 'str', 'str']
+    dtypes = ['str', 'category', 'float32', 'float32', 'float32']
     df = pd.DataFrame(df['row'].apply(parse_plano_basico).tolist())
     df.loc[df['@Frequencia'].isna(), '@Frequencia'] = df.loc[df['@Frequência'].notna(), '@Frequência']
     df.drop('@Frequência', axis=1, inplace=True)
     df.columns = columns
+    df = df[(df.Latitude != '') & (df.Longitude != '')]
     for col, dtype in zip(columns, dtypes):
-        df[col] = df[col].astype(dtype)
+        df[col] = df[col].astype(dtype, errors='ignore')
     return df
 
 def read_historico(path):
