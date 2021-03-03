@@ -1,13 +1,14 @@
 repository: ronaldokun/anateldb
 output: web
 topnav_title: anateldb
-site_title: anatelsurf
+site_title: anateldb
 company_name: Ronaldo S.A. Batista
 description: This repository hold automation scripts and tests to navigate. update and scrap the systems in ANATEL.
 # Set to false to disable KaTeX math
 use_math: true
 # Add Google analytics id if you have one and want to use it here
 google_analytics:
+twitter_username: ronaldokun
 # See http://nbdev.fast.ai/search for help with adding Search
 google_search:
 

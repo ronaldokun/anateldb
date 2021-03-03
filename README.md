@@ -8,7 +8,7 @@
 
 ## Como utilizar
 
-### Métodos para baixar / atualizar os arquivos das bases de dados
+### Métodos para baixar ou atualizar os arquivos das bases de dados
 
 ```python
 from anateldb.query import update_mosaico, update_radcom, update_stel
