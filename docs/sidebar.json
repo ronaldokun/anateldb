@@ -2,7 +2,6 @@
   "anateldb": {
     "Overview": "/",
     "Fun\u00e7\u00f5es Auxiliar": "filter.html",
-    "Anatel - Consulta e Processamento do Banco de Dados": "md.html",
     "Parser": "parser.html",
     "Queries SQL e MongoDB": "queries.html"
   }
