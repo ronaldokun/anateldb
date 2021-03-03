@@ -2,13 +2,9 @@
 > Este repositório concentra um conjunto de scripts para navegar e baixar informações dos principais bancos de dados da Anatel. Cujo dados serão utilizados em tarefas fiscalizatórias. O público alvo são os servidores do órgão, uma vez que a maioria dos sistemas utilizados aqui necessitam de autenticação cujo acesso é restrito aos servidores da ANATEL.
 
 
-```python
-#all_local
-```
-
 ## Instalação
 
-`pip install anateldb`
+<code>pip install anateldb</code>
 
 ## Como utilizar
 
@@ -40,19 +36,16 @@ update_radcom('D:\OneDrive - ANATEL\GR01FI3\BaseDados')
     Lendo o Banco de Dados de Radcom
     Wall time: 1 s
 
-
-A função `update_stel` é bem mais lenta que as demais, dado que o banco de dados do STEL é antigo e abarca todos os registros de outorga de serviços de telecomunicações da ANATEL, com mais de **400.000** registros ativos. Esse banco de dados é atualizado 1 vez ao dia à meia-noite e remete ao estado do dia anterior, portanto não faz sentido atualizá-lo mais de 1 vez por dia.
+A função <code>update_stel</code> é bem mais lenta que as demais, dado que o banco de dados do STEL é antigo e abarca todos os registros de outorga de serviços de telecomunicações da ANATEL, com mais de **400.000** registros ativos. Esse banco de dados é atualizado 1 vez ao dia à meia-noite e remete ao estado do dia anterior, portanto não faz sentido atualizá-lo mais de 1 vez por dia.
 
 ```python
 %%time
 update_stel('D:\OneDrive - ANATEL\GR01FI3\BaseDados')
 ```
 
-    Lendo o Banco de Dados do STEL. Processo Lento, aguarde...
-    Wall time: 38.5 s
-
 
 ### Métodos para ler as Bases de Dados
+
 
 ```python
 from anateldb.parser import read_radcom, read_stel, read_mosaico
@@ -175,10 +168,9 @@ radcom = read_radcom(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; radcom.he
 </div>
 
 
+Se o argumento <code>update=True</code> for fornecido ou arquivo local não existir, a base de dados é atualizada por meio da função <code>update_radcom</code>. 
 
-Se o argumento `update=True` for fornecido ou arquivo local não existir, a base de dados é atualizada por meio da função `update_radcom`. 
-
-{% include warning.html content='A função `update_radcom` somente irá funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.' %}
+{% include warning.html content='A função <code>update_radcom</code> somente irá funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.' %}
 
 ```python
 radcom = read_radcom(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados', update=True) ; radcom.tail()
@@ -303,15 +295,13 @@ radcom = read_radcom(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados', update=True
 </div>
 
 
-
 ```python
 stel = read_stel(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados', update=True)
 ```
-
 **Os dados do Stel não serão ilustrados aqui por se tratar de dados de telecomunicação privados, os demais dados de radiodifusão são públicos e disponíveis para qualquer interessado consultar**
 
-Se o argumento `update=True` for fornecido ou arquivo local não existir, a base de dados é atualizada por meio da função `update_stel`. 
-{% include warning.html content='A função `update_stel` somente irá funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.' %}
+Se o argumento <code>update=True</code> for fornecido ou arquivo local não existir, a base de dados é atualizada por meio da função <code>update_stel</code>. 
+{% include warning.html content='A função  <code>update_stel</code> somente irá funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.' %}
 
 ```python
 mosaico = read_mosaico(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; mosaico.tail()
@@ -463,6 +453,5 @@ mosaico = read_mosaico(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; mosaico
 </div>
 
 
-
-Se o argumento `update=True` for fornecido ou o arquivo local não existir, a base de dados é atualizada por meio da função `update_mosaico`. 
-{% include tip.html content='A função `update_mosaico` usa a base de dados Pública do Spectrum E, portanto basta ter conexão com a internet .' %}
+Se o argumento <code>update=True</code> for fornecido ou o arquivo local não existir, a base de dados é atualizada por meio da função <code>update_mosaico</code>. 
+{% include tip.html content='A função <code>update_mosaico</code> usa a base de dados Pública do Spectrum E, portanto basta somente estar conectado na internet &#x1F60E;.' %}
