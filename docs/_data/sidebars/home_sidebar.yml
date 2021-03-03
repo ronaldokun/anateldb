@@ -10,16 +10,13 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
-      title: "Fun\xE7\xF5es Auxiliar"
+      title: Filtragem
       url: filter.html
-    - output: web,pdf
-      title: Anatel - Consulta e Processamento do Banco de Dados
-      url: md.html
     - output: web,pdf
       title: Parser
       url: parser.html
     - output: web,pdf
-      title: Queries SQL e MongoDB
+      title: Queries
       url: queries.html
     output: web
     title: anateldb
