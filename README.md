@@ -300,128 +300,13 @@ radcom = read_radcom(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados', update=True
 
 
 ```python
-stel = read_stel(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; stel.tail()
-```
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Frequência</th>
-      <th>Unidade</th>
-      <th>Latitude</th>
-      <th>Longitude</th>
-      <th>Número do Serviço</th>
-      <th>Número da estação</th>
-      <th>Entidade</th>
-      <th>Município</th>
-      <th>UF</th>
-      <th>CNPJ</th>
-      <th>Fistel</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>403573</th>
-      <td>22807.0</td>
-      <td>kHz</td>
-      <td>-22.965000</td>
-      <td>-43.673333</td>
-      <td>064</td>
-      <td>895156</td>
-      <td>CLARO S.A.</td>
-      <td>Rio de Janeiro</td>
-      <td>RJ</td>
-      <td>40432544000147</td>
-      <td>01020422092</td>
-    </tr>
-    <tr>
-      <th>403574</th>
-      <td>23113.0</td>
-      <td>kHz</td>
-      <td>-23.467583</td>
-      <td>-46.862111</td>
-      <td>019</td>
-      <td>1000352878</td>
-      <td>RAFT TECNOLOGIES BRAZIL SISTEMAS DE TECNOLOGIA...</td>
-      <td>Santana de Parnaíba</td>
-      <td>SP</td>
-      <td>17196674000106</td>
-      <td>50411558609</td>
-    </tr>
-    <tr>
-      <th>403575</th>
-      <td>25242.0</td>
-      <td>kHz</td>
-      <td>-15.819444</td>
-      <td>-47.880556</td>
-      <td>019</td>
-      <td>5050111</td>
-      <td>EMBAIXADA DA REPUBLICA TCHECA</td>
-      <td>Brasília</td>
-      <td>DF</td>
-      <td>00000000000000</td>
-      <td>50000906590</td>
-    </tr>
-    <tr>
-      <th>403576</th>
-      <td>26100.5</td>
-      <td>kHz</td>
-      <td>-8.051667</td>
-      <td>-34.929444</td>
-      <td>064</td>
-      <td>895180</td>
-      <td>CLARO S.A.</td>
-      <td>Recife</td>
-      <td>PE</td>
-      <td>40432544000147</td>
-      <td>01020422092</td>
-    </tr>
-    <tr>
-      <th>403577</th>
-      <td>26720.0</td>
-      <td>kHz</td>
-      <td>-30.063889</td>
-      <td>-51.200000</td>
-      <td>079</td>
-      <td>71366</td>
-      <td>TELE TAXI CIDADE LTDA</td>
-      <td>Porto Alegre</td>
-      <td>RS</td>
-      <td>90068602000173</td>
-      <td>03020216710</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
-
-Se o argumento `update=True` for fornecido ou arquivo local não existir, a base de dados é atualizada por meio da função `update_stel`. 
-{% include warning.html content='A função `update_stel` somente irá funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.' %}
-
-```python
 stel = read_stel(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados', update=True)
 ```
 
 **Os dados do Stel não serão ilustrados aqui por se tratar de dados de telecomunicação privados, os demais dados de radiodifusão são públicos e disponíveis para qualquer interessado consultar**
+
+Se o argumento `update=True` for fornecido ou arquivo local não existir, a base de dados é atualizada por meio da função `update_stel`. 
+{% include warning.html content='A função `update_stel` somente irá funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.' %}
 
 ```python
 mosaico = read_mosaico(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; mosaico.tail()
@@ -575,4 +460,4 @@ mosaico = read_mosaico(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; mosaico
 
 
 Se o argumento `update=True` for fornecido ou o arquivo local não existir, a base de dados é atualizada por meio da função `update_mosaico`. 
-{% include tip.html content='A função `update_mosaico` usa a base de dados Pública do Spectrum E, portanto basta ter conexão com a internet :smile:' %}
+{% include tip.html content='A função `update_mosaico` usa a base de dados Pública do Spectrum E, portanto basta ter conexão com a internet .' %}
