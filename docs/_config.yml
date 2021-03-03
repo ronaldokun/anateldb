@@ -1,6 +1,6 @@
-repository: ronaldokun/anatelsurf
+repository: ronaldokun/anateldb
 output: web
-topnav_title: anatelsurf
+topnav_title: anateldb
 site_title: anatelsurf
 company_name: Ronaldo S.A. Batista
 description: This repository hold automation scripts and tests to navigate. update and scrap the systems in ANATEL.

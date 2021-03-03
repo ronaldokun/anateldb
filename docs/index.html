@@ -1,6 +1,6 @@
 ---
 
-title: Anatel - Consulta e Processamento do Banco de Dados da Anatel
+title: Anatel - Consulta e Processamento do Banco de Dados
 
 
 keywords: fastai
@@ -645,143 +645,23 @@ Wall time: 38.5 s
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">stel</span> <span class="o">=</span> <span class="n">read_stel</span><span class="p">(</span><span class="n">pasta</span><span class="o">=</span><span class="s1">&#39;D:\OneDrive - ANATEL\GR01FI3\BaseDados&#39;</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="p">;</span> <span class="n">stel</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">stel</span> <span class="o">=</span> <span class="n">read_stel</span><span class="p">(</span><span class="n">pasta</span><span class="o">=</span><span class="s1">&#39;D:\OneDrive - ANATEL\GR01FI3\BaseDados&#39;</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
     </div>
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Lendo o Banco de Dados do STEL. Processo Lento, aguarde...
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Frequência</th>
-      <th>Unidade</th>
-      <th>Latitude</th>
-      <th>Longitude</th>
-      <th>Número do Serviço</th>
-      <th>Número da estação</th>
-      <th>Entidade</th>
-      <th>Município</th>
-      <th>UF</th>
-      <th>CNPJ</th>
-      <th>Fistel</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>403573</th>
-      <td>21976.0</td>
-      <td>kHz</td>
-      <td>-19.646389</td>
-      <td>-43.950556</td>
-      <td>019</td>
-      <td>690947151</td>
-      <td>GOL LINHAS AEREAS S.A.</td>
-      <td>Lagoa Santa</td>
-      <td>MG</td>
-      <td>07575651000400</td>
-      <td>50406293970</td>
-    </tr>
-    <tr>
-      <th>403574</th>
-      <td>22756.0</td>
-      <td>kHz</td>
-      <td>-22.965000</td>
-      <td>-43.673333</td>
-      <td>064</td>
-      <td>895156</td>
-      <td>CLARO S.A.</td>
-      <td>Rio de Janeiro</td>
-      <td>RJ</td>
-      <td>40432544000147</td>
-      <td>01020422092</td>
-    </tr>
-    <tr>
-      <th>403575</th>
-      <td>22807.0</td>
-      <td>kHz</td>
-      <td>-8.051667</td>
-      <td>-34.929444</td>
-      <td>064</td>
-      <td>895180</td>
-      <td>CLARO S.A.</td>
-      <td>Recife</td>
-      <td>PE</td>
-      <td>40432544000147</td>
-      <td>01020422092</td>
-    </tr>
-    <tr>
-      <th>403576</th>
-      <td>24100.0</td>
-      <td>kHz</td>
-      <td>-23.662778</td>
-      <td>-46.695833</td>
-      <td>035</td>
-      <td>1000487528</td>
-      <td>RAFT TECNOLOGIES BRAZIL SISTEMAS DE TECNOLOGIA...</td>
-      <td>São Paulo</td>
-      <td>SP</td>
-      <td>17196674000106</td>
-      <td>50411805045</td>
-    </tr>
-    <tr>
-      <th>403577</th>
-      <td>27635.0</td>
-      <td>kHz</td>
-      <td>-23.621325</td>
-      <td>-46.655492</td>
-      <td>019</td>
-      <td>1268732</td>
-      <td>TAM LINHAS AEREAS S/A</td>
-      <td>São Paulo</td>
-      <td>SP</td>
-      <td>02012862000160</td>
-      <td>02030398152</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-</div>
-
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Os dados do Stel não serão ilustrados aqui por se tratar de dados de telecomunicação privados, os demais dados de radiodifusão são públicos e disponíveis para qualquer interessado consultar</strong></p>
+
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">

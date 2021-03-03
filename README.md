@@ -1,4 +1,4 @@
-# Anatel - Consulta e Processamento do Banco de Dados da Anatel
+# Anatel - Consulta e Processamento do Banco de Dados
 > Este repositório concentra um conjunto de scripts para navegar e baixar informações dos principais bancos de dados da Anatel. Cujo dados serão utilizados em tarefas fiscalizatórias. O público alvo são os servidores do órgão, uma vez que a maioria dos sistemas utilizados aqui necessitam de autenticação cujo acesso é restrito aos servidores da ANATEL.
 
 
@@ -26,7 +26,7 @@ update_mosaico(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados')
     Baixando o Histórico de Atualizações...
     Kbô
     Wall time: 8.12 s
-    
+
 
 ```python
 %%time
@@ -35,7 +35,7 @@ update_radcom('D:\OneDrive - ANATEL\GR01FI3\BaseDados')
 
     Lendo o Banco de Dados de Radcom
     Wall time: 1 s
-    
+
 
 A função `update_stel` é bem mais lenta que as demais, dado que o banco de dados do STEL é antigo e abarca todos os registros de outorga de serviços de telecomunicações da ANATEL, com mais de **400.000** registros ativos. Esse banco de dados é atualizado 1 vez ao dia à meia-noite e remete ao estado do dia anterior, portanto não faz sentido atualizá-lo mais de 1 vez por dia.
 
@@ -46,7 +46,7 @@ update_stel('D:\OneDrive - ANATEL\GR01FI3\BaseDados')
 
     Lendo o Banco de Dados do STEL. Processo Lento, aguarde...
     Wall time: 38.5 s
-    
+
 
 ### Métodos para ler as Bases de Dados
 
@@ -180,7 +180,7 @@ radcom = read_radcom(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados', update=True
 ```
 
     Lendo o Banco de Dados de Radcom
-    
+
 
 
 
@@ -418,122 +418,10 @@ Se o argumento `update=True` for fornecido ou arquivo local não existir, a base
 {% include warning.html content='A função `update_stel` somente irá funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.' %}
 
 ```python
-stel = read_stel(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados', update=True) ; stel.tail()
+stel = read_stel(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados', update=True)
 ```
 
-    Lendo o Banco de Dados do STEL. Processo Lento, aguarde...
-    
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Frequência</th>
-      <th>Unidade</th>
-      <th>Latitude</th>
-      <th>Longitude</th>
-      <th>Número do Serviço</th>
-      <th>Número da estação</th>
-      <th>Entidade</th>
-      <th>Município</th>
-      <th>UF</th>
-      <th>CNPJ</th>
-      <th>Fistel</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>403573</th>
-      <td>21976.0</td>
-      <td>kHz</td>
-      <td>-19.646389</td>
-      <td>-43.950556</td>
-      <td>019</td>
-      <td>690947151</td>
-      <td>GOL LINHAS AEREAS S.A.</td>
-      <td>Lagoa Santa</td>
-      <td>MG</td>
-      <td>07575651000400</td>
-      <td>50406293970</td>
-    </tr>
-    <tr>
-      <th>403574</th>
-      <td>22756.0</td>
-      <td>kHz</td>
-      <td>-22.965000</td>
-      <td>-43.673333</td>
-      <td>064</td>
-      <td>895156</td>
-      <td>CLARO S.A.</td>
-      <td>Rio de Janeiro</td>
-      <td>RJ</td>
-      <td>40432544000147</td>
-      <td>01020422092</td>
-    </tr>
-    <tr>
-      <th>403575</th>
-      <td>22807.0</td>
-      <td>kHz</td>
-      <td>-8.051667</td>
-      <td>-34.929444</td>
-      <td>064</td>
-      <td>895180</td>
-      <td>CLARO S.A.</td>
-      <td>Recife</td>
-      <td>PE</td>
-      <td>40432544000147</td>
-      <td>01020422092</td>
-    </tr>
-    <tr>
-      <th>403576</th>
-      <td>24100.0</td>
-      <td>kHz</td>
-      <td>-23.662778</td>
-      <td>-46.695833</td>
-      <td>035</td>
-      <td>1000487528</td>
-      <td>RAFT TECNOLOGIES BRAZIL SISTEMAS DE TECNOLOGIA...</td>
-      <td>São Paulo</td>
-      <td>SP</td>
-      <td>17196674000106</td>
-      <td>50411805045</td>
-    </tr>
-    <tr>
-      <th>403577</th>
-      <td>27635.0</td>
-      <td>kHz</td>
-      <td>-23.621325</td>
-      <td>-46.655492</td>
-      <td>019</td>
-      <td>1268732</td>
-      <td>TAM LINHAS AEREAS S/A</td>
-      <td>São Paulo</td>
-      <td>SP</td>
-      <td>02012862000160</td>
-      <td>02030398152</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
+**Os dados do Stel não serão ilustrados aqui por se tratar de dados de telecomunicação privados, os demais dados de radiodifusão são públicos e disponíveis para qualquer interessado consultar**
 
 ```python
 mosaico = read_mosaico(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; mosaico.tail()
@@ -543,7 +431,7 @@ mosaico = read_mosaico(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; mosaico
     Baixando o Plano Básico das Estações...
     Baixando o Histórico de Atualizações...
     Kbô
-    
+
 
 
 

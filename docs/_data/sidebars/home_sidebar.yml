@@ -10,7 +10,10 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
-      title: Title
+      title: "Fun\xE7\xF5es Auxiliar"
+      url: filter.html
+    - output: web,pdf
+      title: Parser
       url: parser.html
     - output: web,pdf
       title: Queries SQL e MongoDB
