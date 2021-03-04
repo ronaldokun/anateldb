@@ -6,3 +6,4 @@ __all__ = []
 from .query import *
 from .parser import *
 from .filter import *
+from pathlib import Path
