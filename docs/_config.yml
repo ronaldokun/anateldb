@@ -56,8 +56,7 @@ defaults:
       search: true
       tooltip: true
 
-sidebars:
-- home_sidebar
+sidebars: [home_sidebar]
 
 plugins:
     - jekyll-remote-theme
