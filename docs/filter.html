@@ -74,6 +74,440 @@ nb_path: "filter.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;D:\OneDrive - ANATEL\GR01FI3\BaseDados&#39;</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">mosaico</span> <span class="o">=</span> <span class="n">read_mosaico</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<span class="n">radcom</span> <span class="o">=</span> <span class="n">read_radcom</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>    
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">radcom</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Frequência</th>
+      <th>Fase</th>
+      <th>Situação</th>
+      <th>Unidade</th>
+      <th>Entidade</th>
+      <th>Fistel</th>
+      <th>Número da Estação</th>
+      <th>Município</th>
+      <th>UF</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
+      <th>CNPJ</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>104.9</td>
+      <td>3</td>
+      <td>A</td>
+      <td>MHz</td>
+      <td>ACADEMIA CULTURAL DE SANTA HELENA - ACULT - ST...</td>
+      <td>50011685115</td>
+      <td>641168764</td>
+      <td>Santa Helena</td>
+      <td>PR</td>
+      <td>-24.861389</td>
+      <td>-54.334722</td>
+      <td>00104477000117</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>87.9</td>
+      <td>3</td>
+      <td>M</td>
+      <td>MHz</td>
+      <td>ASSOCIACAO DOS MORADORES E PRODUT. RURAIS DE A...</td>
+      <td>50012524409</td>
+      <td>682699349</td>
+      <td>Assunção</td>
+      <td>PB</td>
+      <td>-7.074444</td>
+      <td>-36.731111</td>
+      <td>00284576000128</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>87.9</td>
+      <td>3</td>
+      <td>H</td>
+      <td>MHz</td>
+      <td>ASSOCIACAO BONFIM ESPERANCA- ABESPE</td>
+      <td>50011824689</td>
+      <td>659028590</td>
+      <td>Bonfim</td>
+      <td>MG</td>
+      <td>-20.323611</td>
+      <td>-44.246944</td>
+      <td>00575697000129</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>104.9</td>
+      <td>3</td>
+      <td>B</td>
+      <td>MHz</td>
+      <td>ASSOCIACAO DOS TRABALHADORES DE GUIMARANIA (ATG)</td>
+      <td>50011398132</td>
+      <td>631410937</td>
+      <td>Guimarânia</td>
+      <td>MG</td>
+      <td>-18.843611</td>
+      <td>-46.792778</td>
+      <td>00792795000118</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>87.9</td>
+      <td>3</td>
+      <td>M</td>
+      <td>MHz</td>
+      <td>FUNDACAO ASSISTENCIAL LAR DA PAZ - FALP</td>
+      <td>50011398990</td>
+      <td>631412301</td>
+      <td>Dores do Indaiá</td>
+      <td>MG</td>
+      <td>-19.466667</td>
+      <td>-45.600000</td>
+      <td>00794510000188</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>4639</th>
+      <td>87.9</td>
+      <td>1</td>
+      <td>K</td>
+      <td>MHz</td>
+      <td>ASSOCIACAO AMIGOS DA CULTURA E DO MEIO AMBIENT...</td>
+      <td>50411347829</td>
+      <td>1011036964</td>
+      <td>Palmas</td>
+      <td>TO</td>
+      <td>-10.311667</td>
+      <td>-48.162222</td>
+      <td>08931976000190</td>
+    </tr>
+    <tr>
+      <th>4640</th>
+      <td>104.9</td>
+      <td>1</td>
+      <td>A</td>
+      <td>MHz</td>
+      <td>ASSOCIACAO RADIO COMUNITARIA MONTE SANTO FM</td>
+      <td>50416345301</td>
+      <td>1011037472</td>
+      <td>Monte Santo do Tocantins</td>
+      <td>TO</td>
+      <td>-10.005000</td>
+      <td>-48.988889</td>
+      <td>19001721000144</td>
+    </tr>
+    <tr>
+      <th>4641</th>
+      <td>104.9</td>
+      <td>P</td>
+      <td>M</td>
+      <td>MHz</td>
+      <td>ASSOCIACAO RADIO COMUNITARIA TOP FM</td>
+      <td>50416480004</td>
+      <td>1011044797</td>
+      <td>Araguatins</td>
+      <td>TO</td>
+      <td>-5.586389</td>
+      <td>-48.061111</td>
+      <td>19332116000156</td>
+    </tr>
+    <tr>
+      <th>4642</th>
+      <td>98.3</td>
+      <td>2</td>
+      <td>K</td>
+      <td>MHz</td>
+      <td>ASSOCIACAO DE RADIODIFUSAO CIDADE DE CRUZ ALTA</td>
+      <td>50416390609</td>
+      <td>1011044940</td>
+      <td>Cruz Alta</td>
+      <td>RS</td>
+      <td>-28.682222</td>
+      <td>-53.610278</td>
+      <td>97538346000180</td>
+    </tr>
+    <tr>
+      <th>4643</th>
+      <td>104.9</td>
+      <td>1</td>
+      <td>K</td>
+      <td>MHz</td>
+      <td>ASSOCIAÇÃO DE DESENVOLVIMENTO CULTURAL DA RÁDI...</td>
+      <td>50411382063</td>
+      <td>1011110250</td>
+      <td>Mataraca</td>
+      <td>PB</td>
+      <td>-6.594722</td>
+      <td>-35.055278</td>
+      <td>10877144000184</td>
+    </tr>
+  </tbody>
+</table>
+<p>4644 rows × 12 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">mosaico</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Serviço</th>
+      <th>Status</th>
+      <th>Entidade</th>
+      <th>Fistel</th>
+      <th>CNPJ</th>
+      <th>Município</th>
+      <th>UF</th>
+      <th>Id</th>
+      <th>Número da Estação</th>
+      <th>Classe</th>
+      <th>Frequência</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
+      <th>Num_Ato</th>
+      <th>Órgao</th>
+      <th>Data_Ato</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>TV</td>
+      <td>TV-C3</td>
+      <td>TELEVISAO OESTE BAIANO LTDA</td>
+      <td>06030116240</td>
+      <td>16395923000120</td>
+      <td>Barreiras</td>
+      <td>BA</td>
+      <td>57dbaad0dc4e3</td>
+      <td>322647029</td>
+      <td>A</td>
+      <td>79</td>
+      <td>-12,102222222222</td>
+      <td>-44,994444444444</td>
+      <td>6245</td>
+      <td>ORLE</td>
+      <td>2019-10-08 03:30:03</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>TV</td>
+      <td>TV-C3</td>
+      <td>TV CABRALIA LTDA</td>
+      <td>06020354903</td>
+      <td>13494265000135</td>
+      <td>Itabuna</td>
+      <td>BA</td>
+      <td>57dbaad0ef8af</td>
+      <td>322623537</td>
+      <td>B</td>
+      <td>177</td>
+      <td>-14,78</td>
+      <td>-39,260833333333</td>
+      <td>7613</td>
+      <td>ORLE</td>
+      <td>2018-10-10 13:21:26</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>TV</td>
+      <td>TV-C7</td>
+      <td>FUNDACAO FUNDESUL</td>
+      <td>50011828080</td>
+      <td>04188244000109</td>
+      <td>Porto Seguro</td>
+      <td>BA</td>
+      <td>57dbaad1077a6</td>
+      <td>637062230</td>
+      <td>C</td>
+      <td>515</td>
+      <td>-16,353055555555</td>
+      <td>-39,386111111111</td>
+      <td>33606</td>
+      <td>ER</td>
+      <td>2003-02-06 00:00:00</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>TV</td>
+      <td>TV-C3</td>
+      <td>TELEVISAO SUL BAHIA DE TEIXEIRA DE FREITAS LTDA</td>
+      <td>06020355209</td>
+      <td>13985114000180</td>
+      <td>Teixeira de Freitas</td>
+      <td>BA</td>
+      <td>57dbaad132559</td>
+      <td>322623561</td>
+      <td>B</td>
+      <td>79</td>
+      <td>-17,520833333333</td>
+      <td>-39,729444444444</td>
+      <td>9872</td>
+      <td>ORLE</td>
+      <td>2018-12-14 10:32:05</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>TV</td>
+      <td>TV-C7</td>
+      <td>FUNDACAO VALE DO JAGUARIBE</td>
+      <td>50012058165</td>
+      <td>04704007000145</td>
+      <td>Aracati</td>
+      <td>CE</td>
+      <td>57dbaad13efce</td>
+      <td>637069110</td>
+      <td>C</td>
+      <td>177</td>
+      <td>-4,5666666666667</td>
+      <td>-37,77</td>
+      <td>32627</td>
+      <td>ER</td>
+      <td>2003-01-03 00:00:00</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">nbdev.export</span> <span class="kn">import</span> <span class="n">notebook2script</span><span class="p">;</span> <span class="n">notebook2script</span><span class="p">()</span>
 </pre></div>
 

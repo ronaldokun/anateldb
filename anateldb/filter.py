@@ -28,31 +28,31 @@ def filter_database(path):
     radcom = radcom.loc[:, RADIODIFUSAO]
     mosaico = mosaico.loc[:, RADIODIFUSAO]
     radiodifusao = mosaico.append(radcom)
-    radiodifusao['Frequência'] = radiodifusao['Frequência'].str.replace(',','.')
-    radiodifusao['Frequência'] = radiodifusao.Frequência.astype('float32')
+#     radiodifusao['Frequência'] = radiodifusao['Frequência'].str.replace(',','.')
+#     radiodifusao['Frequência'] = radiodifusao.Frequência.astype('float32')
     radiodifusao = radiodifusao.sort_values('Frequência').reset_index(drop=True)
     slma = (stel.Frequência >= 108) & (stel.Frequência <= 137)
     telecom = stel[~slma].reset_index(drop=True)
     slma = stel[slma].reset_index(drop=True)
-    radiodifusao = radiodifusao[(radiodifusao.Latitude != '') & (radiodifusao.Longitude != '')].reset_index(drop=True)
-    radiodifusao['Latitude'] = radiodifusao.Latitude.str.replace(',', '.').astype('float32')
-    radiodifusao['Longitude'] = radiodifusao.Longitude.str.replace(',', '.').astype('float32')
+#     radiodifusao = radiodifusao[(radiodifusao.Latitude != '') & (radiodifusao.Longitude != '')].reset_index(drop=True)
+#     radiodifusao['Latitude'] = radiodifusao.Latitude.str.replace(',', '.').astype('float32')
+#     radiodifusao['Longitude'] = radiodifusao.Longitude.str.replace(',', '.').astype('float32')
 
-    for c in radiodifusao.columns:
-        if c in ('Latitude', 'Longitude'):
-            radiodifusao[c] = radiodifusao[c].astype('float32', errors='ignore')
-        else:
-            radiodifusao[c] = radiodifusao[c].astype('str')
-    for c in slma.columns:
-        if c in ('Latitude', 'Longitude'):
-            slma[c] = slma[c].astype('float32', errors='ignore')
-        else:
-            slma[c] = slma[c].astype('str')
-    for c in telecom.columns:
-        if c in ('Latitude', 'Longitude'):
-            telecom[c] = telecom[c].astype('float32', errors='ignore')
-        else:
-            telecom[c] = telecom[c].astype('str')
+#     for c in radiodifusao.columns:
+#         if c in ('Latitude', 'Longitude'):
+#             radiodifusao[c] = radiodifusao[c].astype('float32', errors='ignore')
+#         else:
+#             radiodifusao[c] = radiodifusao[c].astype('str')
+#     for c in slma.columns:
+#         if c in ('Latitude', 'Longitude'):
+#             slma[c] = slma[c].astype('float32', errors='ignore')
+#         else:
+#             slma[c] = slma[c].astype('str')
+#     for c in telecom.columns:
+#         if c in ('Latitude', 'Longitude'):
+#             telecom[c] = telecom[c].astype('float32', errors='ignore')
+#         else:
+#             telecom[c] = telecom[c].astype('str')
 
     radiodifusao['Descrição'] = radiodifusao.Status + ', ' + radiodifusao.Classe + ', ' + radiodifusao.Entidade.str.title() + ' (' + \
                                 radiodifusao.Fistel + ', ' + radiodifusao['Número da Estação'] + '), ' + radiodifusao.Município + '/' + \
