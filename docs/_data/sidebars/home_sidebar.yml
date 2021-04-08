@@ -19,6 +19,9 @@ entries:
       title: Queries
       url: queries.html
     - output: web,pdf
+      title: Redmine
+      url: redmine.html
+    - output: web,pdf
       title: Tests
       url: tests.html
     output: web
