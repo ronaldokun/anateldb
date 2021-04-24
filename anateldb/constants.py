@@ -13,14 +13,15 @@ ACAO_TRACKER = 2
 
 # Cell
 FIELDS = ['id', 'subject', 'status', 'priority', 'start_date', 'due_date']
-CUSTOM_IDS = [89, 2, 22, 25, 26, 595, 156, 157, 158, 159, 31, 57, 69, 70, 91, 92, 93, 94, 170, 171]
+CUSTOM_IDS = [89, 2, 22, 25, 26, 535, 156, 157, 158, 159, 31, 57, 69, 70, 91, 92, 93, 94, 170, 171]
 
 SITUACAO ={'Rascunho': 1,
             'Aguardando Execução': 11,
             'Em andamento': 13,
             'Relatando': 14,
-            'Relatada': 15,
-            'Cancelada': 19}
+            'Relatada': 15
+          }
+            #'Cancelada': 19}
 
 DICT_FIELDS = ('Classe da Inspeção', 'Tipo de inspeção', 'Descrição da Inspeção', 'Fiscal responsável ',
               'Fiscais ', 'Html', ' Gerar Relatório ', 'Frequência inicial', 'Unidade da frequência inicial',
@@ -47,6 +48,8 @@ STATUS = {'Aguardando Execução': ('Classe da Inspeção', 'Tipo de inspeção'
           'Relatada' : ('UF/Município', 'Serviços da Inspeção', 'Qnt. de emissões na faixa', 'Emissões não autorizadas/desc',
                         'Horas de Preparação', 'Horas de Deslocamento', 'Horas de Execução', 'Horas de conclusão', 'Latitude (coordenadas)',
                         'Longitude (coordenadas)', 'Uso de PF', 'Ação de risco à vida criada?', 'Impossibilidade acesso online?')}
+
+
 
 SERVICOS = {'230' : '230 - COLETIVO - RADIODIFUSÃO SONORA EM FREQÜÊNCIA MODULADA',
             '231' : '231 - COLETIVO - RADIODIFUSÃO COMUNITÁRIA',
@@ -86,8 +89,9 @@ ID2FIELD = {
 22: 'Descrição da Inspeção',
 25: 'Fiscal responsável ',
 26: 'Fiscais ',
-585: 'Html',
-588: ' Gerar Relatório ',
+537: 'Html',
+534: ' Gerar Relatório ',
+535: 'Relatório de Monitoramento',
 156: 'Frequência inicial',
 157: 'Unidade da frequência inicial',
 158: 'Frequência final',
@@ -111,9 +115,9 @@ FIELD2ID = {'Classe da Inspeção': 89,
  'Descrição da Inspeção': 22,
  'Fiscal responsável ': 25,
  'Fiscais ': 26,
- 'Relatório de Monitoramento': 595,
- ' Gerar Relatório ': 588,
- 'Html': 585, #Campo Oculto
+ ' Gerar Relatório ': 534,
+ 'Relatório de Monitoramento': 535,
+ 'Html': 537, #Campo Oculto
  'Frequência inicial': 156,
  'Unidade da frequência inicial': 157,
  'Frequência final': 158,

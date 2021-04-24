@@ -2,7 +2,8 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"URL": "constants.ipynb",
+index = {"console": "console.ipynb",
+         "URL": "constants.ipynb",
          "URLHM": "constants.ipynb",
          "URLHM2": "constants.ipynb",
          "ACAO_DESCRIPTION": "constants.ipynb",
@@ -47,21 +48,19 @@ index = {"URL": "constants.ipynb",
          "update_radcom": "queries.ipynb",
          "update_stel": "queries.ipynb",
          "update_mosaico": "queries.ipynb",
+         "journal2table": "redmine.ipynb",
          "value_text_string": "redmine.ipynb",
          "auth_user": "redmine.ipynb",
          "valida_fiscaliza": "redmine.ipynb",
+         "issue_type": "redmine.ipynb",
          "issue2users": "redmine.ipynb",
          "insp2acao": "redmine.ipynb",
          "detalhar_inspecao": "redmine.ipynb",
-         "rascunho2aguardando": "redmine.ipynb",
-         "journal2table": "redmine.ipynb",
-         "check_update": "redmine.ipynb",
-         "validate_datadict": "redmine.ipynb",
-         "aguardando2andamento": "redmine.ipynb",
-         "andamento2relatando": "redmine.ipynb",
-         "relatando2relatado": "redmine.ipynb"}
+         "atualiza_fiscaliza": "redmine.ipynb",
+         "relatar_inspecao": "redmine.ipynb"}
 
-modules = ["constants.py",
+modules = ["console.py",
+           "constants.py",
            "filter.py",
            "parser.py",
            "query.py",
