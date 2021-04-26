@@ -49,6 +49,8 @@ index = {"console": "console.ipynb",
          "update_stel": "queries.ipynb",
          "update_mosaico": "queries.ipynb",
          "journal2table": "redmine.ipynb",
+         "check_update": "redmine.ipynb",
+         "validate_datadict": "redmine.ipynb",
          "value_text_string": "redmine.ipynb",
          "auth_user": "redmine.ipynb",
          "valida_fiscaliza": "redmine.ipynb",
@@ -64,8 +66,7 @@ modules = ["console.py",
            "filter.py",
            "parser.py",
            "query.py",
-           "redmine.py",
-           "tests.py"]
+           "redmine.py"]
 
 doc_url = "https://ronaldokun.github.io/anateldb/"
 

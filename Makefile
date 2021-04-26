@@ -2,11 +2,11 @@
 SHELL := /bin/bash
 SRC = $(wildcard ./*.ipynb)
 
-all: anatelsurf docs
+all: anateldb docs
 
 anatelsurf: $(SRC)
 	nbdev_build_lib
-	touch anatelsurf
+	touch anateldb
 
 sync:
 	nbdev_update_lib

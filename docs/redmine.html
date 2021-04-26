@@ -38,6 +38,7 @@ nb_path: "redmine.ipynb"
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> autoreload
 <span class="o">%</span><span class="k">autoreload</span> 2
+<span class="o">%</span><span class="k">config</span> Completer.use_jedi = False
 </pre></div>
 
     </div>
@@ -181,7 +182,7 @@ Os dados desse dicionário serão usados como teste das funções a seguir</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="journal2table" class="doc_header"><code>journal2table</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/redmine.py#L22" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>journal2table</code>(<strong><code>journal</code></strong>)</p>
+<h4 id="journal2table" class="doc_header"><code>journal2table</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/redmine.py#L21" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>journal2table</code>(<strong><code>journal</code></strong>)</p>
 </blockquote>
 <p>Recebe a string journal, caso a formatação seja compatível com um csv, retorna este formato como markdown
 Do contrário simplesmente retorna a string inalterada</p>
@@ -206,183 +207,54 @@ Do contrário simplesmente retorna a string inalterada</p>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">check_update</span><span class="p">(</span><span class="n">field</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span> <span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">values_set</span><span class="p">:</span> <span class="n">Iterable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">val_text_string</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>    
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;É esperado que o campo </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2"> seja do tipo </span><span class="si">{</span><span class="nb">str</span><span class="si">}</span><span class="s2">, o fornecido foi </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    
-    <span class="k">if</span> <span class="n">values_set</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">set</span><span class="p">(</span><span class="n">listify</span><span class="p">(</span><span class="n">value</span><span class="p">))</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">values_set</span><span class="p">)):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;O valor para </span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2"> deve pertencer ao conjunto: </span><span class="si">{</span><span class="n">values_set</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        
-    <span class="k">if</span> <span class="n">val_text_string</span><span class="p">:</span>
-        <span class="n">value</span> <span class="o">=</span> <span class="n">value_text_string</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-        
-    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">FIELD2ID</span><span class="p">[</span><span class="n">field</span><span class="p">],</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">value</span><span class="p">}</span>
-        
-<span class="k">def</span> <span class="nf">validate_datadict</span><span class="p">(</span><span class="n">data_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">insp</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">fiscaliza</span><span class="p">:</span> <span class="n">Redmine</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">dict</span><span class="p">:</span>
-    
-    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data_dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;É esperado um dicionário como entrada, </span><span class="si">{</span><span class="n">data_dict</span><span class="si">}</span><span class="s2"> é do tipo: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">data_dict</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span> 
-    
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">set</span><span class="p">(</span><span class="n">data_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">DICT_FIELDS</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;As chaves seguintes são desconhecidas ou estão com o nome diferente do esperado: </span><span class="se">\</span>
-<span class="s1">                         </span><span class="si">{</span><span class="nb">set</span><span class="p">(</span><span class="n">data_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">DICT_FIELDS</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-        
-    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fiscaliza</span><span class="p">,</span> <span class="n">Redmine</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Uma instância do tipo Redmine é esperada, foi retornado objeto fiscaliza </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">fiscaliza</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-        
-    <span class="n">valida_fiscaliza</span><span class="p">(</span><span class="n">fiscaliza</span><span class="p">)</span>    
-    <span class="n">issue</span> <span class="o">=</span> <span class="n">fiscaliza</span><span class="o">.</span><span class="n">issue</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">insp</span><span class="p">,</span> <span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;relations&#39;</span><span class="p">,</span> <span class="s1">&#39;attachments&#39;</span><span class="p">])</span>
-    <span class="n">issue_id</span> <span class="o">=</span> <span class="n">issue</span><span class="o">.</span><span class="n">id</span>    
-    <span class="n">date_pattern</span> <span class="o">=</span> <span class="s1">&#39;([2]\d</span><span class="si">{3}</span><span class="s1">)-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])&#39;</span>    
-    <span class="n">d</span> <span class="o">=</span> <span class="n">data_dict</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    
-    <span class="n">key</span> <span class="o">=</span> <span class="n">DICT_FIELDS</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">classe</span> <span class="o">:=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)):</span>
-        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">classe</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">CLASSE</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-        
-    <span class="n">key</span> <span class="o">=</span> <span class="n">DICT_FIELDS</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">tipo</span> <span class="o">:=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)):</span>
-        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">tipo</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">TIPO</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-        
-    <span class="n">key</span> <span class="o">=</span> <span class="n">DICT_FIELDS</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">description</span> <span class="o">:=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)):</span>
-        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
-    
-    <span class="n">key</span> <span class="o">=</span> <span class="n">DICT_FIELDS</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">fiscal</span> <span class="o">:=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)):</span>
-        <span class="n">_</span><span class="p">,</span> <span class="n">name2id</span> <span class="o">=</span> <span class="n">issue2users</span><span class="p">(</span><span class="n">fiscaliza</span><span class="p">,</span> <span class="n">issue_id</span><span class="p">)</span>
-        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">fiscal</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name2id</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-        
-    <span class="n">key</span> <span class="o">=</span> <span class="n">DICT_FIELDS</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">fiscais</span> <span class="o">:=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)):</span>
-        <span class="n">_</span><span class="p">,</span> <span class="n">name2id</span> <span class="o">=</span> <span class="n">issue2users</span><span class="p">(</span><span class="n">fiscaliza</span><span class="p">,</span> <span class="n">issue_id</span><span class="p">)</span>
-        <span class="n">fiscais</span> <span class="o">=</span> <span class="n">listify</span><span class="p">(</span><span class="n">fiscais</span><span class="p">)</span>
-        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">fiscais</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="n">name2id</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-        
-    <span class="n">key</span> <span class="o">=</span> <span class="n">DICT_FIELDS</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">html</span> <span class="o">:=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">html</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">html</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="n">html</span><span class="o">.</span><span class="n">is_file</span><span class="p">(),</span> <span class="sa">f</span><span class="s2">&quot;O caminho para o arquivo html informado não existe ou não é um arquivo: </span><span class="si">{</span><span class="n">html</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">html</span><span class="o">.</span><span class="n">read_text</span><span class="p">(),</span> <span class="nb">str</span><span class="p">)</span>
-        <span class="n">key</span> <span class="o">=</span> <span class="n">DICT_FIELDS</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">relatorio</span> <span class="o">:=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">relatorio</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
-    
-    <span class="n">key</span> <span class="o">=</span> <span class="n">DICT_FIELDS</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">freq_init</span> <span class="o">:=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)):</span>
-        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">freq_init</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">))</span>
-    
-    <span class="n">key</span> <span class="o">=</span> <span class="n">DICT_FIELDS</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">init_unit</span> <span class="o">:=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)):</span>
-        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">init_unit</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;kHz&#39;</span><span class="p">,</span> <span class="s1">&#39;MHz&#39;</span><span class="p">,</span> <span class="s1">&#39;GHz&#39;</span><span class="p">))</span>
-    
-    <span class="n">key</span> <span class="o">=</span> <span class="n">DICT_FIELDS</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">freq_final</span> <span class="o">:=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)):</span>
-        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">freq_final</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">))</span>
-    
-    <span class="n">key</span> <span class="o">=</span> <span class="n">DICT_FIELDS</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">final_unit</span> <span class="o">:=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)):</span>
-        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">final_unit</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;kHz&#39;</span><span class="p">,</span> <span class="s1">&#39;MHz&#39;</span><span class="p">,</span> <span class="s1">&#39;GHz&#39;</span><span class="p">))</span>
-        
-    <span class="n">key</span> <span class="o">=</span> <span class="n">DICT_FIELDS</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">start_date</span> <span class="o">:=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)):</span>
-        <span class="k">assert</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">date_pattern</span><span class="p">,</span> <span class="n">start_date</span><span class="p">),</span> <span class="sa">f</span><span class="s1">&#39;A data informada é inválida </span><span class="si">{</span><span class="n">start_date</span><span class="si">}</span><span class="s1">, informe o formato yyyy-mm-dd&#39;</span>
-        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">start_date</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;O campo &quot;Data de início&quot; não pode ficar vazio!&#39;</span><span class="p">)</span>
-    
-    <span class="n">key</span> <span class="o">=</span> <span class="n">DICT_FIELDS</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">due_date</span> <span class="o">:=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)):</span>
-        <span class="k">assert</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">date_pattern</span><span class="p">,</span> <span class="n">due_date</span><span class="p">),</span> <span class="sa">f</span><span class="s1">&#39;A data informada é inválida </span><span class="si">{</span><span class="n">due_date</span><span class="si">}</span><span class="s1">, informe o formato yyyy-mm-dd&#39;</span>
-        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">due_date</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;O campo &quot;Data limite&quot; não poder ficar vazio!&#39;</span><span class="p">)</span>        
-    
-    <span class="n">key</span> <span class="o">=</span> <span class="n">DICT_FIELDS</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">municipio</span> <span class="o">:=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)):</span>
-        <span class="n">municipios</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="s1">&#39;municipios.pkl&#39;</span><span class="p">)</span>
-        <span class="n">municipio</span> <span class="o">=</span> <span class="n">listify</span><span class="p">(</span><span class="n">municipio</span><span class="p">)</span>
-        <span class="n">lista_municipios</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">municipio</span><span class="p">:</span>
-            <span class="n">match</span> <span class="o">=</span>  <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ESTADOS</span><span class="p">)</span><span class="si">}</span><span class="s1">)/(\w+[\s|\w]+)&#39;</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Verifique o formato da string UF/Município: </span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>                    
-            <span class="n">lista_municipios</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">check_update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">municipios</span><span class="p">,</span> <span class="kc">True</span><span class="p">)[</span><span class="s1">&#39;value&#39;</span><span class="p">])</span>        
-        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">FIELD2ID</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">lista_municipios</span><span class="p">}</span>
-        <span class="k">del</span> <span class="n">municipios</span>
-        
-    <span class="n">key</span> <span class="o">=</span> <span class="n">DICT_FIELDS</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">servicos</span> <span class="o">:=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)):</span>
-        <span class="n">servicos</span> <span class="o">=</span> <span class="n">listify</span><span class="p">(</span><span class="n">servicos</span><span class="p">)</span>
-        <span class="n">lista_servicos</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">servicos</span><span class="p">:</span>
-            <span class="n">s</span> <span class="o">=</span> <span class="n">SERVICOS</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
-            <span class="n">lista_servicos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">check_update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">SERVICOS</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="kc">True</span><span class="p">)[</span><span class="s1">&#39;value&#39;</span><span class="p">])</span>
-        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">FIELD2ID</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">lista_servicos</span><span class="p">}</span>
-        
-    <span class="n">key</span> <span class="o">=</span> <span class="n">DICT_FIELDS</span><span class="p">[</span><span class="mi">15</span><span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">qnt</span> <span class="o">:=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">))</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># 0 não deve ser interpretado como False</span>
-        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">qnt</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
-    
-    <span class="n">key</span> <span class="o">=</span> <span class="n">DICT_FIELDS</span><span class="p">[</span><span class="mi">16</span><span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">nauto</span> <span class="o">:=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">))</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> 
-        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">nauto</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
-        
-    <span class="n">key</span> <span class="o">=</span> <span class="n">DICT_FIELDS</span><span class="p">[</span><span class="mi">17</span><span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">hprep</span> <span class="o">:=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">))</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">hprep</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
-        
-    <span class="n">key</span> <span class="o">=</span> <span class="n">DICT_FIELDS</span><span class="p">[</span><span class="mi">18</span><span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">hdesl</span> <span class="o">:=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">))</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">hdesl</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
-        
-    <span class="n">key</span> <span class="o">=</span> <span class="n">DICT_FIELDS</span><span class="p">[</span><span class="mi">19</span><span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">hexec</span> <span class="o">:=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">))</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">hexec</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
-        
-    <span class="n">key</span> <span class="o">=</span> <span class="n">DICT_FIELDS</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">hconc</span> <span class="o">:=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">))</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">hconc</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
-     
-    <span class="n">key</span> <span class="o">=</span> <span class="n">DICT_FIELDS</span><span class="p">[</span><span class="mi">21</span><span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">lat</span> <span class="o">:=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">))</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">max_lat</span> <span class="o">=</span> <span class="mf">5.2666664</span> <span class="c1"># Monte Caburaí RR</span>
-        <span class="n">min_lat</span> <span class="o">=</span> <span class="o">-</span><span class="mf">33.7017531</span> <span class="c1"># Arroio Chuy RS</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">min_lat</span> <span class="o">&lt;=</span> <span class="n">lat</span> <span class="o">&lt;=</span> <span class="n">max_lat</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;O valor de latitude inserido está fora dos extremos do Brasil: (</span><span class="si">{</span><span class="n">min_lat</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">max_lat</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
-        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
-        
-    <span class="n">key</span> <span class="o">=</span> <span class="n">DICT_FIELDS</span><span class="p">[</span><span class="mi">22</span><span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">long</span> <span class="o">:=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)):</span> <span class="c1"># Não pode ser 0</span>
-        <span class="n">min_long</span> <span class="o">=</span> <span class="o">-</span><span class="mf">75.3709938</span>
-        <span class="n">max_long</span> <span class="o">=</span> <span class="o">-</span><span class="mf">32.423786</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">min_long</span> <span class="o">&lt;=</span> <span class="n">long</span> <span class="o">&lt;=</span> <span class="n">max_long</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;O valor de longitude inserido está fora dos extremos do Brasil: (</span><span class="si">{</span><span class="n">min_long</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">max_long</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
-        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">long</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
-    
-    <span class="n">key</span> <span class="o">=</span> <span class="n">DICT_FIELDS</span><span class="p">[</span><span class="mi">23</span><span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">pf</span> <span class="o">:=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)):</span>
-        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">pf</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">PF</span><span class="p">)</span>
-        
-    <span class="n">key</span> <span class="o">=</span> <span class="n">DICT_FIELDS</span><span class="p">[</span><span class="mi">24</span><span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">risco</span> <span class="o">:=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)):</span>
-        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">risco</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Sim&#39;</span><span class="p">,</span> <span class="s1">&#39;Não&#39;</span><span class="p">))</span>
-        
-    <span class="n">key</span> <span class="o">=</span> <span class="n">DICT_FIELDS</span><span class="p">[</span><span class="mi">25</span><span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">online</span> <span class="o">:=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)):</span>
-        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">check_update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">online</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">))</span>
-        
-    <span class="k">if</span> <span class="p">(</span><span class="n">notes</span> <span class="o">:=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;notes&#39;</span><span class="p">)):</span>
-        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;notes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">journal2table</span><span class="p">(</span><span class="n">notes</span><span class="p">)</span>
-            
-    <span class="k">return</span> <span class="n">d</span>
-</pre></div>
+<div class="output_wrapper">
+<div class="output">
 
-    </div>
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="check_update" class="doc_header"><code>check_update</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/redmine.py#L33" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>check_update</code>(<strong><code>field</code></strong>:<code>str</code>, <strong><code>value</code></strong>, <strong><code>dtype</code></strong>, <strong><code>values_set</code></strong>:<code>Iterable</code>[<code>T_co</code>]=<em><code>None</code></em>, <strong><code>val_text_string</code></strong>:<code>bool</code>=<em><code>False</code></em>)</p>
+</blockquote>
+
+</div>
+
+</div>
+
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="validate_datadict" class="doc_header"><code>validate_datadict</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/redmine.py#L45" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>validate_datadict</code>(<strong><code>data_dict</code></strong>:<code>Union</code>[<code>str</code>, <code>Path</code>, <code>dict</code>], <strong><code>insp</code></strong>:<code>str</code>, <strong><code>fiscaliza</code></strong>:<code>Redmine</code>)</p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -404,7 +276,7 @@ Do contrário simplesmente retorna a string inalterada</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="value_text_string" class="doc_header"><code>value_text_string</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/redmine.py#L34" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>value_text_string</code>(<strong><code>input_value</code></strong>)</p>
+<h4 id="value_text_string" class="doc_header"><code>value_text_string</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/redmine.py#L214" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>value_text_string</code>(<strong><code>input_value</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -428,7 +300,7 @@ Do contrário simplesmente retorna a string inalterada</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="auth_user" class="doc_header"><code>auth_user</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/redmine.py#L37" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>auth_user</code>(<strong><code>username</code></strong>, <strong><code>password</code></strong>, <strong><code>teste</code></strong>=<em><code>True</code></em>, <strong><code>verify</code></strong>=<em><code>True</code></em>)</p>
+<h4 id="auth_user" class="doc_header"><code>auth_user</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/redmine.py#L217" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>auth_user</code>(<strong><code>username</code></strong>, <strong><code>password</code></strong>, <strong><code>teste</code></strong>=<em><code>True</code></em>, <strong><code>verify</code></strong>=<em><code>True</code></em>)</p>
 </blockquote>
 
 </div>
@@ -452,7 +324,7 @@ Do contrário simplesmente retorna a string inalterada</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="valida_fiscaliza" class="doc_header"><code>valida_fiscaliza</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/redmine.py#L43" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>valida_fiscaliza</code>(<strong><code>fiscaliza_obj</code></strong>:<code>Redmine</code>)</p>
+<h4 id="valida_fiscaliza" class="doc_header"><code>valida_fiscaliza</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/redmine.py#L223" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>valida_fiscaliza</code>(<strong><code>fiscaliza_obj</code></strong>:<code>Redmine</code>)</p>
 </blockquote>
 
 </div>
@@ -476,7 +348,7 @@ Do contrário simplesmente retorna a string inalterada</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="issue_type" class="doc_header"><code>issue_type</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/redmine.py#L48" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>issue_type</code>(<strong><code>fiscaliza</code></strong>, <strong><code>insp</code></strong>)</p>
+<h4 id="issue_type" class="doc_header"><code>issue_type</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/redmine.py#L228" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>issue_type</code>(<strong><code>fiscaliza</code></strong>, <strong><code>insp</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -500,7 +372,7 @@ Do contrário simplesmente retorna a string inalterada</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="issue2users" class="doc_header"><code>issue2users</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/redmine.py#L56" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>issue2users</code>(<strong><code>fiscaliza</code></strong>:<code>Redmine</code>, <strong><code>issue</code></strong>:<code>str</code>)</p>
+<h4 id="issue2users" class="doc_header"><code>issue2users</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/redmine.py#L236" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>issue2users</code>(<strong><code>fiscaliza</code></strong>:<code>Redmine</code>, <strong><code>issue</code></strong>:<code>str</code>)</p>
 </blockquote>
 <p>Recebe objeto Redmine e string issue e retorna um dicionário com os usuários do grupo Inspeção-Execução</p>
 
@@ -525,7 +397,7 @@ Do contrário simplesmente retorna a string inalterada</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="insp2acao" class="doc_header"><code>insp2acao</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/redmine.py#L77" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>insp2acao</code>(<strong><code>insp</code></strong>:<code>str</code>, <strong><code>fiscaliza</code></strong>:<code>Redmine</code>)</p>
+<h4 id="insp2acao" class="doc_header"><code>insp2acao</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/redmine.py#L257" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>insp2acao</code>(<strong><code>insp</code></strong>:<code>str</code>, <strong><code>fiscaliza</code></strong>:<code>Redmine</code>)</p>
 </blockquote>
 <p>Recebe o objeto <code>fiscaliza</code> e a string referente à inspeção <code>insp</code> e retorna um dicionário resumo da Ação atrelada à inspeção</p>
 <p>Args:
@@ -564,7 +436,7 @@ Do contrário simplesmente retorna a string inalterada</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="detalhar_inspecao" class="doc_header"><code>detalhar_inspecao</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/redmine.py#L113" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>detalhar_inspecao</code>(<strong><code>insp</code></strong>:<code>str</code>, <strong><code>fiscaliza</code></strong>:<code>Redmine</code>=<em><code>None</code></em>)</p>
+<h4 id="detalhar_inspecao" class="doc_header"><code>detalhar_inspecao</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/redmine.py#L293" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>detalhar_inspecao</code>(<strong><code>insp</code></strong>:<code>str</code>, <strong><code>fiscaliza</code></strong>:<code>Redmine</code>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Recebe número da inspeção <code>insp</code> e objeto Redmine logado <code>fiscaliza</code>
 Retorna um dicionário com a Situação e campos preenchidos da Inspeção</p>
@@ -597,7 +469,7 @@ Retorna um dicionário com a Situação e campos preenchidos da Inspeção</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="atualiza_fiscaliza" class="doc_header"><code>atualiza_fiscaliza</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/redmine.py#L130" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>atualiza_fiscaliza</code>(<strong><code>insp</code></strong>, <strong><code>fields</code></strong>, <strong><code>fiscaliza</code></strong>, <strong><code>status</code></strong>, <strong><code>notes</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="atualiza_fiscaliza" class="doc_header"><code>atualiza_fiscaliza</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/redmine.py#L310" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>atualiza_fiscaliza</code>(<strong><code>insp</code></strong>, <strong><code>fields</code></strong>, <strong><code>fiscaliza</code></strong>, <strong><code>status</code></strong>, <strong><code>notes</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Atualiza a Inspeção para a Situação <code>status</code> com os dados do dicionário <code>fields</code></p>
 
@@ -629,7 +501,7 @@ Retorna um dicionário com a Situação e campos preenchidos da Inspeção</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="relatar_inspecao" class="doc_header"><code>relatar_inspecao</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/redmine.py#L148" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>relatar_inspecao</code>(<strong><code>login</code></strong>:"Login Anatel do Usuário", <strong><code>senha</code></strong>:"Senha Utilizada nos Sistemas Interativos da Anatel", <strong><code>inspecao</code></strong>:"Número da Inspeção a ser relatada", <strong><code>dados</code></strong>:"Dicionário com os Dados a serem relatados")</p>
+<h4 id="relatar_inspecao" class="doc_header"><code>relatar_inspecao</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/redmine.py#L328" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>relatar_inspecao</code>(<strong><code>login</code></strong>:"Login Anatel do Usuário", <strong><code>senha</code></strong>:"Senha Utilizada nos Sistemas Interativos da Anatel", <strong><code>inspecao</code></strong>:"Número da Inspeção a ser relatada", <strong><code>dados</code></strong>:"Dicionário com os Dados a serem relatados")</p>
 </blockquote>
 <p>Relata a inspeção <code>inspecao</code> com os dados constantes no dicionário <code>dados</code></p>
 
@@ -657,209 +529,31 @@ Retorna um dicionário com a Situação e campos preenchidos da Inspeção</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">USR</span> <span class="o">=</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getuser</span><span class="p">()</span>
-<span class="n">PWD</span> <span class="o">=</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getpass</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">relatar_inspecao</span><span class="p">(</span><span class="n">USR</span><span class="p">,</span> <span class="n">PWD</span><span class="p">,</span> <span class="s1">&#39;52876&#39;</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_html rendered_html output_subarea ">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #008000; text-decoration-color: #008000; font-weight: bold">Usuário Autenticado com Sucesso 👍</span>
-</pre>
-
-</div>
-
-</div>
-
-<div class="output_area">
-
-
-<div class="output_html rendered_html output_subarea ">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">❗ O número de inspeção inserido <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">52876</span> corresponde a uma <span style="color: #800000; text-decoration-color: #800000; font-weight: bold">Ação</span> ❗
-</pre>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Testes">Testes<a class="anchor-link" href="#Testes"> </a></h2>
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
-<span class="n">f</span> <span class="o">=</span> <span class="n">partialler</span><span class="p">(</span><span class="n">validate_datadict</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">f</span><span class="p">(),</span> <span class="kc">True</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;Servidor&#39;</span><span class="p">,</span> <span class="s1">&#39;Ronaldo&#39;</span><span class="p">)]</span>
-<span class="k">with</span> <span class="n">ExceptionExpected</span><span class="p">(</span><span class="n">ex</span><span class="o">=</span><span class="ne">AssertionError</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="s1">&#39;É esperado um dicionário&#39;</span><span class="p">):</span>
-    <span class="n">validate_datadict</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="n">d</span><span class="p">[</span><span class="s1">&#39;Servidor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Ronaldo&#39;</span>
-<span class="k">with</span> <span class="n">ExceptionExpected</span><span class="p">(</span><span class="n">ex</span><span class="o">=</span><span class="ne">ValueError</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="s1">&#39;As chaves seguintes são desconhecidas&#39;</span><span class="p">):</span>
-    <span class="n">validate_datadict</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="n">ExceptionExpected</span><span class="p">(</span><span class="n">ex</span><span class="o">=</span><span class="ne">ValueError</span><span class="p">):</span>
-    <span class="n">validate_datadict</span><span class="p">({</span><span class="s1">&#39;Classe da Inspeção&#39;</span><span class="p">:</span> <span class="s1">&#39;Outorga&#39;</span><span class="p">})</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="n">ExceptionExpected</span><span class="p">(</span><span class="n">ex</span><span class="o">=</span><span class="ne">TypeError</span><span class="p">):</span>
-    <span class="n">validate_datadict</span><span class="p">({</span><span class="s1">&#39;Classe da Inspeção&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Técnica&#39;</span><span class="p">]})</span>
-    <span class="n">validate_datadict</span><span class="p">({</span><span class="s1">&#39;Classe da Inspeção&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">})</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Mostrar-resumo-da-A&#231;&#227;o-&#224;-partir-da-Inspe&#231;&#227;o">Mostrar resumo da A&#231;&#227;o &#224; partir da Inspe&#231;&#227;o<a class="anchor-link" href="#Mostrar-resumo-da-A&#231;&#227;o-&#224;-partir-da-Inspe&#231;&#227;o"> </a></h3>
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">detalhar_inspecao</span><span class="p">(</span><span class="n">INSP</span><span class="p">,</span> <span class="n">fiscaliza</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">nbdev.export</span> <span class="kn">import</span> <span class="n">notebook2script</span>
 <span class="n">notebook2script</span><span class="p">()</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Converted console.ipynb.
+Converted constants.ipynb.
+Converted filter.ipynb.
+Converted index.ipynb.
+Converted parser.ipynb.
+Converted queries.ipynb.
+Converted redmine.ipynb.
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
