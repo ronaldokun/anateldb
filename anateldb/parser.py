@@ -97,6 +97,7 @@ def read_plano_basico(path):
     df.drop('@Frequencia', axis=1, inplace=True)
     df.loc[df['@País'].isna(), '@País'] = df.loc[df['@País'].isna(), '@Pais']
     df.drop('@Pais', axis=1, inplace=True)
+    return df
     df = df.loc[:, COL_PB]
     df.columns = NEW_PB
     return df
@@ -115,6 +116,7 @@ def read_historico(path):
         matches = re.finditer(regex, item, re.MULTILINE)
         dict_list.append(dict(match.groups() for match in matches))
     df = pd.DataFrame(dict_list)
+    return df
     df = df[(df.tipoDocumento == 'Ato') & (df.razao == 'Autoriza o Uso de Radiofrequência')].reset_index()
     df = df.loc[:, ['id', 'numeroDocumento', 'orgao', 'dataDocumento']]
     df.columns = ['Id', 'Num_Ato', 'Órgao', 'Data_Ato']
@@ -125,8 +127,8 @@ def read_historico(path):
 def read_mosaico(pasta, update=False):
     if update:
         update_mosaico(pasta)
-        estações = read_estações(f'{pasta}/estações.zip', ['estacao_rd'])
-        plano_basico = read_plano_basico(f'{pasta}/plano_basico.zip', ['plano_basico'])
+        estações = read_estações(f'{pasta}/estações.zip')
+        plano_basico = read_plano_basico(f'{pasta}/plano_basico.zip')
         historico = read_historico(f'{pasta}/historico.zip')
         df = pd.merge(estações, plano_basico, on='Id').merge(historico, on='Id')
         df.to_feather(f'{pasta}/mosaico.fth')

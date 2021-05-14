@@ -3,7 +3,7 @@
     "Tipo de inspe\u00e7\u00e3o": "Uso do Espectro - Monitora\u00e7\u00e3o",
     "Descri\u00e7\u00e3o da Inspe\u00e7\u00e3o": "Atendimento da Den\u00fancia AC202010213075425 (6104512), \nverifica\u00e7\u00e3o da Pot\u00eancia e Intensidade de Campo El\u00e9trico da Frequ\u00eancia 105.1MHz e seus harm\u00f4nicos, \nal\u00e9m da checagem de Intermodula\u00e7\u00e3o e Esp\u00farios nas frequ\u00eancias 450.3MHz e 750MHz.",
     "Fiscal respons\u00e1vel ": "Ronaldo da Silva Alves Batista",
-    "Fiscais ": [
+    "Fiscais": [
         "Ronaldo da Silva Alves Batista",
         "Paulo Diogo Costa",
         "Mario Augusto Volpini"
@@ -15,7 +15,7 @@
     "Frequ\u00eancia final": 700,
     "Unidade da frequ\u00eancia final": "MHz",
     "Data de in\u00edcio": "2021-03-19",
-    "Data limite": "2021-12-31",
+    "Data Limite": "2021-12-31",
     "UF/Munic\u00edpio": "SP/S\u00e3o Paulo",
     "Servi\u00e7os da Inspe\u00e7\u00e3o": [
         "230",
@@ -33,5 +33,5 @@
     "Uso de PF": "N\u00e3o se aplica PF - uso apenas de formul\u00e1rios",
     "A\u00e7\u00e3o de risco \u00e0 vida criada?": "N\u00e3o",
     "Impossibilidade acesso online?": "0",
-    "notes": "Faixa, Classe Especial, Classe A, Classe B, Classe C\n                VHF-L,0,5,7,5\n                VHF-H,0,12,1,0\n                UHF,1,1,2,4\n                FM,5,1,0,0\n                RADCOM,0,0,0,0\n                Outorgadas com ind\u00edcios de irregularidades,1,2,3,4\n            "
+    "Notes": "Faixa, Classe Especial, Classe A, Classe B, Classe C\n                VHF-L,0,5,7,5\n                VHF-H,0,12,1,0\n                UHF,1,1,2,4\n                FM,5,1,0,0\n                RADCOM,0,0,0,0\n                Outorgadas com ind\u00edcios de irregularidades,1,2,3,4\n            "
 }
