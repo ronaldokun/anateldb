@@ -4,8 +4,8 @@ __all__ = ['TIMEOUT', 'RELATORIO', 'ESTACOES', 'ESTACAO', 'PLANO_BASICO', 'HISTO
            'COL_ESTACOES', 'NEW_ESTACOES', 'COL_PB', 'NEW_PB', 'TELECOM', 'RADIODIFUSAO', 'APP_ANALISE', 'ENTIDADES',
            'RADCOM', 'STEL', 'optimize_floats', 'optimize_ints', 'optimize_objects', 'df_optimize', 'connect_db',
            'row2dict', 'dict2cols', 'parse_plano_basico', 'scrape_dataframe', 'read_stel', 'read_radcom',
-           'read_estações', 'read_plano_basico', 'read_historico', 'read_mosaico', 'clean_merge', 'update_radcom',
-           'update_stel', 'update_mosaico']
+           'read_estações', 'read_plano_basico', 'read_historico', 'read_mosaico', 'read_base', 'clean_merge',
+           'update_radcom', 'update_stel', 'update_mosaico', 'update_base']
 
 # Cell
 import requests
@@ -116,6 +116,7 @@ TELECOM = (
     "UF",
     "Latitude",
     "Longitude",
+    "Validade_RF"
 )
 RADIODIFUSAO = (
     "Frequência",
@@ -220,18 +221,20 @@ def optimize_floats(df: pd.DataFrame, exclude = None) -> pd.DataFrame:
     return df
 
 
-def optimize_ints(df: pd.DataFrame) -> pd.DataFrame:
+def optimize_ints(df: pd.DataFrame, exclude=None) -> pd.DataFrame:
     ints = df.select_dtypes(include=["int64"]).columns.tolist()
+    ints = [c for c in ints if c not in listify(exclude)]
     df[ints] = df[ints].apply(pd.to_numeric, downcast="integer")
     return df
 
 
-def optimize_objects(df: pd.DataFrame, datetime_features: List[str]) -> pd.DataFrame:
+def optimize_objects(df: pd.DataFrame, datetime_features: List[str], exclude) -> pd.DataFrame:
     for col in df.select_dtypes(include=["object"]):
         if col not in datetime_features:
             num_unique_values = len(df[col].unique())
             num_total_values = len(df[col])
             if float(num_unique_values) / num_total_values < 0.5:
+                if col in listify(exclude): continue
                 df[col] = df[col].astype("category")
         else:
             df[col] = pd.to_datetime(df[col]).dt.date
@@ -239,7 +242,7 @@ def optimize_objects(df: pd.DataFrame, datetime_features: List[str]) -> pd.DataF
 
 
 def df_optimize(df: pd.DataFrame, datetime_features: List[str] = [], exclude = None):
-    return optimize_floats(optimize_ints(optimize_objects(df, datetime_features)), exclude)
+    return optimize_floats(optimize_ints(optimize_objects(df, datetime_features, exclude), exclude), exclude)
 
 # Cell
 def connect_db():
@@ -300,10 +303,8 @@ def read_stel(pasta, update=False):
         update_stel(pasta)
     if (file := Path(f"{pasta}/stel.fth")).exists():
         stel = pd.read_feather(file)
-    elif (file := Path(f"{pasta}/stel.csv")).exists():
-        stel = pd.read_csv(file)
-    elif (file := Path(f"{pasta}/Base_de_Dados.xlsx")).exists():
-        stel = pd.read_excel(file, sheet_name="Stel", engine="openpyxl")
+    elif (file := Path(f"{pasta}/stel.xlsx")).exists():
+        stel = pd.read_excel(file, engine="openpyxl")
     else:
         update_stel(pasta)
         try:
@@ -312,7 +313,7 @@ def read_stel(pasta, update=False):
             raise ConnectionError(
                 "Base de Dados do Stel inexistente e não foi possível atualizá-la"
             ) from e
-    return df_optimize(stel)
+    return stel
 
 
 def read_radcom(pasta, update=False):
@@ -321,10 +322,10 @@ def read_radcom(pasta, update=False):
         update_radcom(pasta)
     if (file := Path(f"{pasta}/radcom.fth")).exists():
         radcom = pd.read_feather(file)
+    elif (file := Path(f"{pasta}/radcom.xlsx")).exists():
+        radcom = pd.read_excel(file, engine="openpyxl")
     elif (file := Path(f"{pasta}/radcom.csv")).exists():
         radcom = pd.read_csv(file)
-    elif (file := Path(f"{pasta}/Base_de_Dados.xlsx")).exists():
-        radcom = pd.read_excel(file, sheet_name="Radcom", engine="openpyxl")
     else:
         update_radcom(pasta)
         try:
@@ -333,7 +334,7 @@ def read_radcom(pasta, update=False):
             raise ConnectionError(
                 "Base de Dados do Stel inexistente e não foi possível atualizá-la"
             ) from e
-    return df_optimize(radcom)
+    return radcom
 
 
 def read_estações(path):
@@ -365,6 +366,8 @@ def read_estações(path):
     df["Num_Ato"] = docs.itemgot(0).map(str)
     df["Data_Ato"] = docs.itemgot(1).map(str)
     df.columns = NEW_ESTACOES
+    df['Validade_RF'] = df.Validade_RF.astype('str').str.slice(0,10)
+    df["Data_Ato"] = df.Data_Ato.str.slice(0,10)
     df['Entidade'] = df.Entidade.fillna('')
     ENTIDADES.update({r.Fistel : r.Entidade for r in df.itertuples() if r.Entidade != ''})
     return df
@@ -390,8 +393,6 @@ def read_plano_basico(path):
     df = df[df.Status.str.contains("-C1$|-C2$|-C3$|-C4$|-C7|-C98$")].reset_index(drop=True)
     return df
 
-
-
 def read_historico(path):
     regex = r"\s([a-zA-Z]+)=\'{1}([\w\-\ :\.]*)\'{1}"
     with ZipFile(path) as xmlzip:
@@ -414,9 +415,22 @@ def read_historico(path):
 def read_mosaico(pasta, update=False):
     if update:
         update_mosaico(pasta)
-    if not (file := Path(f"{pasta}/mosaico.xlsx")).exists():
-        return read_mosaico(pasta, update=True)
-    return pd.read_excel(f"{pasta}/mosaico.xlsx")
+    if (file := Path(f"{pasta}/mosaico.fth")).exists():
+        return pd.read_feather(file)
+    elif (file := Path(f"{pasta}/mosaico.xlsx")).exists():
+        return pd.read_excel(f"{pasta}/mosaico.xlsx")
+    return read_mosaico(pasta, update=True)
+
+def read_base(pasta, up_stel=False, up_radcom=False, up_mosaico=False):
+    if any([up_stel, up_radcom, up_mosaico]):
+        update_base(pasta, up_stel, up_radcom, up_mosaico)
+    if (file := Path(f"{pasta}/base.fth")).exists():
+        return pd.read_feather(file)
+    elif (file := Path(f"{pasta}/base.xlsx")).exists():
+        return pd.read_excel(file, engine='openpyxl')
+    else:
+        update_base(pasta, up_stel, up_radcom, up_mosaico)
+        read_base(pasta, False, False, False)
 
 # Cell
 def clean_merge(pasta, df):
@@ -496,23 +510,14 @@ def clean_merge(pasta, df):
     for r in df[(df.Entidade.isna()) | (df.Entidade == '')].itertuples():
         df.loc[r.Index, 'Entidade'] = ENTIDADES.get(r.Fistel, '')
 
-
-
     df.loc[df["Número_da_Estação"] == "", "Número_da_Estação"] = -1
-#     df["Número_da_Estação"] = df["Número_da_Estação"].astype("int")
-#     df["Canal"] = df["Canal"].astype("str")
-#     df.loc[(df.Classe == '') | (df.Classe.isna()), 'Classe'] = 'Z'
-#     df = df_optimize(df, ["Validade_RF", "Data_Ato"])
-#     df['Num_Serviço'] = df.Num_Serviço.astype('category')
-#     df['Fistel'] = df.Fistel.astype('category')
-#     df.loc[df['Validade_RF'].notna(), 'Validade_RF'] = df.loc[df['Validade_RF'].notna(), 'Validade_RF'].astype(str).str.slice(0,10)
-#     df.loc[df['Data_Ato'].notna(), 'Data_Ato']  = df.loc[df['Data_Ato'].notna(), 'Data_Ato'].astype(str).str.slice(0,10)
     df["Latitude"] = df["Latitude"].astype("float")
     df["Longitude"] = df["Longitude"].astype("float")
     df["Frequência"] = df.Frequência.astype("float")
     df.loc[df.Serviço == 'OM', 'Frequência'] = df.loc[df.Serviço == 'OM', 'Frequência'].apply(lambda x: Decimal(x) / Decimal(1000))
     df["Frequência"] = df.Frequência.astype("float")
-    return df_optimize(df, exclude=['Latitude', 'Longitude', 'Frequência'])
+#     return df_optimize(df, exclude=['Latitude', 'Longitude', 'Frequência', 'Validade_RF'])
+    return df
 
 # Cell
 def update_radcom(folder):
@@ -523,8 +528,10 @@ def update_radcom(folder):
         try:
             conn = connect_db()
             df = pd.read_sql_query(RADCOM, conn)
-            df = df_optimize(df)
+            df = df_optimize(df, exclude=['Frequência', 'Latitude', 'Longitude'])
             df.to_feather(f"{folder}/radcom.fth")
+            df.to_excel(f"{folder}/radcom.xlsx", engine='openpyxl', index=False)
+
         except pyodbc.OperationalError:
             status.console.log(
                 "Não foi possível abrir uma conexão com o SQL Server. Esta conexão somente funciona da rede cabeada!"
@@ -540,8 +547,10 @@ def update_stel(folder):
         try:
             conn = connect_db()
             df = pd.read_sql_query(STEL, conn)
-            df = df_optimize(df)
+            df['Validade_RF'] = df.Validade_RF.astype('str').str.slice(0,10)
+            df = df_optimize(df, exclude=['Frequência', 'Latitude', 'Longitude'])
             df.to_feather(f"{folder}/stel.fth")
+            df.to_excel(f"{folder}/stel.xlsx", engine='openpyxl', index=False)
         except pyodbc.OperationalError:
             status.console.log(
                 "Não foi possível abrir uma conexão com o SQL Server. Esta conexão somente funciona da rede cabeada!"
@@ -567,8 +576,38 @@ def update_mosaico(pasta):
     plano_basico = read_plano_basico(f"{pasta}/Canais.zip")
     df = estações.merge(plano_basico, on="Id", how="left")
     df = clean_merge(pasta, df)
-#    df.reset_index(drop=True).to_feather(f"{pasta}/mosaico.fth")
+    df.reset_index(drop=True).to_feather(f"{pasta}/mosaico.fth")
     with pd.ExcelWriter(f"{pasta}/mosaico.xlsx") as workbook:
         df.reset_index(drop=True).to_excel(workbook, sheet_name='Sheet1', engine="openpyxl", index=False)
     console.print("Kbô :vampire:")
     return df
+
+
+def update_base(folder, up_stel=False, up_radcom=False, up_mosaico=False):
+    stel = read_stel(path, up_stel).loc[:, TELECOM]
+    stel.rename(
+        columns={"Serviço": "Num_Serviço", "Número da Estação": "Número_da_Estação"},
+        inplace=True,
+    )
+    radcom = read_radcom(path, up_radcom)
+    radcom.rename(columns={"Número da Estação": "Número_da_Estação"}, inplace=True)
+    mosaico = read_mosaico(path, up_mosaico)
+    radcom["Num_Serviço"] = 231
+    radcom["Status"] = "RADCOM"
+    radcom["Classe"] = radcom.Fase.str.strip() + "-" + radcom.Situação.str.strip()
+    radcom["Entidade"] = radcom.Entidade.str.rstrip().str.lstrip()
+    radcom["Num_Ato"] = ""
+    radcom["Data_Ato"] = ""
+    radcom["Validade_RF"] = ""
+    radcom = radcom.loc[:, RADIODIFUSAO]
+    stel["Num_Ato"] = ""
+    stel["Data_Ato"] = ""
+    stel['Entidade'] = stel.Entidade.str.rstrip().str.lstrip()
+    mosaico = mosaico.loc[:, RADIODIFUSAO]
+    rd = mosaico.append(radcom)
+    rd = rd.append(stel).sort_values("Frequência").reset_index(drop=True)
+#     rd = df_optimize(rd, exclude=['Frequência', 'Latitude', 'Longitude', 'Validade_RF', 'Data_Ato'])
+#     rd.to_feather(f"{folder}/base.fth")
+    with pd.ExcelWriter(f"{folder}/base.xlsx") as workbook:
+        rd.reset_index(drop=True).to_excel(workbook, sheet_name='Sheet1', engine="openpyxl", index=False)
+    return rd

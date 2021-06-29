@@ -39,10 +39,12 @@ index = {"console": "constants.ipynb",
          "read_plano_basico": "queries.ipynb",
          "read_historico": "queries.ipynb",
          "read_mosaico": "queries.ipynb",
+         "read_base": "queries.ipynb",
          "clean_merge": "queries.ipynb",
          "update_radcom": "queries.ipynb",
          "update_stel": "queries.ipynb",
-         "update_mosaico": "queries.ipynb"}
+         "update_mosaico": "queries.ipynb",
+         "update_base": "queries.ipynb"}
 
 modules = ["constants.py",
            "filter.py",
