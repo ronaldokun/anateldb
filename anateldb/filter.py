@@ -23,82 +23,46 @@ def formatar_db(
     dest = Path(path)
     dest.mkdir(parents=True, exist_ok=True)
     time = datetime.today().strftime("%d/%m/%Y %H:%M:%S")
-#     stel = read_stel(path, atualizar).sort_values("Frequência").loc[:, TELECOM]
-#     stel.rename(
-#         columns={"Serviço": "Num_Serviço", "Número da Estação": "Número_da_Estação"},
-#         inplace=True,
-#     )
-#     radcom = read_radcom(path, atualizar)
-#     radcom.rename(columns={"Número da Estação": "Número_da_Estação"}, inplace=True)
-#     mosaico = read_mosaico(path, atualizar)
-    with console.status(
-         "[blue]Formatação e filtro das diversas colunas ...", spinner="pong"
-     ) as status:
-#         radcom["Num_Serviço"] = "231"
-#         radcom["Status"] = "RADCOM"
-#         radcom["Classe"] = radcom.Fase.str.strip() + "-" + radcom.Situação.str.strip()
-#         radcom["Entidade"] = radcom.Entidade.str.rstrip().str.lstrip()
-#         radcom["Num_Ato"] = ""
-#         radcom["Data_Ato"] = ""
-#         radcom["Validade_RF"] = ""
-#         radcom = radcom.loc[:, RADIODIFUSAO]
-#         mosaico = mosaico.loc[:, RADIODIFUSAO]
-#         rd = mosaico.append(radcom)
-#         stel["Num_Ato"] = ""
-#         stel["Data_Ato"] = ""
-#         stel["Validade_RF"] = ""  # FIXME
-#         stel['Entidade'] = stel.Entidade.str.rstrip().str.lstrip()
-        rd = read_base(path, up_stel, up_radcom, up_mosaico)
-        rd.fillna('', inplace=True)
-        rd.loc[rd['Status'] != '', 'Status'] = rd.loc[rd['Status'] != '', 'Status'].astype(str) + ", " \
-            + rd.loc[rd['Status'] != '', 'Classe'].astype(str)
-        rd.loc[rd['Status'] == '', 'Status'] = rd.loc[rd['Status'] == '', 'Num_Serviço']
+    console.print(":scroll:[green]Lendo as bases de dados...")
+    rd = read_base(path, up_stel, up_radcom, up_mosaico)
+    rd['Validade_RF'] = rd.Validade_RF.astype('string').fillna('')
+    rd['Data_Ato'] = rd.Data_Ato.astype('string').fillna('')
+    rd['Status'] = rd.Status.astype('string')
+    rd['Classe'] = rd.Classe.astype('string')
+    rd.loc[rd['Status'] != '', 'Status'] = rd.loc[rd['Status'] != '', 'Status'] + ", " \
+        + rd.loc[rd['Status'] != '', 'Classe']
+    rd.loc[rd['Status'].isna(), 'Status'] = rd.loc[rd['Status'].isna(), 'Num_Serviço'].astype('string')
 
-        rd["Descrição"] = (
-            rd.Status.astype(str)
-            + ", "
-            + rd.Entidade.astype(str).str.title()
-            + " ("
-            + rd.Fistel.astype(str)
-            + ", "
-            + rd["Número_da_Estação"].astype(str)
-            + "), "
-            + rd.Município.astype(str)
-            + "/"
-            + rd.UF.astype(str)
-        )
-#         stel["Descrição"] = (
-#             stel.Num_Serviço.astype(str)
-#             + ", "
-#             + stel.Entidade.astype(str).str.title()
-#             + " ("
-#             + stel.Fistel.astype(str)
-#             + ", "
-#             + stel["Número_da_Estação"].astype(str)
-#             + "), "
-#             + stel["Município"].astype(str)
-#             + "/"
-#             + stel.UF.astype(str)
-#         )
-        export_columns = [
-            "Frequência",
-            "Latitude",
-            "Longitude",
-            "Descrição",
-            "Num_Serviço",
-            "Número_da_Estação",
-            "Num_Ato",
-            "Data_Ato",
-            "Validade_RF",
-        ]
-        rd = rd.loc[:, export_columns]
-        rd.columns = APP_ANALISE
+    rd["Descrição"] = (
+        rd.Status
+        + ", "
+        + rd.Entidade.astype('string').str.title()
+        + " ("
+        + rd.Fistel.astype('string')
+        + ", "
+        + rd["Número_da_Estação"].astype('string')
+        + "), "
+        + rd.Município.astype('string')
+        + "/"
+        + rd.UF.astype('string')
+    )
 
-    with console.status("[magenta]Salvando os arquivos ...", spinner="grenade") as status:
-        date = pd.DataFrame(columns=[time])
-        with pd.ExcelWriter(f"{dest}/AnatelDB.xlsx") as workbook:
-            date.to_excel(workbook, sheet_name="ExtractDate", index=False)
-            rd.to_excel(workbook, sheet_name="DataBase", index=False)
-
-
+    export_columns = [
+        "Frequência",
+        "Latitude",
+        "Longitude",
+        "Descrição",
+        "Num_Serviço",
+        "Número_da_Estação",
+        "Num_Ato",
+        "Data_Ato",
+        "Validade_RF",
+    ]
+    rd = rd.loc[:, export_columns]
+    rd.columns = APP_ANALISE
+    console.print(":card_file_box:[green]Salvando os arquivos...")
+    date = pd.DataFrame(columns=[time])
+    with pd.ExcelWriter(f"{dest}/AnatelDB.xlsx") as workbook:
+        date.to_excel(workbook, sheet_name="ExtractDate", index=False)
+        rd.to_excel(workbook, sheet_name="DataBase", index=False)
     console.print("Sucesso :zap:")

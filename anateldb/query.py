@@ -25,6 +25,7 @@ import collections
 from fastcore.utils import listify
 from fastcore.foundation import L
 from .constants import console
+from pyarrow import ArrowInvalid
 getcontext().prec = 5
 
 # Cell
@@ -228,14 +229,17 @@ def optimize_ints(df: pd.DataFrame, exclude=None) -> pd.DataFrame:
     return df
 
 
-def optimize_objects(df: pd.DataFrame, datetime_features: List[str], exclude) -> pd.DataFrame:
-    for col in df.select_dtypes(include=["object"]):
+def optimize_objects(df: pd.DataFrame, datetime_features: List[str], exclude=None) -> pd.DataFrame:
+    for col in df.select_dtypes(include=["object"]).columns.tolist():
         if col not in datetime_features:
+            if col in listify(exclude): continue
             num_unique_values = len(df[col].unique())
             num_total_values = len(df[col])
             if float(num_unique_values) / num_total_values < 0.5:
-                if col in listify(exclude): continue
-                df[col] = df[col].astype("category")
+                dtype = "category"
+            else:
+                dtype = "string"
+            df[col] = df[col].astype(dtype)
         else:
             df[col] = pd.to_datetime(df[col]).dt.date
     return df
@@ -418,7 +422,7 @@ def read_mosaico(pasta, update=False):
     if (file := Path(f"{pasta}/mosaico.fth")).exists():
         return pd.read_feather(file)
     elif (file := Path(f"{pasta}/mosaico.xlsx")).exists():
-        return pd.read_excel(f"{pasta}/mosaico.xlsx")
+        return df_optimize(pd.read_excel(f"{pasta}/mosaico.xlsx"), exclude=['Frequência', 'Latitude', 'Longitude'])
     return read_mosaico(pasta, update=True)
 
 def read_base(pasta, up_stel=False, up_radcom=False, up_mosaico=False):
@@ -427,7 +431,7 @@ def read_base(pasta, up_stel=False, up_radcom=False, up_mosaico=False):
     if (file := Path(f"{pasta}/base.fth")).exists():
         return pd.read_feather(file)
     elif (file := Path(f"{pasta}/base.xlsx")).exists():
-        return pd.read_excel(file, engine='openpyxl')
+        return df_optimize(pd.read_excel(file, engine='openpyxl'), exclude=['Frequência', 'Latitude', 'Longitude'])
     else:
         update_base(pasta, up_stel, up_radcom, up_mosaico)
         read_base(pasta, False, False, False)
@@ -516,8 +520,10 @@ def clean_merge(pasta, df):
     df["Frequência"] = df.Frequência.astype("float")
     df.loc[df.Serviço == 'OM', 'Frequência'] = df.loc[df.Serviço == 'OM', 'Frequência'].apply(lambda x: Decimal(x) / Decimal(1000))
     df["Frequência"] = df.Frequência.astype("float")
-#     return df_optimize(df, exclude=['Latitude', 'Longitude', 'Frequência', 'Validade_RF'])
-    return df
+    df['Validade_RF'] = df.Validade_RF.astype('string').str.slice(0,10)
+    df.loc[df['Num_Ato'] == '', 'Num_Ato'] = -1
+    df['Num_Ato'] = df.Num_Ato.astype('int')
+    return df_optimize(df, exclude=['Latitude', 'Longitude', 'Frequência'])
 
 # Cell
 def update_radcom(folder):
@@ -576,9 +582,11 @@ def update_mosaico(pasta):
     plano_basico = read_plano_basico(f"{pasta}/Canais.zip")
     df = estações.merge(plano_basico, on="Id", how="left")
     df = clean_merge(pasta, df)
-    df.reset_index(drop=True).to_feather(f"{pasta}/mosaico.fth")
-    with pd.ExcelWriter(f"{pasta}/mosaico.xlsx") as workbook:
-        df.reset_index(drop=True).to_excel(workbook, sheet_name='Sheet1', engine="openpyxl", index=False)
+    try:
+        df.reset_index(drop=True).to_feather(f"{pasta}/mosaico.fth")
+    except ArrowInvalid:
+        with pd.ExcelWriter(f"{pasta}/mosaico.xlsx") as workbook:
+            df.reset_index(drop=True).to_excel(workbook, sheet_name='Sheet1', engine="openpyxl", index=False)
     console.print("Kbô :vampire:")
     return df
 
@@ -596,18 +604,20 @@ def update_base(folder, up_stel=False, up_radcom=False, up_mosaico=False):
     radcom["Status"] = "RADCOM"
     radcom["Classe"] = radcom.Fase.str.strip() + "-" + radcom.Situação.str.strip()
     radcom["Entidade"] = radcom.Entidade.str.rstrip().str.lstrip()
-    radcom["Num_Ato"] = ""
+    radcom["Num_Ato"] = -1
     radcom["Data_Ato"] = ""
     radcom["Validade_RF"] = ""
     radcom = radcom.loc[:, RADIODIFUSAO]
-    stel["Num_Ato"] = ""
+    stel["Num_Ato"] = -1
     stel["Data_Ato"] = ""
     stel['Entidade'] = stel.Entidade.str.rstrip().str.lstrip()
     mosaico = mosaico.loc[:, RADIODIFUSAO]
     rd = mosaico.append(radcom)
     rd = rd.append(stel).sort_values("Frequência").reset_index(drop=True)
-#     rd = df_optimize(rd, exclude=['Frequência', 'Latitude', 'Longitude', 'Validade_RF', 'Data_Ato'])
-#     rd.to_feather(f"{folder}/base.fth")
-    with pd.ExcelWriter(f"{folder}/base.xlsx") as workbook:
-        rd.reset_index(drop=True).to_excel(workbook, sheet_name='Sheet1', engine="openpyxl", index=False)
+    rd = df_optimize(rd, exclude=['Frequência', 'Latitude', 'Longitude'])
+    try:
+        rd.to_feather(f"{folder}/base.fth")
+    except ArrowInvalid:
+        with pd.ExcelWriter(f"{folder}/base.xlsx") as workbook:
+            rd.to_excel(workbook, sheet_name='Sheet1', engine="openpyxl", index=False)
     return rd
