@@ -11,6 +11,7 @@ from .constants import console
 from unidecode import unidecode
 from fastcore.test import *
 from fastcore.script import call_parse, Param, store_true, bool_arg
+from pyarrow import ArrowInvalid
 
 # Cell
 @call_parse
@@ -62,7 +63,10 @@ def formatar_db(
     rd.columns = APP_ANALISE
     console.print(":card_file_box:[green]Salvando os arquivos...")
     date = pd.DataFrame(columns=[time])
-    with pd.ExcelWriter(f"{dest}/AnatelDB.xlsx") as workbook:
-        date.to_excel(workbook, sheet_name="ExtractDate", index=False)
-        rd.to_excel(workbook, sheet_name="DataBase", index=False)
+    try:
+        rd.to_feather(f"{dest}/AnatelDB.fth")
+    except ArrowInvalid:
+        with pd.ExcelWriter(f"{dest}/AnatelDB.xlsx") as workbook:
+            date.to_excel(workbook, sheet_name="ExtractDate", index=False)
+            rd.to_excel(workbook, sheet_name="DataBase", index=False)
     console.print("Sucesso :zap:")

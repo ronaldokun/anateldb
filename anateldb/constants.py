@@ -227,6 +227,9 @@ insert into ##faixas values(0,'De 20 MHz - 6 GHz','20000', '6000000');
 
 select distinct f.MedTransmissaoInicial as 'Frequência',
 uf.SiglaUnidadeFrequencia as 'Unidade',
+d.CodClasseEmissao as 'ClasseEmissao',
+d.SiglaLarguraEmissao as 'LarguraEmissao',
+ce.CodTipoClasseEstacao as 'ClasseEstacao',
 e.NumServico as 'Serviço',
 ent.NomeEntidade as 'Entidade',
 h.NumFistel as 'Fistel',
@@ -236,10 +239,12 @@ e.SiglaUf as 'UF',
 e.MedLatitudeDecimal as 'Latitude',
 e.MedLongitudeDecimal as 'Longitude',
 ent.NumCnpjCpf as 'CNPJ',
-c.DataValidadeRadiofrequencia as 'Validade_RF'
+c.DataValidadeRadiofrequencia as 'Validade_RF',
 from contrato c
 inner join estacao e on e.IdtContrato = c.Idtcontrato
 inner join frequencia f on f.IdtEstacao = e.IdtEstacao
+inner join CLASSEESTACAO ce on ce.IdtFrequencia = f.IdtFrequencia
+inner join DESIGNACAOEMISSAO d  on d.IdtClasseEstacao = ce.IdtClasseEstacao
 inner join HABILITACAO h on h.IdtHabilitacao = c.IdtHabilitacao
 inner join entidade ent on ent.IdtEntidade = h.IdtEntidade
 inner join endereco en on en.IdtEstacao = e.IdtEstacao
@@ -252,8 +257,11 @@ or (fx.inic <= f.MedTransmissaoInicialKHz and fx.fim >= f.medtransmissaoinicialk
 or (fx.inic <= f.MedFrequenciaInicialKHz and fx.fim >= f.MedFrequenciaInicialKHz)
 or (fx.inic <= f.MedFrequenciaFinalKHz and fx.fim >= f.MedFrequenciaFinalKHz)
 )
-where e.DataExclusao is null and
-fx.faixa is not null and
-f.MedTransmissaoInicial is not null
+where e.DataExclusao is null
+and fx.faixa is not null
+and f.MedTransmissaoInicial is not null
+and f.CodStatusRegistro = 'L'
+and e.IndStatusEstacao = 'L'
 and h.NumServico <> '010'
+order by 'Frequência'
 """
