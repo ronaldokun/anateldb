@@ -233,7 +233,6 @@ def read_estações(path):
     df = pd.concat(dfs)
     df = df[df.state.str.contains("-C1$|-C2$|-C3$|-C4$|-C7|-C98$")].reset_index(drop=True)
     docs = L(df.historico_documentos.apply(extrair_ato).tolist())
-    return df
     df = df.loc[:, COL_ESTACOES]
     df["Num_Ato"] = docs.itemgot(0).map(str)
     df["Data_Ato"] = docs.itemgot(1).map(str)
@@ -314,6 +313,7 @@ def update_stel(pasta):
             conn = connect_db()
             df = pd.read_sql_query(STEL, conn)
             df['Validade_RF'] = df.Validade_RF.astype('str').str.slice(0,10)
+            df['Num_Serviço'] = df.Num_Serviço.astype('int')
             df = df_optimize(df, exclude=['Frequência'])
             try:
                 df.to_feather(f"{pasta}/stel.fth")
@@ -365,22 +365,32 @@ def update_base(pasta, up_stel=False, up_radcom=False, up_mosaico=False):
     mosaico = read_mosaico(pasta, up_mosaico)
     radcom["Num_Serviço"] = 231
     radcom["Status"] = "RADCOM"
+    radcom['Classe_Emissão'] = ''
+    radcom['Largura_Emissão'] = ''
     radcom["Classe"] = radcom.Fase.str.strip() + "-" + radcom.Situação.str.strip()
     radcom["Entidade"] = radcom.Entidade.str.rstrip().str.lstrip()
     radcom["Num_Ato"] = -1
     radcom["Data_Ato"] = ""
     radcom["Validade_RF"] = ""
     radcom = radcom.loc[:, RADIODIFUSAO]
+    stel['Status'] = 'L'
+    stel['Num_Serviço'] = stel.Num_Serviço.astype('uint8')
     stel["Num_Ato"] = -1
     stel["Data_Ato"] = ""
     stel['Entidade'] = stel.Entidade.str.rstrip().str.lstrip()
     mosaico = mosaico.loc[:, RADIODIFUSAO]
+    mosaico['Classe_Emissão'] = ''
+    mosaico['Largura_Emissão'] = ''
     rd = mosaico.append(radcom)
     rd = rd.append(stel).sort_values("Frequência").reset_index(drop=True)
     rd = df_optimize(rd, exclude=['Frequência'])
+    rd['Fistel'] = rd.Fistel.astype('str')
+    console.print(":trophy: [green]Base Consolidada. Salvando os arquivos...")
+    return rd
     try:
         rd.to_feather(f"{pasta}/base.fth")
     except ArrowInvalid:
+        Path(f"{pasta}/base.fth").unlink()
         with pd.ExcelWriter(f"{pasta}/base.xlsx") as workbook:
             rd.to_excel(workbook, sheet_name='Sheet1', engine="openpyxl", index=False)
     return rd

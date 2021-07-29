@@ -7,7 +7,7 @@ from pathlib import Path
 import pandas as pd
 from datetime import datetime
 from .query import *
-from .constants import console
+from .constants import console, APP_ANALISE
 from unidecode import unidecode
 from fastcore.test import *
 from fastcore.script import call_parse, Param, store_true, bool_arg
@@ -55,6 +55,8 @@ def formatar_db(
         "Descrição",
         "Num_Serviço",
         "Número_da_Estação",
+        "Classe_Emissão",
+        "Largura_Emissão",
         "Num_Ato",
         "Data_Ato",
         "Validade_RF",
@@ -66,7 +68,12 @@ def formatar_db(
     try:
         rd.to_feather(f"{dest}/AnatelDB.fth")
     except ArrowInvalid:
-        with pd.ExcelWriter(f"{dest}/AnatelDB.xlsx") as workbook:
-            date.to_excel(workbook, sheet_name="ExtractDate", index=False)
-            rd.to_excel(workbook, sheet_name="DataBase", index=False)
+        pass
+    with pd.ExcelWriter(f"{dest}/AnatelDB.xlsx") as workbook:
+        date.to_excel(workbook, sheet_name="ExtractDate", index=False)
+        rd.to_excel(workbook, sheet_name="DataBase", index=False)
     console.print("Sucesso :zap:")
+    d = json.loads((dest / 'VersionFile.json').read_text())
+    d['anateldb']['ReleaseDate'] = datetime.today().strftime('%d/%m/%Y')
+    d['anateldb']['Version'] = bump_version(d['anateldb']['Version'])
+    json.dump(d, (dest / 'VersionFile.json').open('w'))

@@ -6,8 +6,8 @@ title: Anatel - Consulta e Processamento do Banco de Dados
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "Este repositÛrio concentra um conjunto de scripts para navegar e baixar informaÁıes dos principais bancos de dados da Anatel. Cujo dados ser„o utilizados em tarefas fiscalizatÛrias. O p˙blico alvo s„o os servidores do Ûrg„o, uma vez que a maioria dos sistemas utilizados aqui necessitam de autenticaÁ„o cujo acesso È restrito aos servidores da ANATEL."
-description: "Este repositÛrio concentra um conjunto de scripts para navegar e baixar informaÁıes dos principais bancos de dados da Anatel. Cujo dados ser„o utilizados em tarefas fiscalizatÛrias. O p˙blico alvo s„o os servidores do Ûrg„o, uma vez que a maioria dos sistemas utilizados aqui necessitam de autenticaÁ„o cujo acesso È restrito aos servidores da ANATEL."
+summary: "Este reposit√≥rio concentra um conjunto de scripts para navegar e baixar informa√ß√µes dos principais bancos de dados da Anatel. Cujo dados ser√£o utilizados em tarefas fiscalizat√≥rias. O p√∫blico alvo s√£o os servidores do √≥rg√£o, uma vez que a maioria dos sistemas utilizados aqui necessitam de autentica√ß√£o cujo acesso √© restrito aos servidores da ANATEL."
+description: "Este reposit√≥rio concentra um conjunto de scripts para navegar e baixar informa√ß√µes dos principais bancos de dados da Anatel. Cujo dados ser√£o utilizados em tarefas fiscalizat√≥rias. O p√∫blico alvo s√£o os servidores do √≥rg√£o, uma vez que a maioria dos sistemas utilizados aqui necessitam de autentica√ß√£o cujo acesso √© restrito aos servidores da ANATEL."
 nb_path: "index.ipynb"
 ---
 <!--
@@ -64,7 +64,7 @@ nb_path: "index.ipynb"
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>A funÁ„o seguinte baixa os dados diretamente da interface p˙blica online do <a href="http://sistemas.anatel.gov.br/se/public/view/b/srd.php">Spectrum E</a></p>
+<p>A fun√ß√£o seguinte baixa os dados diretamente da interface p√∫blica online do <a href="http://sistemas.anatel.gov.br/se/public/view/b/srd.php">Spectrum E</a></p>
 
 </div>
 </div>
@@ -75,10 +75,10 @@ nb_path: "index.ipynb"
 <span class="n">update_mosaico</span><span class="p">(</span><span class="n">pasta</span><span class="o">=</span><span class="s1">&#39;D:\OneDrive - ANATEL\GR01FI3\BaseDados&#39;</span><span class="p">)</span>
 </pre></div>
 
-<pre><code>Baixando as EstaÁıes do Mosaico...
-Baixando o Plano B·sico das EstaÁıes...
-Baixando o HistÛrico de AtualizaÁıes...
-KbÙ
+<pre><code>Baixando as Esta√ß√µes do Mosaico...
+Baixando o Plano B√°sico das Esta√ß√µes...
+Baixando o Hist√≥rico de Atualiza√ß√µes...
+Kb√¥
 Wall time: 8.12 s</code></pre>
 
 </div>
@@ -98,7 +98,7 @@ Wall time: 1 s</code></pre>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>A funÁ„o <code>update_stel</code> È bem mais lenta que as demais, dado que o banco de dados do STEL È antigo e abarca todos os registros de outorga de serviÁos de telecomunicaÁıes da ANATEL, com mais de <strong>400.000</strong> registros ativos. Esse banco de dados È atualizado 1 vez ao dia ‡ meia-noite e remete ao estado do dia anterior, portanto n„o faz sentido atualiz·-lo mais de 1 vez por dia.</p>
+<p>A fun√ß√£o <code>update_stel</code> √© bem mais lenta que as demais, dado que o banco de dados do STEL √© antigo e abarca todos os registros de outorga de servi√ßos de telecomunica√ß√µes da ANATEL, com mais de <strong>400.000</strong> registros ativos. Esse banco de dados √© atualizado 1 vez ao dia √† meia-noite e remete ao estado do dia anterior, portanto n√£o faz sentido atualiz√°-lo mais de 1 vez por dia.</p>
 
 </div>
 </div>
@@ -141,17 +141,17 @@ Wall time: 1 s</code></pre>
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>FrequÍncia</th>
+      <th>Frequ√™ncia</th>
       <th>Unidade</th>
       <th>Latitude</th>
       <th>Longitude</th>
       <th>Fase</th>
-      <th>SituaÁ„o</th>
-      <th>Numero da EstaÁ„o</th>
+      <th>Situa√ß√£o</th>
+      <th>Numero da Esta√ß√£o</th>
       <th>CNPJ</th>
       <th>Fistel</th>
       <th>Entidade</th>
-      <th>MunicÌpio</th>
+      <th>Munic√≠pio</th>
       <th>UF</th>
     </tr>
   </thead>
@@ -183,7 +183,7 @@ Wall time: 1 s</code></pre>
       <td>00284576000128</td>
       <td>50012524409</td>
       <td>ASSOCIACAO DOS MORADORES E PRODUT. RURAIS DE A...</td>
-      <td>AssunÁ„o</td>
+      <td>Assun√ß√£o</td>
       <td>PB</td>
     </tr>
     <tr>
@@ -213,7 +213,7 @@ Wall time: 1 s</code></pre>
       <td>00792795000118</td>
       <td>50011398132</td>
       <td>ASSOCIACAO DOS TRABALHADORES DE GUIMARANIA (ATG)</td>
-      <td>Guimar‚nia</td>
+      <td>Guimar√¢nia</td>
       <td>MG</td>
     </tr>
     <tr>
@@ -228,7 +228,7 @@ Wall time: 1 s</code></pre>
       <td>00794510000188</td>
       <td>50011398990</td>
       <td>FUNDACAO ASSISTENCIAL LAR DA PAZ - FALP</td>
-      <td>Dores do Indai·</td>
+      <td>Dores do Indai√°</td>
       <td>MG</td>
     </tr>
   </tbody>
@@ -239,14 +239,14 @@ Wall time: 1 s</code></pre>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Se o argumento <code>update=True</code> for fornecido ou arquivo local n„o existir, a base de dados È atualizada por meio da funÁ„o <code>update_radcom</code>.</p>
+<p>Se o argumento <code>update=True</code> for fornecido ou arquivo local n√£o existir, a base de dados √© atualizada por meio da fun√ß√£o <code>update_radcom</code>.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<blockquote><p><em>A funÁ„o <code>update_radcom</code> somente ir· funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.</em></p>
+<blockquote><p><em>A fun√ß√£o <code>update_radcom</code> somente ir√° funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.</em></p>
 </blockquote>
 
 </div>
@@ -282,17 +282,17 @@ Wall time: 1 s</code></pre>
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>FrequÍncia</th>
+      <th>Frequ√™ncia</th>
       <th>Unidade</th>
       <th>Latitude</th>
       <th>Longitude</th>
       <th>Fase</th>
-      <th>SituaÁ„o</th>
-      <th>Numero da EstaÁ„o</th>
+      <th>Situa√ß√£o</th>
+      <th>Numero da Esta√ß√£o</th>
       <th>CNPJ</th>
       <th>Fistel</th>
       <th>Entidade</th>
-      <th>MunicÌpio</th>
+      <th>Munic√≠pio</th>
       <th>UF</th>
     </tr>
   </thead>
@@ -368,7 +368,7 @@ Wall time: 1 s</code></pre>
       <td>1011110250</td>
       <td>10877144000184</td>
       <td>50411382063</td>
-      <td>ASSOCIA«√O DE DESENVOLVIMENTO CULTURAL DA R¡DI...</td>
+      <td>ASSOCIA√á√ÉO DE DESENVOLVIMENTO CULTURAL DA R√ÅDI...</td>
       <td>Mataraca</td>
       <td>PB</td>
     </tr>
@@ -382,15 +382,15 @@ Wall time: 1 s</code></pre>
 <div class="text_cell_render border-box-sizing rendered_html">
 <div class="highlight"><pre><span></span><span class="n">stel</span> <span class="o">=</span> <span class="n">read_stel</span><span class="p">(</span><span class="n">pasta</span><span class="o">=</span><span class="s1">&#39;D:\OneDrive - ANATEL\GR01FI3\BaseDados&#39;</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
-<p><strong>Os dados do Stel n„o ser„o ilustrados aqui por se tratar de dados de telecomunicaÁ„o privados, os demais dados de radiodifus„o s„o p˙blicos e disponÌveis para qualquer interessado consultar</strong></p>
+<p><strong>Os dados do Stel n√£o ser√£o ilustrados aqui por se tratar de dados de telecomunica√ß√£o privados, os demais dados de radiodifus√£o s√£o p√∫blicos e dispon√≠veis para qualquer interessado consultar</strong></p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Se o argumento <code>update=True</code> for fornecido ou arquivo local n„o existir, a base de dados È atualizada por meio da funÁ„o <code>update_stel</code>.</p>
-<blockquote><p><em>A funÁ„o  <code>update_stel</code> somente ir· funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.</em></p>
+<p>Se o argumento <code>update=True</code> for fornecido ou arquivo local n√£o existir, a base de dados √© atualizada por meio da fun√ß√£o <code>update_stel</code>.</p>
+<blockquote><p><em>A fun√ß√£o  <code>update_stel</code> somente ir√° funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.</em></p>
 </blockquote>
 
 </div>
@@ -401,10 +401,10 @@ Wall time: 1 s</code></pre>
 <div class="highlight"><pre><span></span><span class="n">mosaico</span> <span class="o">=</span> <span class="n">read_mosaico</span><span class="p">(</span><span class="n">pasta</span><span class="o">=</span><span class="s1">&#39;D:\OneDrive - ANATEL\GR01FI3\BaseDados&#39;</span><span class="p">)</span> <span class="p">;</span> <span class="n">mosaico</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>
 </pre></div>
 
-<pre><code>Baixando as EstaÁıes do Mosaico...
-Baixando o Plano B·sico das EstaÁıes...
-Baixando o HistÛrico de AtualizaÁıes...
-KbÙ
+<pre><code>Baixando as Esta√ß√µes do Mosaico...
+Baixando o Plano B√°sico das Esta√ß√µes...
+Baixando o Hist√≥rico de Atualiza√ß√µes...
+Kb√¥
 
 
 
@@ -429,21 +429,21 @@ KbÙ
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>ServiÁo</th>
-      <th>SituaÁ„o</th>
+      <th>Servi√ßo</th>
+      <th>Situa√ß√£o</th>
       <th>Entidade</th>
       <th>Fistel</th>
       <th>CNPJ</th>
-      <th>MunicÌpio</th>
+      <th>Munic√≠pio</th>
       <th>UF</th>
       <th>Id</th>
-      <th>N˙mero da EstaÁ„o</th>
+      <th>N√∫mero da Esta√ß√£o</th>
       <th>Classe</th>
-      <th>FrequÍncia</th>
+      <th>Frequ√™ncia</th>
       <th>Latitude</th>
       <th>Longitude</th>
       <th>Num_Ato</th>
-      <th>”rgao</th>
+      <th>√ìrgao</th>
       <th>Data_Ato</th>
     </tr>
   </thead>
@@ -493,7 +493,7 @@ KbÙ
       <td>FUNDACAO EDUCACIONAL E CULTURAL DE IPANEMA</td>
       <td>50433856696</td>
       <td>04608796000110</td>
-      <td>Sabar·</td>
+      <td>Sabar√°</td>
       <td>MG</td>
       <td>5f32c1c918e6b</td>
       <td></td>
@@ -551,8 +551,8 @@ KbÙ
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Se o argumento <code>update=True</code> for fornecido ou o arquivo local n„o existir, a base de dados È atualizada por meio da funÁ„o <code>update_mosaico</code>.</p>
-<blockquote><p>A funÁ„o <code>update_mosaico</code> usa a base de dados P˙blica do Spectrum E, portanto basta somente estar conectado na internet &#x1F60E;.</p>
+<p>Se o argumento <code>update=True</code> for fornecido ou o arquivo local n√£o existir, a base de dados √© atualizada por meio da fun√ß√£o <code>update_mosaico</code>.</p>
+<blockquote><p>A fun√ß√£o <code>update_mosaico</code> usa a base de dados P√∫blica do Spectrum E, portanto basta somente estar conectado na internet &#x1F60E;.</p>
 </blockquote>
 
 </div>

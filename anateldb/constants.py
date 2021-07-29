@@ -153,10 +153,13 @@ NEW_PB = (
 )
 TELECOM = (
     "Frequência",
-    "Serviço",
+    "Num_Serviço",
+    "Classe",
+    "Classe_Emissão",
+    "Largura_Emissão",
     "Entidade",
     "Fistel",
-    "Número da Estação",
+    "Número_da_Estação",
     "Município",
     "UF",
     "Latitude",
@@ -187,6 +190,8 @@ APP_ANALISE = (
     "Description",
     "Service",
     "Station",
+    "Class",
+    "BW",
     "ActNumber",
     "ActDate",
     "ValRF",
@@ -224,22 +229,21 @@ STEL = """IF OBJECT_ID('tempDB..##faixas','U') is not null
 drop table ##faixas
 create table ##faixas (id int not null, faixa varchar(20), inic float, fim float,);
 insert into ##faixas values(0,'De 20 MHz - 6 GHz','20000', '6000000');
-
 select distinct f.MedTransmissaoInicial as 'Frequência',
 uf.SiglaUnidadeFrequencia as 'Unidade',
-d.CodClasseEmissao as 'ClasseEmissao',
-d.SiglaLarguraEmissao as 'LarguraEmissao',
-ce.CodTipoClasseEstacao as 'ClasseEstacao',
-e.NumServico as 'Serviço',
+d.CodClasseEmissao as 'Classe_Emissão',
+d.SiglaLarguraEmissao as 'Largura_Emissão',
+ce.CodTipoClasseEstacao as 'Classe',
+e.NumServico as 'Num_Serviço',
 ent.NomeEntidade as 'Entidade',
 h.NumFistel as 'Fistel',
-e.NumEstacao as 'Número da Estação',
+e.NumEstacao as 'Número_da_Estação',
 mu.NomeMunicipio as 'Município',
 e.SiglaUf as 'UF',
 e.MedLatitudeDecimal as 'Latitude',
 e.MedLongitudeDecimal as 'Longitude',
 ent.NumCnpjCpf as 'CNPJ',
-c.DataValidadeRadiofrequencia as 'Validade_RF',
+c.DataValidadeRadiofrequencia as 'Validade_RF'
 from contrato c
 inner join estacao e on e.IdtContrato = c.Idtcontrato
 inner join frequencia f on f.IdtEstacao = e.IdtEstacao
@@ -263,5 +267,4 @@ and f.MedTransmissaoInicial is not null
 and f.CodStatusRegistro = 'L'
 and e.IndStatusEstacao = 'L'
 and h.NumServico <> '010'
-order by 'Frequência'
-"""
+order by 'Frequência'"""

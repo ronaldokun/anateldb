@@ -144,3 +144,6 @@ checklink/cookies.txt
 *.fth
 *.csv
 
+# VSCODE Files
+.virtual_documents
+
