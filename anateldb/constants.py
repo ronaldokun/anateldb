@@ -225,11 +225,7 @@ where h.NumServico = '231'
 """
 
 # Cell
-STEL = """IF OBJECT_ID('tempDB..##faixas','U') is not null
-drop table ##faixas
-create table ##faixas (id int not null, faixa varchar(20), inic float, fim float,);
-insert into ##faixas values(0,'De 20 MHz - 6 GHz','20000', '6000000');
-select distinct f.MedTransmissaoInicial as 'Frequência',
+STEL = """select distinct f.MedTransmissaoInicial as 'Frequência',
 uf.SiglaUnidadeFrequencia as 'Unidade',
 d.CodClasseEmissao as 'Classe_Emissão',
 d.SiglaLarguraEmissao as 'Largura_Emissão',
@@ -255,16 +251,10 @@ inner join endereco en on en.IdtEstacao = e.IdtEstacao
 inner join Municipio mu on mu.CodMunicipio = en.CodMunicipio
 inner join Servico s on s.NumServico = h.NumServico and s.IdtServicoAreaAtendimento = 4
 left join UnidadeFrequencia uf on uf.IdtUnidadeFrequencia = f.IdtUnidadeTransmissao
-left outer join ##faixas fx on (
-(fx.inic <= f.MedRecepcaoInicialKHz and fx.fim >= f.MedRecepcaoInicialKHz)
-or (fx.inic <= f.MedTransmissaoInicialKHz and fx.fim >= f.medtransmissaoinicialkhz)
-or (fx.inic <= f.MedFrequenciaInicialKHz and fx.fim >= f.MedFrequenciaInicialKHz)
-or (fx.inic <= f.MedFrequenciaFinalKHz and fx.fim >= f.MedFrequenciaFinalKHz)
-)
-where e.DataExclusao is null
-and fx.faixa is not null
+where h.NumServico <> '010'
+and e.DataExclusao is null
+and e.IndStatusEstacao = 'L'
 and f.MedTransmissaoInicial is not null
 and f.CodStatusRegistro = 'L'
-and e.IndStatusEstacao = 'L'
-and h.NumServico <> '010'
+and c.DataValidadeRadiofrequencia is not null
 order by 'Frequência'"""

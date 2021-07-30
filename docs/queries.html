@@ -6,8 +6,8 @@ title: Queries
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "Este mÃ³dulo executa as queries sql / MongoDB necessÃ¡rias para baixar os dados do STEL, RADCOM e MOSAICO"
-description: "Este mÃ³dulo executa as queries sql / MongoDB necessÃ¡rias para baixar os dados do STEL, RADCOM e MOSAICO"
+summary: "Este módulo executa as queries sql / MongoDB necessárias para baixar os dados do STEL, RADCOM e MOSAICO"
+description: "Este módulo executa as queries sql / MongoDB necessárias para baixar os dados do STEL, RADCOM e MOSAICO"
 nb_path: "queries.ipynb"
 ---
 <!--
@@ -38,7 +38,7 @@ nb_path: "queries.ipynb"
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Otimiza&#231;&#227;o-dos-Tipos-de-dados">Otimiza&#231;&#227;o dos Tipos de dados<a class="anchor-link" href="#Otimiza&#231;&#227;o-dos-Tipos-de-dados"> </a></h2><p>A serem criados dataframes, normalmente a tipo de data Ã© aquele com maior resoluÃ§Ã£o possÃ­vel, nem sempre isso Ã© necessÃ¡rio, os arquivos de espectro mesmo possuem somente uma casa decimal, portanto um <code>float16</code> jÃ¡ Ã© suficiente para armazenÃ¡-los. As funÃ§Ãµes a seguir fazem essa otimizaÃ§Ã£o</p>
+<h2 id="Otimiza&#231;&#227;o-dos-Tipos-de-dados">Otimiza&#231;&#227;o dos Tipos de dados<a class="anchor-link" href="#Otimiza&#231;&#227;o-dos-Tipos-de-dados"> </a></h2><p>A serem criados dataframes, normalmente a tipo de data é aquele com maior resolução possível, nem sempre isso é necessário, os arquivos de espectro mesmo possuem somente uma casa decimal, portanto um <code>float16</code> já é suficiente para armazená-los. As funções a seguir fazem essa otimização</p>
 
 </div>
 </div>
@@ -155,7 +155,7 @@ nb_path: "queries.ipynb"
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Conex&#227;o-com-o-banco-de-dados">Conex&#227;o com o banco de dados<a class="anchor-link" href="#Conex&#227;o-com-o-banco-de-dados"> </a></h2><p>A funÃ§Ã£o a seguir Ã© um <code>wrapper</code> simples que utiliza o <code>pyodbc</code> para se conectar ao banco de dados base da Anatel e retorna o objeto da conexÃ£o</p>
+<h2 id="Conex&#227;o-com-o-banco-de-dados">Conex&#227;o com o banco de dados<a class="anchor-link" href="#Conex&#227;o-com-o-banco-de-dados"> </a></h2><p>A função a seguir é um <code>wrapper</code> simples que utiliza o <code>pyodbc</code> para se conectar ao banco de dados base da Anatel e retorna o objeto da conexão</p>
 
 </div>
 </div>
@@ -173,7 +173,7 @@ nb_path: "queries.ipynb"
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="connect_db" class="doc_header"><code>connect_db</code><a href="anateldb/query.py#L63" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>connect_db</code>()</p>
 </blockquote>
-<p>Conecta ao Banco ANATELBDRO01 e retorna o 'cursor' (iterador) do Banco pronto para fazer iteraÃ§Ãµes</p>
+<p>Conecta ao Banco ANATELBDRO01 e retorna o 'cursor' (iterador) do Banco pronto para fazer iterações</p>
 
 </div>
 
@@ -216,14 +216,14 @@ nb_path: "queries.ipynb"
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Fun&#231;&#245;es-auxiliares-de-Formata&#231;&#227;o">Fun&#231;&#245;es auxiliares de Formata&#231;&#227;o<a class="anchor-link" href="#Fun&#231;&#245;es-auxiliares-de-Formata&#231;&#227;o"> </a></h2><p>As funÃ§Ãµes a seguir sÃ£o utilizadas para formatar diversos objetos intermediÃ¡rios utilizados nas funÃ§Ãµes de leitura e atualizaÃ§Ã£o da base de dados e nÃ£o sÃ£o chamadas diretamente.</p>
+<h2 id="Fun&#231;&#245;es-auxiliares-de-Formata&#231;&#227;o-e-Leitura">Fun&#231;&#245;es auxiliares de Formata&#231;&#227;o e Leitura<a class="anchor-link" href="#Fun&#231;&#245;es-auxiliares-de-Formata&#231;&#227;o-e-Leitura"> </a></h2><p>As funções a seguir são utilizadas para formatar diversos objetos intermediários utilizados nas funções de leitura e atualização da base de dados e não são chamadas diretamente.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Atualiza&#231;&#227;o-das-bases-de-dados">Atualiza&#231;&#227;o das bases de dados<a class="anchor-link" href="#Atualiza&#231;&#227;o-das-bases-de-dados"> </a></h2><p>As bases de dados sÃ£o atualizadas atrÃ¡ves das funÃ§Ãµes a seguir, o Ãºnico argumento passado em todas elas Ã© a pasta na qual os arquivos locais processados serÃ£o salvos, os nomes dos arquivos sÃ£o padronizados e nÃ£o podem ser editados para que as funÃ§Ãµes de leitura e processamento recebam somente a pasta na qual esses arquivos foram salvos.</p>
+<h2 id="Atualiza&#231;&#227;o-das-bases-de-dados">Atualiza&#231;&#227;o das bases de dados<a class="anchor-link" href="#Atualiza&#231;&#227;o-das-bases-de-dados"> </a></h2><p>As bases de dados são atualizadas atráves das funções a seguir, o único argumento passado em todas elas é a pasta na qual os arquivos locais processados serão salvos, os nomes dos arquivos são padronizados e não podem ser editados para que as funções de leitura e processamento recebam somente a pasta na qual esses arquivos foram salvos.</p>
 
 </div>
 </div>
@@ -264,7 +264,7 @@ nb_path: "queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="update_stel" class="doc_header"><code>update_stel</code><a href="anateldb/query.py#L306" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>update_stel</code>(<strong><code>pasta</code></strong>)</p>
+<h4 id="update_stel" class="doc_header"><code>update_stel</code><a href="anateldb/query.py#L307" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>update_stel</code>(<strong><code>pasta</code></strong>)</p>
 </blockquote>
 <p>Atualiza a tabela local retornada pela query <code>STEL</code></p>
 
@@ -289,9 +289,9 @@ nb_path: "queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="update_mosaico" class="doc_header"><code>update_mosaico</code><a href="anateldb/query.py#L328" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>update_mosaico</code>(<strong><code>pasta</code></strong>)</p>
+<h4 id="update_mosaico" class="doc_header"><code>update_mosaico</code><a href="anateldb/query.py#L334" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>update_mosaico</code>(<strong><code>pasta</code></strong>)</p>
 </blockquote>
-<p>Atualiza a tabela local do Mosaico. Ã‰ baixado e processado arquivos xml zipados da pÃ¡gina pÃºblica do Spectrum E</p>
+<p>Atualiza a tabela local do Mosaico. É baixado e processado arquivos xml zipados da página pública do Spectrum E</p>
 
 </div>
 
@@ -314,9 +314,9 @@ nb_path: "queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="update_base" class="doc_header"><code>update_base</code><a href="anateldb/query.py#L356" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>update_base</code>(<strong><code>pasta</code></strong>, <strong><code>up_stel</code></strong>=<em><code>False</code></em>, <strong><code>up_radcom</code></strong>=<em><code>False</code></em>, <strong><code>up_mosaico</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="update_base" class="doc_header"><code>update_base</code><a href="anateldb/query.py#L363" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>update_base</code>(<strong><code>pasta</code></strong>, <strong><code>up_stel</code></strong>=<em><code>False</code></em>, <strong><code>up_radcom</code></strong>=<em><code>False</code></em>, <strong><code>up_mosaico</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
-<p>Wrapper que atualiza opcionalmente lÃª e atualiza as trÃªs bases indicadas anteriormente, as combina e salva o arquivo consolidado na pasta <code>pasta</code></p>
+<p>Wrapper que atualiza opcionalmente lê e atualiza as três bases indicadas anteriormente, as combina e salva o arquivo consolidado na pasta <code>pasta</code></p>
 
 </div>
 
@@ -337,13 +337,13 @@ nb_path: "queries.ipynb"
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Fun&#231;&#245;es-de-Leitura-das-diversas-bases">Fun&#231;&#245;es de Leitura das diversas bases<a class="anchor-link" href="#Fun&#231;&#245;es-de-Leitura-das-diversas-bases"> </a></h2><p>A presente biblioteca utiliza trÃªs bases de dados:</p>
+<h2 id="Fun&#231;&#245;es-de-Leitura-das-diversas-bases">Fun&#231;&#245;es de Leitura das diversas bases<a class="anchor-link" href="#Fun&#231;&#245;es-de-Leitura-das-diversas-bases"> </a></h2><p>A presente biblioteca utiliza três bases de dados:</p>
 <ul>
-<li><code>STEL</code> - ServiÃ§os Privados de TelecomunicaÃ§Ãµes</li>
-<li><code>RADCOM</code> - ServiÃ§o de RadiodifusÃ£o comunitÃ¡ria</li>
-<li><code>MOSAICO</code> - Demais serviÃ§os de RadiodifusÃ£o e paulatinamente tambÃ©m adicionado serviÃ§os privados</li>
+<li><code>STEL</code> - Serviços Privados de Telecomunicações</li>
+<li><code>RADCOM</code> - Serviço de Radiodifusão comunitária</li>
+<li><code>MOSAICO</code> - Demais serviços de Radiodifusão e paulatinamente também adicionado serviços privados</li>
 </ul>
-<p>As funÃ§Ãµes a seguir sÃ£o para leitura dos arquivos locais baixados e processados dessas bases, opcionalmente esses arquivos podem ser atualizados antes de serem lidos passando o argumento <code>update = True</code></p>
+<p>As funções a seguir são para leitura dos arquivos locais baixados e processados dessas bases, opcionalmente esses arquivos podem ser atualizados antes de serem lidos passando o argumento <code>update = True</code></p>
 
 </div>
 </div>
@@ -359,9 +359,9 @@ nb_path: "queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_stel" class="doc_header"><code>read_stel</code><a href="anateldb/query.py#L400" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_stel</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="read_stel" class="doc_header"><code>read_stel</code><a href="anateldb/query.py#L403" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_stel</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
-<p>LÃª o banco de dados salvo localmente do STEL. Opcionalmente o atualiza pelo Banco de Dados ANATELBDRO01 caso <code>update = True</code> ou nÃ£o exista o arquivo local</p>
+<p>Lê o banco de dados salvo localmente do STEL. Opcionalmente o atualiza pelo Banco de Dados ANATELBDRO01 caso <code>update = True</code> ou não exista o arquivo local</p>
 
 </div>
 
@@ -384,9 +384,9 @@ nb_path: "queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_radcom" class="doc_header"><code>read_radcom</code><a href="anateldb/query.py#L416" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_radcom</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="read_radcom" class="doc_header"><code>read_radcom</code><a href="anateldb/query.py#L420" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_radcom</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
-<p>LÃª o banco de dados salvo localmente de RADCOM. Opcionalmente o atualiza pelo Banco de Dados ANATELBDRO01 caso <code>update = True</code> ou nÃ£o exista o arquivo local</p>
+<p>Lê o banco de dados salvo localmente de RADCOM. Opcionalmente o atualiza pelo Banco de Dados ANATELBDRO01 caso <code>update = True</code> ou não exista o arquivo local</p>
 
 </div>
 
@@ -409,9 +409,9 @@ nb_path: "queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_mosaico" class="doc_header"><code>read_mosaico</code><a href="anateldb/query.py#L432" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_mosaico</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="read_mosaico" class="doc_header"><code>read_mosaico</code><a href="anateldb/query.py#L436" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_mosaico</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
-<p>LÃª o banco de dados salvo localmente do MOSAICO. Opcionalmente o atualiza antes da leitura baixando os diversos arquivos disponÃ­veis na interface web pÃºblica</p>
+<p>Lê o banco de dados salvo localmente do MOSAICO. Opcionalmente o atualiza antes da leitura baixando os diversos arquivos disponíveis na interface web pública</p>
 
 </div>
 
@@ -434,9 +434,9 @@ nb_path: "queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_base" class="doc_header"><code>read_base</code><a href="anateldb/query.py#L448" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_base</code>(<strong><code>pasta</code></strong>, <strong><code>up_stel</code></strong>=<em><code>False</code></em>, <strong><code>up_radcom</code></strong>=<em><code>False</code></em>, <strong><code>up_mosaico</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="read_base" class="doc_header"><code>read_base</code><a href="anateldb/query.py#L452" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_base</code>(<strong><code>pasta</code></strong>, <strong><code>up_stel</code></strong>=<em><code>False</code></em>, <strong><code>up_radcom</code></strong>=<em><code>False</code></em>, <strong><code>up_mosaico</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
-<p>Wrapper que combina a chamada das trÃªs funÃ§Ãµes de leitura do banco e opcionalmente Ã© possÃ­vel atualizÃ¡-las antes da leitura</p>
+<p>Wrapper que combina a chamada das três funções de leitura do banco e opcionalmente é possível atualizá-las antes da leitura</p>
 
 </div>
 

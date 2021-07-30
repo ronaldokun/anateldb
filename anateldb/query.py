@@ -296,6 +296,7 @@ def update_radcom(pasta):
             try:
                 df.to_feather(f"{pasta}/radcom.fth")
             except ArrowInvalid:
+                Path(f"{pasta}/radcom.fth").unlink()
                 df.to_excel(f"{pasta}/radcom.xlsx", engine='openpyxl', index=False)
         except pyodbc.OperationalError:
             status.console.log(
@@ -314,10 +315,15 @@ def update_stel(pasta):
             df = pd.read_sql_query(STEL, conn)
             df['Validade_RF'] = df.Validade_RF.astype('str').str.slice(0,10)
             df['Num_Serviço'] = df.Num_Serviço.astype('int')
+            df.loc[df.Unidade == 'kHz', 'Frequência'] = df.loc[df.Unidade == 'kHz', 'Frequência'].apply(lambda x: Decimal(x) / Decimal(1000))
+            df.loc[df.Unidade == 'GHz', 'Frequência'] = df.loc[df.Unidade == 'GHz', 'Frequência'].apply(lambda x: Decimal(x) * Decimal(1000))
+            df['Frequência'] = df.Frequência.astype('float')
+            df.loc[df.Unidade == 'kHz', 'Unidade'] = 'MHz'
             df = df_optimize(df, exclude=['Frequência'])
             try:
                 df.to_feather(f"{pasta}/stel.fth")
             except ArrowInvalid:
+                Path(f"{pasta}/stel.fth").unlink()
                 df.to_excel(f"{pasta}/stel.xlsx", engine='openpyxl', index=False)
         except pyodbc.OperationalError:
             status.console.log(
@@ -347,6 +353,7 @@ def update_mosaico(pasta):
     try:
         df.reset_index(drop=True).to_feather(f"{pasta}/mosaico.fth")
     except ArrowInvalid:
+        Path(f"{pasta}/mosaico.fth").unlink()
         with pd.ExcelWriter(f"{pasta}/mosaico.xlsx") as workbook:
             df.reset_index(drop=True).to_excel(workbook, sheet_name='Sheet1', engine="openpyxl", index=False)
     console.print("Kbô :vampire:")
@@ -356,10 +363,6 @@ def update_mosaico(pasta):
 def update_base(pasta, up_stel=False, up_radcom=False, up_mosaico=False):
     """Wrapper que atualiza opcionalmente lê e atualiza as três bases indicadas anteriormente, as combina e salva o arquivo consolidado na pasta `pasta`"""
     stel = read_stel(pasta, up_stel).loc[:, TELECOM]
-    stel.rename(
-        columns={"Serviço": "Num_Serviço", "Número da Estação": "Número_da_Estação"},
-        inplace=True,
-    )
     radcom = read_radcom(pasta, up_radcom)
     radcom.rename(columns={"Número da Estação": "Número_da_Estação"}, inplace=True)
     mosaico = read_mosaico(pasta, up_mosaico)
@@ -378,6 +381,7 @@ def update_base(pasta, up_stel=False, up_radcom=False, up_mosaico=False):
     stel["Num_Ato"] = -1
     stel["Data_Ato"] = ""
     stel['Entidade'] = stel.Entidade.str.rstrip().str.lstrip()
+
     mosaico = mosaico.loc[:, RADIODIFUSAO]
     mosaico['Classe_Emissão'] = ''
     mosaico['Largura_Emissão'] = ''
@@ -386,7 +390,6 @@ def update_base(pasta, up_stel=False, up_radcom=False, up_mosaico=False):
     rd = df_optimize(rd, exclude=['Frequência'])
     rd['Fistel'] = rd.Fistel.astype('str')
     console.print(":trophy: [green]Base Consolidada. Salvando os arquivos...")
-    return rd
     try:
         rd.to_feather(f"{pasta}/base.fth")
     except ArrowInvalid:
@@ -410,6 +413,7 @@ def read_stel(pasta, update=False):
             stel = pd.read_excel(file, engine="openpyxl")
         except FileNotFoundError:
             read_stel(pasta, True)
+
     return stel
 
 
