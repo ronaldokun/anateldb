@@ -71,18 +71,30 @@ def formatar_db(
         "Validade_RF",
     ]
     rd = rd.loc[:, export_columns]
+    df_optimize(rd, exclude=['Frequência'])
     rd.columns = APP_ANALISE
     console.print(":card_file_box:[green]Salvando os arquivos...")
-    date = pd.DataFrame(columns=[time])
-#    try:
-#        rd.to_feather(f"{dest}/AnatelDB.fth")
-#    except ArrowInvalid:
-#        pass
-    with pd.ExcelWriter(f"{dest}/AnatelDB.xlsx") as workbook:
-        date.to_excel(workbook, sheet_name="ExtractDate", index=False)
-        rd.to_excel(workbook, sheet_name="DataBase", index=False)
-    console.print("Sucesso :zap:")
     d = json.loads((dest / 'VersionFile.json').read_text())
+    try:
+        cache = pd.read_feather(f"{dest}/AnatelDB.fth")
+    except (ArrowInvalid, FileNotFoundError):
+        cache = pd.DataFrame()
+
+    if not rd.equals(cache):
+        console.print(":new: [green] A base de dados mudou desde a última atualização! Salvando o novo arquivo e atualizando a versão")
+        date = pd.DataFrame(columns=[time])
+        try:
+            rd.to_feather(Path(f"{dest}/AnatelDB.fth").open('bw'))
+        except ArrowInvalid:
+            Path(f"{dest}/AnatelDB.fth").unlink()
+        with pd.ExcelWriter(f"{dest}/AnatelDB.xlsx") as workbook:
+            date.to_excel(workbook, sheet_name="ExtractDate", index=False)
+            rd.to_excel(workbook, sheet_name="DataBase", index=False)
+        d['anateldb']['Version'] = bump_version(d['anateldb']['Version'])
+    else:
+        console.print(":recycle: [green] A base de dados não mudou desde a última atualização, a versão não será atualizada, somente a data de verificação")
+
+
+    console.print("Sucesso :zap:")
     d['anateldb']['ReleaseDate'] = datetime.today().strftime('%d/%m/%Y')
-    d['anateldb']['Version'] = bump_version(d['anateldb']['Version'])
     json.dump(d, (dest / 'VersionFile.json').open('w'))

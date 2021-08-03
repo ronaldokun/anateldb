@@ -160,7 +160,7 @@ def clean_merge(pasta, df):
     ] = "Santana do Livramento"
     m["Município"] = (
         m.Município.apply(unidecode).str.lower().str.replace("'", " ")
-    )  # (lambda x: "".join(e for e in x if e.isalnum()))
+    )
     m["UF"] = m.UF.str.lower()
     df["Coordenadas_do_Município"] = False
     df["Latitude"] = df.Latitude.str.replace(",", ".")
@@ -168,7 +168,10 @@ def clean_merge(pasta, df):
     df["Frequência"] = df.Frequência.str.replace(",", ".")
     df.loc[df["Município"] == "Poxoréo", "Município"] = "Poxoréu"
     df.loc[df["Município"] == "Couto de Magalhães", "Município"] = "Couto Magalhães"
-    for row in df[(df.Latitude == "") | (df.Latitude.isna())].itertuples():
+    df['Município'] = df.Município.astype('string')
+    criteria = ((df.Latitude == "") | (df.Latitude.isna()) | (df.Longitude == '') | (df.Longitude.isna())) & df.Município.isna()
+    df = df[~criteria]
+    for row in df[((df.Latitude == "") | (df.Latitude.isna()) | (df.Longitude == '') | (df.Longitude.isna()))].itertuples():
         try:
             left = unidecode(row.Município).lower()
             m_coord = (
@@ -185,13 +188,13 @@ def clean_merge(pasta, df):
         except ValueError:
             print(left, row.UF, m_coord)
             continue
-
     freq_nans = df[df.Frequência.isna()].Id.tolist()
-    complement_df = scrape_dataframe(freq_nans)
-    df.loc[
-        df.Frequência.isna(), ["Status", "Entidade", "Fistel", "Frequência", "Classe",
-                               'Num_Serviço', 'Município', 'UF']
-        ] = complement_df.values
+    if freq_nans:
+        complement_df = scrape_dataframe(freq_nans)
+        df.loc[
+            df.Frequência.isna(), ["Status", "Entidade", "Fistel", "Frequência", "Classe",
+                                   'Num_Serviço', 'Município', 'UF']
+            ] = complement_df.values
 
     for r in df[(df.Entidade.isna()) | (df.Entidade == '')].itertuples():
         df.loc[r.Index, 'Entidade'] = ENTIDADES.get(r.Fistel, '')
@@ -204,8 +207,9 @@ def clean_merge(pasta, df):
     df["Frequência"] = df.Frequência.astype("float")
     df['Validade_RF'] = df.Validade_RF.astype('string').str.slice(0,10)
     df.loc[df['Num_Ato'] == '', 'Num_Ato'] = -1
-    df['Num_Ato'] = df.Num_Ato.astype('int')
-    return df_optimize(df, exclude=['Latitude', 'Longitude', 'Frequência'])
+    df['Num_Ato'] = df.Num_Ato.astype('string')
+    df['Num_Serviço'] = df.Num_Serviço.astype('category')
+    return df_optimize(df, exclude=['Frequência'])
 
 # Internal Cell
 def read_estações(path):
@@ -237,16 +241,15 @@ def read_estações(path):
     df["Num_Ato"] = docs.itemgot(0).map(str)
     df["Data_Ato"] = docs.itemgot(1).map(str)
     df.columns = NEW_ESTACOES
-    df['Validade_RF'] = df.Validade_RF.astype('str').str.slice(0,10)
+    df['Validade_RF'] = df.Validade_RF.astype('string').str.slice(0,10)
     df["Data_Ato"] = df.Data_Ato.str.slice(0,10)
-    df['Entidade'] = df.Entidade.fillna('')
-    ENTIDADES.update({r.Fistel : r.Entidade for r in df.itertuples() if r.Entidade != ''})
+    for c in df.columns:
+        df.loc[df[c] == '', c] = pd.NA
     return df
 
 
 def read_plano_basico(path):
     pb = pdx.read_xml(path, ["plano_basico"])
-    # df = pd.DataFrame(df["row"].apply(row2dict).tolist()).replace("", pd.NA)
     dfs = []
     for i in range(pb.shape[0]):
         df = pd.DataFrame(pb["row"][i]).replace("", pd.NA)
@@ -255,15 +258,17 @@ def read_plano_basico(path):
         dfs.append(df)
     df = pd.concat(dfs)
     df = df.loc[df.pais == "BRA", COL_PB].reset_index(drop=True)
+    for c in df.columns:
+        df.loc[df[c] == '', c] = pd.NA
     df.columns = NEW_PB
     df.sort_values(["Id", "Canal"], inplace=True)
-    df['Entidade'] = df.Entidade.fillna('')
-    ENTIDADES.update({r.Fistel : r.Entidade for r in df.itertuples() if r.Entidade != ''})
+    ENTIDADES.update({r.Fistel : r.Entidade for r in df.itertuples() if str(r.Entidade) == '<NA>'})
     df = df.groupby("Id", as_index=False).first()  # remove duplicated with NaNs
     df.dropna(subset=['Status'], inplace=True)
     df = df[df.Status.str.contains("-C1$|-C2$|-C3$|-C4$|-C7|-C98$")].reset_index(drop=True)
     return df
 
+#deprecated
 def read_historico(path):
     regex = r"\s([a-zA-Z]+)=\'{1}([\w\-\ :\.]*)\'{1}"
     with ZipFile(path) as xmlzip:
@@ -314,7 +319,7 @@ def update_stel(pasta):
             conn = connect_db()
             df = pd.read_sql_query(STEL, conn)
             df['Validade_RF'] = df.Validade_RF.astype('str').str.slice(0,10)
-            df['Num_Serviço'] = df.Num_Serviço.astype('int')
+            df['Num_Serviço'] = df.Num_Serviço.astype('category')
             df.loc[df.Unidade == 'kHz', 'Frequência'] = df.loc[df.Unidade == 'kHz', 'Frequência'].apply(lambda x: Decimal(x) / Decimal(1000))
             df.loc[df.Unidade == 'GHz', 'Frequência'] = df.loc[df.Unidade == 'GHz', 'Frequência'].apply(lambda x: Decimal(x) * Decimal(1000))
             df['Frequência'] = df.Frequência.astype('float')
@@ -349,6 +354,8 @@ def update_mosaico(pasta):
     estações = read_estações(f"{pasta}/estações.zip")
     plano_basico = read_plano_basico(f"{pasta}/Canais.zip")
     df = estações.merge(plano_basico, on="Id", how="left")
+    df['Número_da_Estação'] = df['Número_da_Estação'].fillna(-1)
+    df['Número_da_Estação'] = df['Número_da_Estação'].astype('int')
     df = clean_merge(pasta, df)
     try:
         df.reset_index(drop=True).to_feather(f"{pasta}/mosaico.fth")
@@ -366,29 +373,30 @@ def update_base(pasta, up_stel=False, up_radcom=False, up_mosaico=False):
     radcom = read_radcom(pasta, up_radcom)
     radcom.rename(columns={"Número da Estação": "Número_da_Estação"}, inplace=True)
     mosaico = read_mosaico(pasta, up_mosaico)
-    radcom["Num_Serviço"] = 231
+    radcom["Num_Serviço"] = '231'
     radcom["Status"] = "RADCOM"
     radcom['Classe_Emissão'] = ''
     radcom['Largura_Emissão'] = ''
     radcom["Classe"] = radcom.Fase.str.strip() + "-" + radcom.Situação.str.strip()
     radcom["Entidade"] = radcom.Entidade.str.rstrip().str.lstrip()
-    radcom["Num_Ato"] = -1
+    radcom["Num_Ato"] = '-1'
     radcom["Data_Ato"] = ""
     radcom["Validade_RF"] = ""
     radcom = radcom.loc[:, RADIODIFUSAO]
+    radcom = df_optimize(radcom, exclude=['Frequência'])
     stel['Status'] = 'L'
-    stel['Num_Serviço'] = stel.Num_Serviço.astype('uint8')
-    stel["Num_Ato"] = -1
+    stel["Num_Ato"] = '-1'
     stel["Data_Ato"] = ""
     stel['Entidade'] = stel.Entidade.str.rstrip().str.lstrip()
-
+    stel = df_optimize(stel, exclude=['Frequência'])
     mosaico = mosaico.loc[:, RADIODIFUSAO]
     mosaico['Classe_Emissão'] = ''
     mosaico['Largura_Emissão'] = ''
+    mosaico = df_optimize(mosaico, exclude=['Frequência'])
     rd = mosaico.append(radcom)
     rd = rd.append(stel).sort_values("Frequência").reset_index(drop=True)
+    rd['Num_Serviço'] = rd.Num_Serviço.astype('int')
     rd = df_optimize(rd, exclude=['Frequência'])
-    rd['Fistel'] = rd.Fistel.astype('str')
     console.print(":trophy: [green]Base Consolidada. Salvando os arquivos...")
     try:
         rd.to_feather(f"{pasta}/base.fth")

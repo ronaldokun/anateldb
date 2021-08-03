@@ -95,7 +95,6 @@ COL_ESTACOES = (
     "state",
     "entidade",
     "fistel",
-    "municipio",
     "uf",
     "id",
     "numero_estacao",
@@ -110,7 +109,6 @@ NEW_ESTACOES = [
     "Status",
     "Entidade",
     "Fistel",
-    "Município",
     "UF",
     "Id",
     "Número_da_Estação",
@@ -200,8 +198,7 @@ APP_ANALISE = (
 ENTIDADES = {}
 
 # Cell
-RADCOM = """
-       select f.MedFrequenciaInicial as 'Frequência',
+RADCOM = """select f.MedFrequenciaInicial as 'Frequência',
        Sitarweb.dbo.FN_SRD_RetornaIndFase(PB.NumServico, Pr.idtPedidoRadcom) as 'Fase',
        Sitarweb.dbo.FN_SRD_RetornaSiglaSituacao(h.IdtHabilitacao, Es.IdtEstacao) as 'Situação',
        uf.SiglaUnidadeFrequencia as 'Unidade',
@@ -221,8 +218,7 @@ inner join estacao es on es.IdtHabilitacao = h.IdtHabilitacao
 inner join FREQUENCIA f on f.IdtEstacao = es.IdtEstacao
 inner join UnidadeFrequencia uf on uf.IdtUnidadeFrequencia = f.IdtUnidadeFrequencia
 inner join Municipio m on m.CodMunicipio = pb.CodMunicipio
-where h.NumServico = '231'
-"""
+where h.NumServico = '231"""
 
 # Cell
 STEL = """select distinct f.MedTransmissaoInicial as 'Frequência',
