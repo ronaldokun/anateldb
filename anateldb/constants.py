@@ -218,7 +218,7 @@ inner join estacao es on es.IdtHabilitacao = h.IdtHabilitacao
 inner join FREQUENCIA f on f.IdtEstacao = es.IdtEstacao
 inner join UnidadeFrequencia uf on uf.IdtUnidadeFrequencia = f.IdtUnidadeFrequencia
 inner join Municipio m on m.CodMunicipio = pb.CodMunicipio
-where h.NumServico = '231"""
+where h.NumServico = '231'"""
 
 # Cell
 STEL = """select distinct f.MedTransmissaoInicial as 'Frequência',
