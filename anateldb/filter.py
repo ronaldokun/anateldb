@@ -44,17 +44,17 @@ def formatar_db(
     rd.loc[rd['Status'].isna(), 'Status'] = rd.loc[rd['Status'].isna(), 'Num_Serviço'].astype('string')
 
     rd["Descrição"] = (
-        rd.Status
+        rd.Status.astype('string').fillna('-')
         + ", "
-        + rd.Entidade.astype('string').str.title()
+        + rd.Entidade.astype('string').fillna('-').str.title()
         + " ("
-        + rd.Fistel.astype('string')
+        + rd.Fistel.astype('string').fillna('-')
         + ", "
-        + rd["Número_da_Estação"].astype('string')
+        + rd["Número_da_Estação"].astype('string').fillna('-')
         + "), "
-        + rd.Município.astype('string')
+        + rd.Município.astype('string').fillna('-')
         + "/"
-        + rd.UF.astype('string')
+        + rd.UF.astype('string').fillna('-')
     )
 
     export_columns = [
