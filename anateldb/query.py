@@ -297,7 +297,10 @@ def update_radcom(pasta):
         try:
             conn = connect_db()
             df = pd.read_sql_query(RADCOM, conn)
+            df['Unidade'] = 'MHz'
+            df.loc[df.Situação.isna(), 'Situação'] = 'M'
             df = df_optimize(df, exclude=['Frequência'])
+            
             try:
                 df.to_feather(f"{pasta}/radcom.fth")
             except ArrowInvalid:
@@ -469,5 +472,5 @@ def read_base(pasta, up_stel=False, up_radcom=False, up_mosaico=False):
         try:
             df = pd.read_excel(file, engine='openpyxl')
         except FileNotFoundError:
-            df = update_base(pasta, up_stel, up_radcom, up_mosaico)
+            df = update_base(pasta, True, True, True)
     return df_optimize(df, exclude=['Frequência'])
