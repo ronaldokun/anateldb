@@ -1,1 +1,4 @@
 
+[submodule "AnatelDatabase"]
+	path = AnatelDatabase
+	url = git@github.com:ronaldokun/AnatelDatabase.git
