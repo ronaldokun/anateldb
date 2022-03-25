@@ -162,7 +162,7 @@ TELECOM = (
     "UF",
     "Latitude",
     "Longitude",
-    "Validade_RF"
+    "Validade_RF",
 )
 RADIODIFUSAO = (
     "Frequência",
@@ -190,9 +190,6 @@ APP_ANALISE = (
     "Station",
     "Class",
     "BW",
-    "ActNumber",
-    "ActDate",
-    "ValRF",
 )
 
 ENTIDADES = {}
@@ -203,7 +200,7 @@ SRD.IndFase as 'Fase',
 ID.SiglaSituacao as 'Situação',
 Ent.NomeEntidade as 'Entidade',
 H.NumFistel as 'Fistel',
-E.NumEstacao as 'Número da Estação',
+E.NumEstacao as 'Número_da_Estação',
 M.NomeMunicipio as 'Município',
 PB.SiglaUF as 'UF',
 SRD.MedLatitudeDecimal as 'Latitude',
