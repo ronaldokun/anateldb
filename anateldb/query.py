@@ -361,8 +361,15 @@ def merge_df(df1, df2, on, how='left'):
     df.loc[x & y, 'Description'] = df.loc[x & y, 'Description_x'] +  ' | ' + df.loc[x & y, 'Description_y']
     df.loc[x & ~y, 'Description'] = df.loc[x & ~y, 'Description_x']
     df.loc[~x & y, 'Description'] = df.loc[~x & y, 'Description_y']
-    return df.drop(columns=['Description_x', 'Description_y'])
-
+    df.loc[x & y, 'Latitude'] = (df.loc[x & y, 'Latitude_x'] +  df.loc[x & y, 'Latitude_y']) / 2
+    df.loc[x & y, 'Longitude'] = (df.loc[x & y, 'Longitude_x'] +  df.loc[x & y, 'Longitude_y']) / 2
+    df.loc[x & ~y, 'Latitude'] = df.loc[x & ~y, 'Latitude_x']
+    df.loc[x & ~y, 'Longitude'] = df.loc[x & ~y, 'Longitude_x']
+    df.loc[~x & y, 'Latitude'] = df.loc[~x & y, 'Latitude_y']
+    df.loc[~x & y, 'Longitude'] = df.loc[~x & y, 'Longitude_y']
+    df.loc[x, 'Service'] = df.loc[x, 'Service_x']
+    df.loc[~x & y, 'Service'] = df.loc[~x & y, 'Service_y']
+    return df.loc[:, [c for c in df.columns if '_' not in c]]
 
 def read_aero(pasta, up_icao=False, up_pmec=False, up_geo=False):
     icao = read_icao(pasta, up_icao)

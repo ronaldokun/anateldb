@@ -105,7 +105,7 @@ nb_path: "nbs\filter.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pasta</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;c:/Users/rsilva/db&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pasta</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;c:/Users/rsilva/AnatelDatabase&#39;</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -390,7 +390,7 @@ memory usage: 29.5 MB
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">icao</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">icao</span><span class="p">[</span><span class="n">icao</span><span class="o">.</span><span class="n">Station</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 </pre></div>
 
     </div>
@@ -402,22 +402,138 @@ memory usage: 29.5 MB
 
 <div class="output_area">
 
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
-RangeIndex: 2581 entries, 0 to 2580
-Data columns (total 6 columns):
- #   Column       Non-Null Count  Dtype  
----  ------       --------------  -----  
- 0   Frequency    2581 non-null   float64
- 1   Latitude     2581 non-null   float64
- 2   Longitude    2581 non-null   float64
- 3   Description  2581 non-null   object 
- 4   Service      2581 non-null   int64  
- 5   Station      2581 non-null   int64  
-dtypes: float64(3), int64(2), object(1)
-memory usage: 121.1+ KB
-</pre>
-</div>
+
+<div class="output_html rendered_html output_subarea output_execute_result"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Frequency</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
+      <th>Description</th>
+      <th>Service</th>
+      <th>Station</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>109.1</td>
+      <td>-25.600000</td>
+      <td>-54.466667</td>
+      <td>[FFD] ILS, FOZ DO IGUACU CATARATAS</td>
+      <td>-1</td>
+      <td>-1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>109.3</td>
+      <td>-1.366667</td>
+      <td>-48.466667</td>
+      <td>[FFD] ILS/DME, BELEM VAL DE CAES</td>
+      <td>-1</td>
+      <td>-1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>109.3</td>
+      <td>-15.866667</td>
+      <td>-47.933334</td>
+      <td>[FFD] ILS/DME, BRASILIA INTL.</td>
+      <td>-1</td>
+      <td>-1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>109.3</td>
+      <td>-25.533333</td>
+      <td>-49.166668</td>
+      <td>[FFD] ILS, CURITIBA AFONSO PEÑA</td>
+      <td>-1</td>
+      <td>-1</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>109.3</td>
+      <td>-9.516666</td>
+      <td>-35.783333</td>
+      <td>[FFD] ILS/DME, MACEIO</td>
+      <td>-1</td>
+      <td>-1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2576</th>
+      <td>1203.0</td>
+      <td>-23.616667</td>
+      <td>-46.650002</td>
+      <td>[ICA] Ground-based DME</td>
+      <td>-1</td>
+      <td>-1</td>
+    </tr>
+    <tr>
+      <th>2577</th>
+      <td>1204.0</td>
+      <td>-29.933332</td>
+      <td>-51.183334</td>
+      <td>[ICA] Ground-based DME</td>
+      <td>-1</td>
+      <td>-1</td>
+    </tr>
+    <tr>
+      <th>2578</th>
+      <td>1207.0</td>
+      <td>-1.383333</td>
+      <td>-48.483334</td>
+      <td>[ICA] Ground-based DME</td>
+      <td>-1</td>
+      <td>-1</td>
+    </tr>
+    <tr>
+      <th>2579</th>
+      <td>1209.0</td>
+      <td>-4.183333</td>
+      <td>-69.933334</td>
+      <td>[ICA] Ground-based DME</td>
+      <td>-1</td>
+      <td>-1</td>
+    </tr>
+    <tr>
+      <th>2580</th>
+      <td>1211.0</td>
+      <td>-19.833334</td>
+      <td>-44.000000</td>
+      <td>[ICA] Ground-based DME</td>
+      <td>-1</td>
+      <td>-1</td>
+    </tr>
+  </tbody>
+</table>
+<p>1102 rows × 6 columns</p>
+</div></div>
+
 </div>
 
 </div>
@@ -476,7 +592,7 @@ memory usage: 44.5+ KB
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">icao</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">icao</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 
     </div>
@@ -489,81 +605,10 @@ memory usage: 44.5+ KB
 <div class="output_area">
 
 
-<div class="output_html rendered_html output_subarea output_execute_result"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Frequency</th>
-      <th>Latitude</th>
-      <th>Longitude</th>
-      <th>Description</th>
-      <th>Service</th>
-      <th>Station</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>109.1</td>
-      <td>-25.600000</td>
-      <td>-54.466667</td>
-      <td>[FFD] ILS, FOZ DO IGUACU CATARATAS</td>
-      <td>-1</td>
-      <td>-1</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>109.1</td>
-      <td>-21.783333</td>
-      <td>-43.383335</td>
-      <td>[FFD] ILS/DME, JUIZ DE FORA</td>
-      <td>108</td>
-      <td>696597080</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>109.3</td>
-      <td>-1.366667</td>
-      <td>-48.466667</td>
-      <td>[FFD] ILS/DME, BELEM VAL DE CAES</td>
-      <td>-1</td>
-      <td>-1</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>109.3</td>
-      <td>-15.866667</td>
-      <td>-47.933334</td>
-      <td>[FFD] ILS/DME, BRASILIA INTL.</td>
-      <td>-1</td>
-      <td>-1</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>109.3</td>
-      <td>-25.533333</td>
-      <td>-49.166668</td>
-      <td>[FFD] ILS, CURITIBA AFONSO PEÑA</td>
-      <td>-1</td>
-      <td>-1</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
+<div class="output_text output_subarea output_execute_result">
+<pre>(2581, 6)</pre>
+</div>
 
 </div>
 
@@ -580,7 +625,7 @@ memory usage: 44.5+ KB
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pmec</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pmec</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 
     </div>
@@ -593,81 +638,10 @@ memory usage: 44.5+ KB
 <div class="output_area">
 
 
-<div class="output_html rendered_html output_subarea output_execute_result"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Frequency</th>
-      <th>Latitude</th>
-      <th>Longitude</th>
-      <th>Description</th>
-      <th>Service</th>
-      <th>Station</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>0.200</td>
-      <td>-22.923334</td>
-      <td>-42.071499</td>
-      <td>[AIS] SBCB-RDONAV, NDB BFR, Cabo Frio</td>
-      <td>-1</td>
-      <td>-1</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>0.205</td>
-      <td>-1.486333</td>
-      <td>-56.397835</td>
-      <td>[AIS] SBTB-RDONAV, NDB PTT, Trombetas</td>
-      <td>108</td>
-      <td>684424649</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>0.205</td>
-      <td>-5.386167</td>
-      <td>-35.530998</td>
-      <td>[AIS] SNXX-RDONAV, NDB MXN, Maxaranguape</td>
-      <td>-1</td>
-      <td>-1</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>0.205</td>
-      <td>-5.386167</td>
-      <td>-35.530998</td>
-      <td>[AIS] SBNT-RDONAV, NDB MXN, CAMPO AUGUSTO SEVERO</td>
-      <td>-1</td>
-      <td>-1</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>0.210</td>
-      <td>-19.561001</td>
-      <td>-46.964668</td>
-      <td>[AIS] SBAX-RDONAV, NDB ARX, Romeu Zema</td>
-      <td>-1</td>
-      <td>-1</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
+<div class="output_text output_subarea output_execute_result">
+<pre>(946, 6)</pre>
+</div>
 
 </div>
 
@@ -684,7 +658,7 @@ memory usage: 44.5+ KB
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">geo</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">geo</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 
     </div>
@@ -697,81 +671,10 @@ memory usage: 44.5+ KB
 <div class="output_area">
 
 
-<div class="output_html rendered_html output_subarea output_execute_result"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Frequency</th>
-      <th>Latitude</th>
-      <th>Longitude</th>
-      <th>Description</th>
-      <th>Service</th>
-      <th>Station</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>0.114</td>
-      <td>-32.340057</td>
-      <td>-54.223888</td>
-      <td>[GEOAISWEB] NDB - MELO</td>
-      <td>-1</td>
-      <td>-1</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>0.200</td>
-      <td>-22.923334</td>
-      <td>-42.071499</td>
-      <td>[GEOAISWEB] NDB - CABO FRIO OPR COSTA DO SOL O...</td>
-      <td>-1</td>
-      <td>-1</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>0.205</td>
-      <td>-1.486333</td>
-      <td>-56.397835</td>
-      <td>[GEOAISWEB] NDB - TROMBETAS COVERAGE 100NM; OP...</td>
-      <td>108</td>
-      <td>684424649</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>0.205</td>
-      <td>-5.386167</td>
-      <td>-35.530998</td>
-      <td>[GEOAISWEB] NDB - MAXARANGUAPE</td>
-      <td>-1</td>
-      <td>-1</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>0.210</td>
-      <td>-19.561001</td>
-      <td>-46.964668</td>
-      <td>[GEOAISWEB] NDB - ARAXÁ COVERAGE 50NM</td>
-      <td>-1</td>
-      <td>-1</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
+<div class="output_text output_subarea output_execute_result">
+<pre>(286, 6)</pre>
+</div>
 
 </div>
 
@@ -788,7 +691,7 @@ memory usage: 44.5+ KB
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;Latitude&#39;</span><span class="p">,</span> <span class="s1">&#39;Longitude&#39;</span><span class="p">,</span> <span class="s1">&#39;Service&#39;</span><span class="p">,</span> <span class="s1">&#39;Station&#39;</span><span class="p">]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;Station&#39;</span><span class="p">]</span>
 <span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">icao</span><span class="p">,</span> <span class="n">pmec</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="n">cols</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">geo</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="n">cols</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">)</span>
 </pre></div>
 
@@ -809,7 +712,7 @@ memory usage: 44.5+ KB
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">Description_x</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">Description_y</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span>
 <span class="n">z</span> <span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">Description</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span>
-<span class="n">df2</span><span class="p">[</span><span class="o">~</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">y</span> <span class="o">&amp;</span> <span class="n">z</span><span class="p">]</span>
+<span class="n">df2</span><span class="p">[</span><span class="n">y</span> <span class="o">&amp;</span> <span class="n">z</span>  <span class="o">&amp;</span> <span class="p">(</span><span class="n">df2</span><span class="o">.</span><span class="n">Station</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
 </pre></div>
 
     </div>
@@ -841,418 +744,233 @@ memory usage: 44.5+ KB
     <tr style="text-align: right;">
       <th></th>
       <th>Frequency</th>
+      <th>Latitude_x</th>
+      <th>Longitude_x</th>
+      <th>Description_x</th>
+      <th>Service_x</th>
+      <th>Station</th>
+      <th>Latitude_y</th>
+      <th>Longitude_y</th>
+      <th>Description_y</th>
+      <th>Service_y</th>
       <th>Latitude</th>
       <th>Longitude</th>
-      <th>Description_x</th>
-      <th>Service</th>
-      <th>Station</th>
-      <th>Description_y</th>
       <th>Description</th>
+      <th>Service</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>2586</th>
-      <td>0.200</td>
-      <td>-22.923334</td>
-      <td>-42.071499</td>
-      <td>NaN</td>
-      <td>-1</td>
-      <td>-1</td>
-      <td>[AIS] SBCB-RDONAV, NDB BFR, Cabo Frio</td>
-      <td>[GEOAISWEB] NDB - CABO FRIO OPR COSTA DO SOL O...</td>
+      <th>209</th>
+      <td>112.1</td>
+      <td>-9.366667</td>
+      <td>-40.566666</td>
+      <td>[FFD] VOR/DME, PETROLINA</td>
+      <td>108.0</td>
+      <td>1000842573</td>
+      <td>-9.363334</td>
+      <td>-40.561501</td>
+      <td>[AIS] SBPL-RDONAV, VOR/DME PTL, SENADOR NILO C...</td>
+      <td>108.0</td>
+      <td>-9.363261</td>
+      <td>-40.561577</td>
+      <td>[GEOAISWEB] VOR - PETROLINA OPR INFRAERO</td>
+      <td>108.0</td>
     </tr>
     <tr>
-      <th>2587</th>
-      <td>0.205</td>
-      <td>-1.486333</td>
-      <td>-56.397835</td>
-      <td>NaN</td>
-      <td>108</td>
-      <td>684424649</td>
-      <td>[AIS] SBTB-RDONAV, NDB PTT, Trombetas</td>
-      <td>[GEOAISWEB] NDB - TROMBETAS COVERAGE 100NM; OP...</td>
+      <th>212</th>
+      <td>112.2</td>
+      <td>-6.233333</td>
+      <td>-57.766666</td>
+      <td>[FFD] VOR/DME, JACAREACANGA</td>
+      <td>108.0</td>
+      <td>1000842433</td>
+      <td>-6.235667</td>
+      <td>-57.770500</td>
+      <td>[AIS] SBEK-RDONAV, VOR/DME JAC, Jacareacanga</td>
+      <td>108.0</td>
+      <td>-6.235744</td>
+      <td>-57.770527</td>
+      <td>[GEOAISWEB] VOR - JACAREACANGA VOR NO AVBL SEC...</td>
+      <td>108.0</td>
     </tr>
     <tr>
-      <th>2588</th>
-      <td>0.205</td>
-      <td>-5.386167</td>
-      <td>-35.530998</td>
-      <td>NaN</td>
-      <td>-1</td>
-      <td>-1</td>
-      <td>[AIS] SNXX-RDONAV, NDB MXN, Maxaranguape</td>
-      <td>[GEOAISWEB] NDB - MAXARANGUAPE</td>
+      <th>215</th>
+      <td>112.3</td>
+      <td>-2.450000</td>
+      <td>-54.816666</td>
+      <td>[FFD] VOR/DME, SANTAREM INTL.</td>
+      <td>108.0</td>
+      <td>1000823129</td>
+      <td>-2.426500</td>
+      <td>-54.817501</td>
+      <td>[AIS] SBSN-RDONAV, VOR/DME STM, Maestro Wilson...</td>
+      <td>108.0</td>
+      <td>-2.426419</td>
+      <td>-54.817562</td>
+      <td>[GEOAISWEB] VOR - SANTARÉM OPR INFRAERO</td>
+      <td>108.0</td>
     </tr>
     <tr>
-      <th>2589</th>
-      <td>0.205</td>
-      <td>-5.386167</td>
-      <td>-35.530998</td>
-      <td>NaN</td>
-      <td>-1</td>
-      <td>-1</td>
-      <td>[AIS] SBNT-RDONAV, NDB MXN, CAMPO AUGUSTO SEVERO</td>
-      <td>[GEOAISWEB] NDB - MAXARANGUAPE</td>
+      <th>218</th>
+      <td>112.4</td>
+      <td>-23.333334</td>
+      <td>-51.116665</td>
+      <td>[FFD] VOR/DME, LONDRINA</td>
+      <td>108.0</td>
+      <td>1000822874</td>
+      <td>-23.339500</td>
+      <td>-51.112499</td>
+      <td>[AIS] SBLO-RDONAV, VOR/DME LON, Governador Jos...</td>
+      <td>108.0</td>
+      <td>-23.339516</td>
+      <td>-51.112526</td>
+      <td>[GEOAISWEB] VOR - LONDRINA CH 71XOPR INFRAERO</td>
+      <td>108.0</td>
     </tr>
     <tr>
-      <th>2590</th>
-      <td>0.210</td>
-      <td>-19.561001</td>
-      <td>-46.964668</td>
-      <td>NaN</td>
-      <td>-1</td>
-      <td>-1</td>
-      <td>[AIS] SBAX-RDONAV, NDB ARX, Romeu Zema</td>
-      <td>[GEOAISWEB] NDB - ARAXÁ COVERAGE 50NM</td>
+      <th>227</th>
+      <td>112.7</td>
+      <td>-5.516667</td>
+      <td>-47.450001</td>
+      <td>[FFD] VOR/DME, IMPERATRIZ</td>
+      <td>108.0</td>
+      <td>1000842417</td>
+      <td>-5.523833</td>
+      <td>-47.449833</td>
+      <td>[AIS] SBIZ-RDONAV, VOR/DME YTZ, PREFEITO RENAT...</td>
+      <td>108.0</td>
+      <td>-5.523889</td>
+      <td>-47.449844</td>
+      <td>[GEOAISWEB] VOR - IMPERATRIZ CH 74XOPR INFRAERO</td>
+      <td>108.0</td>
     </tr>
     <tr>
-      <th>2591</th>
-      <td>0.230</td>
-      <td>-4.249333</td>
-      <td>-69.936165</td>
-      <td>NaN</td>
-      <td>-1</td>
-      <td>-1</td>
-      <td>[AIS] SBTT-RDONAV, NDB TBT, Tabatinga</td>
-      <td>[GEOAISWEB] NDB - TABATINGA COVERAGE 50NM</td>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
     </tr>
     <tr>
-      <th>2592</th>
-      <td>0.230</td>
-      <td>-7.266000</td>
-      <td>-35.892666</td>
+      <th>4078</th>
+      <td>1178.0</td>
       <td>NaN</td>
-      <td>108</td>
-      <td>699727375</td>
-      <td>[AIS] SBKG-RDONAV, NDB CPG, Presidente João Su...</td>
-      <td>[GEOAISWEB] NDB - CAMPINA GRANDE COVERAGE 60NM...</td>
-    </tr>
-    <tr>
-      <th>2593</th>
-      <td>0.235</td>
-      <td>-19.765499</td>
-      <td>-47.959167</td>
       <td>NaN</td>
-      <td>108</td>
-      <td>699727340</td>
-      <td>[AIS] SBUR-RDONAV, NDB URB, MARIO DE ALMEIDA F...</td>
-      <td>[GEOAISWEB] NDB - UBERABA COVERAGE 50NMOPR INF...</td>
-    </tr>
-    <tr>
-      <th>2595</th>
-      <td>0.250</td>
-      <td>-4.240500</td>
-      <td>-56.004665</td>
       <td>NaN</td>
-      <td>108</td>
-      <td>699916232</td>
-      <td>[AIS] SBIH-RDONAV, NDB YUB, ITAITUBA</td>
-      <td>[GEOAISWEB] NDB - ITAITUBA OPR INFRAERO</td>
-    </tr>
-    <tr>
-      <th>2596</th>
-      <td>0.265</td>
-      <td>-21.139334</td>
-      <td>-50.426666</td>
       <td>NaN</td>
-      <td>108</td>
-      <td>689289871</td>
-      <td>[AIS] SBAU-RDONAV, NDB ARA, Araçatuba</td>
-      <td>[GEOAISWEB] NDB - ARAÇATUBA OPR TAM</td>
-    </tr>
-    <tr>
-      <th>2600</th>
-      <td>0.280</td>
-      <td>-28.277834</td>
-      <td>-54.171665</td>
-      <td>NaN</td>
-      <td>108</td>
-      <td>1002970897</td>
-      <td>[AIS] SBNM-RDONAV, NDB SAN, Santo Ângelo</td>
-      <td>[GEOAISWEB] NDB - SANTO ÂNGELO OPR RIO SUL.</td>
-    </tr>
-    <tr>
-      <th>2601</th>
-      <td>0.285</td>
-      <td>-22.197332</td>
-      <td>-54.928333</td>
-      <td>NaN</td>
-      <td>-1</td>
-      <td>-1</td>
-      <td>[AIS] SBDO-RDONAV, NDB DOU, Dourados</td>
-      <td>[GEOAISWEB] NDB - DOURA COVERAGE 70NM</td>
-    </tr>
-    <tr>
-      <th>2604</th>
-      <td>0.295</td>
-      <td>-3.256500</td>
-      <td>-52.250832</td>
-      <td>NaN</td>
-      <td>108</td>
-      <td>699916160</td>
-      <td>[AIS] SBHT-RDONAV, NDB ATM, ALTAMIRA</td>
-      <td>[GEOAISWEB] NDB - ALTAMIRA OPR INFRAERO</td>
-    </tr>
-    <tr>
-      <th>2607</th>
-      <td>0.300</td>
-      <td>-25.402666</td>
-      <td>-49.229000</td>
-      <td>NaN</td>
-      <td>-1</td>
-      <td>-1</td>
-      <td>[AIS] SBBI-RDONAV, NDB BCH, Bacacheri</td>
-      <td>[GEOAISWEB] NDB - BACACHERI FM ARP, COVERAGE 50NM</td>
-    </tr>
-    <tr>
-      <th>2608</th>
-      <td>0.305</td>
-      <td>-14.812166</td>
-      <td>-39.036667</td>
-      <td>NaN</td>
-      <td>-1</td>
-      <td>-1</td>
-      <td>[AIS] SBIL-RDONAV, NDB YLH, Jorge Amado</td>
-      <td>[GEOAISWEB] NDB - ILHÉUS COVERAGE 70NMOPR INFR...</td>
-    </tr>
-    <tr>
-      <th>2611</th>
-      <td>0.320</td>
-      <td>-7.140500</td>
-      <td>-34.952499</td>
-      <td>NaN</td>
-      <td>108</td>
-      <td>699727251</td>
-      <td>[AIS] SBJP-RDONAV, NDB JPS, PRESIDENTE CASTRO ...</td>
-      <td>[GEOAISWEB] NDB - JOAO PESSOA Coverage 40NMOPR...</td>
-    </tr>
-    <tr>
-      <th>2612</th>
-      <td>0.330</td>
-      <td>-21.142666</td>
-      <td>-47.776001</td>
-      <td>NaN</td>
-      <td>108</td>
-      <td>699727286</td>
-      <td>[AIS] SBRP-RDONAV, NDB RPR, Leite Lopes</td>
-      <td>[GEOAISWEB] NDB - RIBEIRÃO COVERAGE 50NMOPR IN...</td>
-    </tr>
-    <tr>
-      <th>2620</th>
-      <td>0.380</td>
-      <td>-22.313999</td>
-      <td>-49.107166</td>
-      <td>NaN</td>
-      <td>108</td>
-      <td>699727219</td>
-      <td>[AIS] SBBU-RDONAV, NDB BRU, Bauru</td>
-      <td>[GEOAISWEB] NDB - BAURU COVERAGE 50NMOPR INFRAERO</td>
-    </tr>
-    <tr>
-      <th>2621</th>
-      <td>0.385</td>
-      <td>-16.441668</td>
-      <td>-39.082500</td>
-      <td>NaN</td>
-      <td>-1</td>
-      <td>-1</td>
-      <td>[AIS] SBPS-RDONAV, NDB SGR, Porto Seguro</td>
-      <td>[GEOAISWEB] NDB - PORTO SEGURO COVERAGE 27 NM</td>
-    </tr>
-    <tr>
-      <th>2622</th>
-      <td>0.400</td>
-      <td>-10.784333</td>
-      <td>-65.281166</td>
-      <td>NaN</td>
-      <td>-1</td>
-      <td>-1</td>
-      <td>[AIS] SBGM-RDONAV, NDB GJM, GUAJARA-MIRIM</td>
-      <td>[GEOAISWEB] NDB - GUAJARÁ-MIRIM</td>
-    </tr>
-    <tr>
-      <th>2625</th>
-      <td>0.415</td>
-      <td>-22.194834</td>
-      <td>-49.929333</td>
-      <td>NaN</td>
-      <td>108</td>
-      <td>689251793</td>
-      <td>[AIS] SBML-RDONAV, NDB MRA, FRANK MILOYE MILEN...</td>
-      <td>[GEOAISWEB] NDB - MARÍLIA OPR PANTANAL LINHAS ...</td>
-    </tr>
-    <tr>
-      <th>2627</th>
-      <td>0.420</td>
-      <td>-20.813168</td>
-      <td>-49.406166</td>
-      <td>NaN</td>
-      <td>-1</td>
-      <td>-1</td>
-      <td>[AIS] SBSR-RDONAV, NDB JRP, Professor Eriberto...</td>
-      <td>[GEOAISWEB] NDB - RIO PRETO OPR DAESP</td>
-    </tr>
-    <tr>
-      <th>2629</th>
-      <td>1.618</td>
-      <td>-19.462999</td>
-      <td>-42.479500</td>
-      <td>NaN</td>
-      <td>-1</td>
-      <td>-1</td>
-      <td>[AIS] SBIP-RDONAV, NDB YPT, USIMINAS</td>
-      <td>[GEOAISWEB] NDB - IPATINGA OPR ITUMBIARA</td>
-    </tr>
-    <tr>
-      <th>2704</th>
-      <td>113.100</td>
-      <td>-16.260834</td>
-      <td>-47.971001</td>
-      <td>NaN</td>
-      <td>-1</td>
-      <td>-1</td>
-      <td>[AIS] SWUZ-RDONAV, VOR/DME LUZ, BRIGADEIRO ARA...</td>
-      <td>[GEOAISWEB] VOR - LUZIÂNIA CH 78X</td>
-    </tr>
-    <tr>
-      <th>2721</th>
-      <td>114.300</td>
-      <td>-5.908333</td>
-      <td>-35.248665</td>
-      <td>NaN</td>
-      <td>-1</td>
-      <td>-1</td>
-      <td>[AIS] SBNT-RDONAV, VOR/DME NTL, CAMPO AUGUSTO ...</td>
-      <td>[GEOAISWEB] VOR - NATAL 358DEG MAG/0.42NM CH 90X</td>
-    </tr>
-    <tr>
-      <th>2731</th>
-      <td>115.400</td>
-      <td>-23.233166</td>
-      <td>-45.860001</td>
-      <td>NaN</td>
-      <td>-1</td>
-      <td>-1</td>
-      <td>[AIS] SBSJ-RDONAV, VOR/DME SCP, Professor Urba...</td>
-      <td>[GEOAISWEB] VOR - SÃO JOSÉ CH 101X</td>
-    </tr>
-    <tr>
-      <th>2741</th>
-      <td>116.400</td>
-      <td>-20.260166</td>
-      <td>-40.285000</td>
-      <td>NaN</td>
-      <td>108</td>
-      <td>1000823765</td>
-      <td>[AIS] SBVT-RDONAV, VOR/DME VRI, Eurico de Agui...</td>
-      <td>[GEOAISWEB] VOR - VITÓRIA CH111X</td>
-    </tr>
-    <tr>
-      <th>2978</th>
-      <td>991.000</td>
-      <td>-23.637667</td>
-      <td>-46.648834</td>
-      <td>NaN</td>
-      <td>-1</td>
-      <td>-1</td>
+      <td>1000842506</td>
+      <td>-6.119667</td>
+      <td>-50.001999</td>
       <td>[ICA] Ground-based DME</td>
-      <td>[GEOAISWEB] DME - CONGONHAS 30X</td>
+      <td>108.0</td>
+      <td>-6.119645</td>
+      <td>-50.001995</td>
+      <td>[GEOAISWEB] DME - CARAJÁS 91X</td>
+      <td>108.0</td>
     </tr>
     <tr>
-      <th>2980</th>
-      <td>991.000</td>
-      <td>-9.861167</td>
-      <td>-67.881668</td>
+      <th>4079</th>
+      <td>1185.0</td>
       <td>NaN</td>
-      <td>-1</td>
-      <td>-1</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1000822831</td>
+      <td>-26.222334</td>
+      <td>-48.798000</td>
       <td>[ICA] Ground-based DME</td>
-      <td>[GEOAISWEB] DME - RIO BRANCO 30X</td>
+      <td>108.0</td>
+      <td>-26.222261</td>
+      <td>-48.798046</td>
+      <td>[GEOAISWEB] DME - JOINVILLE 98X</td>
+      <td>108.0</td>
     </tr>
     <tr>
-      <th>2984</th>
-      <td>991.000</td>
-      <td>-5.921500</td>
-      <td>-35.235668</td>
+      <th>4084</th>
+      <td>1193.0</td>
       <td>NaN</td>
-      <td>-1</td>
-      <td>-1</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1000822904</td>
+      <td>-22.344500</td>
+      <td>-41.769001</td>
       <td>[ICA] Ground-based DME</td>
-      <td>[GEOAISWEB] DME - NATAL 30X</td>
+      <td>108.0</td>
+      <td>-22.344448</td>
+      <td>-41.769001</td>
+      <td>[GEOAISWEB] DME - MACAÉ 106X</td>
+      <td>108.0</td>
     </tr>
     <tr>
-      <th>3000</th>
-      <td>1001.000</td>
-      <td>-8.141500</td>
-      <td>-34.918835</td>
+      <th>4085</th>
+      <td>1195.0</td>
       <td>NaN</td>
-      <td>-1</td>
-      <td>-1</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1000823692</td>
+      <td>-18.876667</td>
+      <td>-48.221333</td>
       <td>[ICA] Ground-based DME</td>
-      <td>[GEOAISWEB] DME - RECIFE 40X</td>
+      <td>108.0</td>
+      <td>-18.876610</td>
+      <td>-48.221298</td>
+      <td>[GEOAISWEB] DME - UBERLÂNDIA 108X</td>
+      <td>108.0</td>
     </tr>
     <tr>
-      <th>3006</th>
-      <td>1005.000</td>
-      <td>-23.434271</td>
-      <td>-46.479084</td>
+      <th>4086</th>
+      <td>1198.0</td>
       <td>NaN</td>
-      <td>-1</td>
-      <td>-1</td>
-      <td>[ICA] Ground-based DME</td>
-      <td>[GEOAISWEB] DME - GUARULHOS 44X</td>
-    </tr>
-    <tr>
-      <th>3012</th>
-      <td>1013.000</td>
-      <td>-22.802668</td>
-      <td>-43.258499</td>
       <td>NaN</td>
-      <td>-1</td>
-      <td>-1</td>
-      <td>[ICA] Ground-based DME</td>
-      <td>[GEOAISWEB] DME - GALEÃO 52X</td>
-    </tr>
-    <tr>
-      <th>3313</th>
-      <td>1165.000</td>
-      <td>-16.260834</td>
-      <td>-47.971001</td>
       <td>NaN</td>
-      <td>-1</td>
-      <td>-1</td>
-      <td>[ICA] Ground-based DME</td>
-      <td>[GEOAISWEB] DME - LUZIÂNIA 78X</td>
-    </tr>
-    <tr>
-      <th>3338</th>
-      <td>1188.000</td>
-      <td>-23.233166</td>
-      <td>-45.860001</td>
       <td>NaN</td>
-      <td>-1</td>
-      <td>-1</td>
-      <td>[ICA] Ground-based DME</td>
-      <td>[GEOAISWEB] DME - SÃO JOSÉ 101X</td>
-    </tr>
-    <tr>
-      <th>3348</th>
-      <td>1198.000</td>
-      <td>-20.260166</td>
-      <td>-40.285000</td>
-      <td>NaN</td>
-      <td>108</td>
       <td>1000823781</td>
+      <td>-20.260166</td>
+      <td>-40.285000</td>
       <td>[ICA] Ground-based DME</td>
+      <td>108.0</td>
+      <td>-20.260166</td>
+      <td>-40.285000</td>
       <td>[GEOAISWEB] DME - VITÓRIA 111X</td>
+      <td>108.0</td>
     </tr>
   </tbody>
 </table>
+<p>65 rows × 14 columns</p>
 </div></div>
 
 </div>
 
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">para</span> <span class="n">Station</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">pegar</span> <span class="n">só</span> <span class="n">descrição</span> <span class="o">|</span> 
+</pre></div>
+
+    </div>
 </div>
 </div>
 

@@ -356,7 +356,7 @@ nb_path: "nbs\queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_aero" class="doc_header"><code>read_aero</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L367" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_aero</code>(<strong><code>pasta</code></strong>, <strong><code>up_icao</code></strong>=<em><code>False</code></em>, <strong><code>up_pmec</code></strong>=<em><code>False</code></em>, <strong><code>up_geo</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="read_aero" class="doc_header"><code>read_aero</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L374" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_aero</code>(<strong><code>pasta</code></strong>, <strong><code>up_icao</code></strong>=<em><code>False</code></em>, <strong><code>up_pmec</code></strong>=<em><code>False</code></em>, <strong><code>up_geo</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 
 </div>
@@ -380,7 +380,7 @@ nb_path: "nbs\queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="merge_aero" class="doc_header"><code>merge_aero</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L379" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>merge_aero</code>(<strong><code>df</code></strong>, <strong><code>other</code></strong>)</p>
+<h4 id="merge_aero" class="doc_header"><code>merge_aero</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L386" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>merge_aero</code>(<strong><code>df</code></strong>, <strong><code>other</code></strong>)</p>
 </blockquote>
 <p>Mescla a base da Anatel com as tabelas retiradas da Aeronáutica</p>
 
@@ -405,7 +405,7 @@ nb_path: "nbs\queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="update_base" class="doc_header"><code>update_base</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L393" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>update_base</code>(<strong><code>pasta</code></strong>, <strong><code>up_stel</code></strong>=<em><code>False</code></em>, <strong><code>up_radcom</code></strong>=<em><code>False</code></em>, <strong><code>up_mosaico</code></strong>=<em><code>False</code></em>, <strong><code>up_icao</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="update_base" class="doc_header"><code>update_base</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L400" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>update_base</code>(<strong><code>pasta</code></strong>, <strong><code>up_stel</code></strong>=<em><code>False</code></em>, <strong><code>up_radcom</code></strong>=<em><code>False</code></em>, <strong><code>up_mosaico</code></strong>=<em><code>False</code></em>, <strong><code>up_icao</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Wrapper que atualiza opcionalmente lê e atualiza as três bases indicadas anteriormente, as combina e salva o arquivo consolidado na pasta <code>pasta</code></p>
 
@@ -450,7 +450,7 @@ nb_path: "nbs\queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_stel" class="doc_header"><code>read_stel</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L437" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_stel</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="read_stel" class="doc_header"><code>read_stel</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L444" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_stel</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Lê o banco de dados salvo localmente do STEL. Opcionalmente o atualiza pelo Banco de Dados ANATELBDRO01 caso <code>update = True</code> ou não exista o arquivo local</p>
 
@@ -475,7 +475,7 @@ nb_path: "nbs\queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_radcom" class="doc_header"><code>read_radcom</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L454" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_radcom</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="read_radcom" class="doc_header"><code>read_radcom</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L461" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_radcom</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Lê o banco de dados salvo localmente de RADCOM. Opcionalmente o atualiza pelo Banco de Dados ANATELBDRO01 caso <code>update = True</code> ou não exista o arquivo local</p>
 
@@ -500,7 +500,7 @@ nb_path: "nbs\queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_mosaico" class="doc_header"><code>read_mosaico</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L470" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_mosaico</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="read_mosaico" class="doc_header"><code>read_mosaico</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L477" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_mosaico</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Lê o banco de dados salvo localmente do MOSAICO. Opcionalmente o atualiza antes da leitura baixando os diversos arquivos disponíveis na interface web pública</p>
 
@@ -525,7 +525,7 @@ nb_path: "nbs\queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_icao" class="doc_header"><code>read_icao</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L485" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_icao</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="read_icao" class="doc_header"><code>read_icao</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L492" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_icao</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Lê a base de dados do Frequency Finder e Canalização VOR/ILS/DME</p>
 
@@ -550,7 +550,7 @@ nb_path: "nbs\queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_pmec" class="doc_header"><code>read_pmec</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L502" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_pmec</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="read_pmec" class="doc_header"><code>read_pmec</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L509" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_pmec</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Fontes da informação: AISWEB, REDEMET, Ofício nº 2/SSARP/14410 e Canalização VOR/ILS/DME.</p>
 
@@ -575,7 +575,7 @@ nb_path: "nbs\queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_geo" class="doc_header"><code>read_geo</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L519" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_geo</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="read_geo" class="doc_header"><code>read_geo</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L526" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_geo</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Fontes da informação: AISWEB, REDEMET, Ofício nº 2/SSARP/14410 e Canalização VOR/ILS/DME.</p>
 
@@ -600,7 +600,7 @@ nb_path: "nbs\queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_base" class="doc_header"><code>read_base</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L541" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_base</code>(<strong><code>pasta</code></strong>, <strong><code>up_stel</code></strong>=<em><code>False</code></em>, <strong><code>up_radcom</code></strong>=<em><code>False</code></em>, <strong><code>up_mosaico</code></strong>=<em><code>False</code></em>, <strong><code>up_icao</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="read_base" class="doc_header"><code>read_base</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L548" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_base</code>(<strong><code>pasta</code></strong>, <strong><code>up_stel</code></strong>=<em><code>False</code></em>, <strong><code>up_radcom</code></strong>=<em><code>False</code></em>, <strong><code>up_mosaico</code></strong>=<em><code>False</code></em>, <strong><code>up_icao</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Wrapper que combina a chamada das três funções de leitura do banco e opcionalmente é possível atualizá-las antes da leitura</p>
 
