@@ -47,7 +47,7 @@ nb_path: "nbs\filter.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bump_version" class="doc_header"><code>bump_version</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/filter.py#L20" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bump_version</code>(<strong><code>version</code></strong>, <strong><code>part</code></strong>=<em><code>2</code></em>)</p>
+<h4 id="bump_version" class="doc_header"><code>bump_version</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/filter.py#L21" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bump_version</code>(<strong><code>version</code></strong>, <strong><code>part</code></strong>=<em><code>2</code></em>)</p>
 </blockquote>
 
 </div>
@@ -78,7 +78,7 @@ nb_path: "nbs\filter.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="formatar_db" class="doc_header"><code>formatar_db</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/filter.py#L108" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>formatar_db</code>(<strong><code>path</code></strong>:"Pasta onde salvar os arquivos", <strong><code>up_stel</code></strong>:"Atualizar a base do Stel"=<em><code>False</code></em>, <strong><code>up_radcom</code></strong>:"Atualizar a base do Radcom"=<em><code>False</code></em>, <strong><code>up_mosaico</code></strong>:"Atualizar a base do Mosaico"=<em><code>False</code></em>, <strong><code>up_icao</code></strong>:"Atualizar a base do ICAO"=<em><code>False</code></em>, <strong><code>up_pmec</code></strong>:"Atualizar a base do PMEC"=<em><code>False</code></em>, <strong><code>up_geo</code></strong>:"Atualizar a base do Geo"=<em><code>False</code></em>)</p>
+<h4 id="formatar_db" class="doc_header"><code>formatar_db</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/filter.py#L109" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>formatar_db</code>(<strong><code>path</code></strong>:"Pasta onde salvar os arquivos", <strong><code>up_stel</code></strong>:"Atualizar a base do Stel"=<em><code>False</code></em>, <strong><code>up_radcom</code></strong>:"Atualizar a base do Radcom"=<em><code>False</code></em>, <strong><code>up_mosaico</code></strong>:"Atualizar a base do Mosaico"=<em><code>False</code></em>, <strong><code>up_icao</code></strong>:"Atualizar a base do ICAO"=<em><code>False</code></em>, <strong><code>up_pmec</code></strong>:"Atualizar a base do PMEC"=<em><code>False</code></em>, <strong><code>up_geo</code></strong>:"Atualizar a base do Geo"=<em><code>False</code></em>)</p>
 </blockquote>
 
 </div>
@@ -149,531 +149,106 @@ nb_path: "nbs\filter.ipynb"
 </div>
 </div>
 
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">icao</span> <span class="o">=</span> <span class="n">read_icao</span><span class="p">(</span><span class="n">pasta</span><span class="p">)</span>
+<span class="n">pmec</span> <span class="o">=</span> <span class="n">read_pmec</span><span class="p">(</span><span class="n">pasta</span><span class="p">)</span>
+<span class="n">geo</span> <span class="o">=</span> <span class="n">read_geo</span><span class="p">(</span><span class="n">pasta</span><span class="p">)</span>
+<span class="n">icao</span><span class="p">[</span><span class="s1">&#39;Description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">icao</span><span class="o">.</span><span class="n">Description</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">)</span>
+<span class="n">pmec</span><span class="p">[</span><span class="s1">&#39;Description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pmec</span><span class="o">.</span><span class="n">Description</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">)</span>
+<span class="n">geo</span><span class="p">[</span><span class="s1">&#39;Description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">Description</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">icao</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">pmec</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">geo</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
 <div class="output_wrapper">
 <div class="output">
 
 <div class="output_area">
 
 
-<div class="output_html rendered_html output_subarea "><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">📜<span style="color: #008000; text-decoration-color: #008000">Lendo as bases de dados...</span>
+<div class="output_html rendered_html output_subarea "><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">(</span><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2632</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">6</span><span style="font-weight: bold">)</span>
+<span style="font-weight: bold">(</span><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">971</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">6</span><span style="font-weight: bold">)</span>
+<span style="font-weight: bold">(</span><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">285</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">6</span><span style="font-weight: bold">)</span>
 </pre>
-</div>
-
-</div>
-
-<div class="output_area">
-
-
-<div class="output_html rendered_html output_subarea "><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">🗃<span style="color: #008000; text-decoration-color: #008000">Salvando os arquivos...</span>
-</pre>
-</div>
-
-</div>
-
-<div class="output_area">
-
-
-<div class="output_html rendered_html output_subarea "><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">🆕 <span style="color: #008000; text-decoration-color: #008000"> A base de dados mudou desde a última atualização! Salvando o novo arquivo e atualizando a</span>
-<span style="color: #008000; text-decoration-color: #008000">versão</span>
-</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_feather</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">pasta</span><span class="si">}</span><span class="s1">/AnatelDB.fth&#39;</span><span class="p">)</span> <span class="c1">#, engine=&#39;openpyxl&#39;, sheet_name=&#39;DataBase&#39;)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_html rendered_html output_subarea output_execute_result"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Frequency</th>
-      <th>Latitude</th>
-      <th>Longitude</th>
-      <th>Description</th>
-      <th>Service</th>
-      <th>Station</th>
-      <th>Class</th>
-      <th>BW</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>884055</th>
-      <td>85469.0</td>
-      <td>-1.358931</td>
-      <td>-48.385670</td>
-      <td>[STEL] L, FX, Tim S A (50417425295, 1009786951...</td>
-      <td>19</td>
-      <td>1009786951</td>
-      <td>Q7W</td>
-      <td>750M</td>
-    </tr>
-    <tr>
-      <th>884056</th>
-      <td>85469.0</td>
-      <td>-9.937445</td>
-      <td>-67.827751</td>
-      <td>[STEL] L, FX, Tim S A (50417425295, 1005059940...</td>
-      <td>19</td>
-      <td>1005059940</td>
-      <td>Q7W</td>
-      <td>62M5</td>
-    </tr>
-    <tr>
-      <th>884057</th>
-      <td>85469.0</td>
-      <td>-23.624083</td>
-      <td>-46.623943</td>
-      <td>[STEL] L, FX, Tim S A (50417425295, 1007183141...</td>
-      <td>19</td>
-      <td>1007183141</td>
-      <td>Q7W</td>
-      <td>62M5</td>
-    </tr>
-    <tr>
-      <th>884058</th>
-      <td>85469.0</td>
-      <td>-19.857389</td>
-      <td>-44.616112</td>
-      <td>[STEL] L, FX, Tim S A (50417425295, 1009125734...</td>
-      <td>19</td>
-      <td>1009125734</td>
-      <td>Q7W</td>
-      <td>62M5</td>
-    </tr>
-    <tr>
-      <th>884059</th>
-      <td>85469.0</td>
-      <td>-16.592699</td>
-      <td>-49.267799</td>
-      <td>[STEL] L, FX, Tim S A (50417425295, 1008754061...</td>
-      <td>19</td>
-      <td>1008754061</td>
-      <td>Q7W</td>
-      <td>62M5</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
-RangeIndex: 884060 entries, 0 to 884059
-Data columns (total 8 columns):
- #   Column       Non-Null Count   Dtype   
----  ------       --------------   -----   
- 0   Frequency    884060 non-null  float64 
- 1   Latitude     884060 non-null  float32 
- 2   Longitude    884060 non-null  float32 
- 3   Description  884060 non-null  string  
- 4   Service      884060 non-null  int32   
- 5   Station      884060 non-null  int32   
- 6   Class        884060 non-null  category
- 7   BW           884060 non-null  category
-dtypes: category(2), float32(2), float64(1), int32(2), string(1)
-memory usage: 29.5 MB
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">icao</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">pasta</span><span class="si">}</span><span class="s1">/IcaoDB.xlsx&#39;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;openpyxl&#39;</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;DataBase&#39;</span><span class="p">)</span>
-<span class="n">pmec</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">pasta</span><span class="si">}</span><span class="s1">/PmecDB.xlsx&#39;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;openpyxl&#39;</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;DataBase&#39;</span><span class="p">)</span>
-<span class="n">geo</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">pasta</span><span class="si">}</span><span class="s1">/GeoAiswebDB.xlsx&#39;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;openpyxl&#39;</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;DataBase&#39;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">icao</span><span class="p">[</span><span class="n">icao</span><span class="o">.</span><span class="n">Station</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_html rendered_html output_subarea output_execute_result"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Frequency</th>
-      <th>Latitude</th>
-      <th>Longitude</th>
-      <th>Description</th>
-      <th>Service</th>
-      <th>Station</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>109.1</td>
-      <td>-25.600000</td>
-      <td>-54.466667</td>
-      <td>[FFD] ILS, FOZ DO IGUACU CATARATAS</td>
-      <td>-1</td>
-      <td>-1</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>109.3</td>
-      <td>-1.366667</td>
-      <td>-48.466667</td>
-      <td>[FFD] ILS/DME, BELEM VAL DE CAES</td>
-      <td>-1</td>
-      <td>-1</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>109.3</td>
-      <td>-15.866667</td>
-      <td>-47.933334</td>
-      <td>[FFD] ILS/DME, BRASILIA INTL.</td>
-      <td>-1</td>
-      <td>-1</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>109.3</td>
-      <td>-25.533333</td>
-      <td>-49.166668</td>
-      <td>[FFD] ILS, CURITIBA AFONSO PEÑA</td>
-      <td>-1</td>
-      <td>-1</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>109.3</td>
-      <td>-9.516666</td>
-      <td>-35.783333</td>
-      <td>[FFD] ILS/DME, MACEIO</td>
-      <td>-1</td>
-      <td>-1</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>2576</th>
-      <td>1203.0</td>
-      <td>-23.616667</td>
-      <td>-46.650002</td>
-      <td>[ICA] Ground-based DME</td>
-      <td>-1</td>
-      <td>-1</td>
-    </tr>
-    <tr>
-      <th>2577</th>
-      <td>1204.0</td>
-      <td>-29.933332</td>
-      <td>-51.183334</td>
-      <td>[ICA] Ground-based DME</td>
-      <td>-1</td>
-      <td>-1</td>
-    </tr>
-    <tr>
-      <th>2578</th>
-      <td>1207.0</td>
-      <td>-1.383333</td>
-      <td>-48.483334</td>
-      <td>[ICA] Ground-based DME</td>
-      <td>-1</td>
-      <td>-1</td>
-    </tr>
-    <tr>
-      <th>2579</th>
-      <td>1209.0</td>
-      <td>-4.183333</td>
-      <td>-69.933334</td>
-      <td>[ICA] Ground-based DME</td>
-      <td>-1</td>
-      <td>-1</td>
-    </tr>
-    <tr>
-      <th>2580</th>
-      <td>1211.0</td>
-      <td>-19.833334</td>
-      <td>-44.000000</td>
-      <td>[ICA] Ground-based DME</td>
-      <td>-1</td>
-      <td>-1</td>
-    </tr>
-  </tbody>
-</table>
-<p>1102 rows × 6 columns</p>
-</div></div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pmec</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
-RangeIndex: 946 entries, 0 to 945
-Data columns (total 6 columns):
- #   Column       Non-Null Count  Dtype  
----  ------       --------------  -----  
- 0   Frequency    946 non-null    float64
- 1   Latitude     946 non-null    float64
- 2   Longitude    946 non-null    float64
- 3   Description  946 non-null    object 
- 4   Service      946 non-null    int64  
- 5   Station      946 non-null    int64  
-dtypes: float64(3), int64(2), object(1)
-memory usage: 44.5+ KB
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">icao</span><span class="o">.</span><span class="n">shape</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>(2581, 6)</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pmec</span><span class="o">.</span><span class="n">shape</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>(946, 6)</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">geo</span><span class="o">.</span><span class="n">shape</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>(286, 6)</pre>
 </div>
 
 </div>
@@ -692,7 +267,9 @@ memory usage: 44.5+ KB
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;Station&#39;</span><span class="p">]</span>
-<span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">icao</span><span class="p">,</span> <span class="n">pmec</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="n">cols</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">geo</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="n">cols</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">icao</span><span class="p">[</span><span class="n">icao</span><span class="o">.</span><span class="n">Station</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">pmec</span><span class="p">[</span><span class="n">pmec</span><span class="o">.</span><span class="n">Station</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">geo</span><span class="p">[</span><span class="n">geo</span><span class="o">.</span><span class="n">Station</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -709,10 +286,253 @@ memory usage: 44.5+ KB
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">Description_x</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">Description_y</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span>
-<span class="n">z</span> <span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">Description</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span>
-<span class="n">df2</span><span class="p">[</span><span class="n">y</span> <span class="o">&amp;</span> <span class="n">z</span>  <span class="o">&amp;</span> <span class="p">(</span><span class="n">df2</span><span class="o">.</span><span class="n">Station</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">merge_df</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">merge_df</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s1">&#39;first&#39;</span><span class="p">)</span>
+<span class="n">df</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Frequency</th>
+      <th>Station</th>
+      <th>Description</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
+      <th>Service</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>109.100</td>
+      <td>696597080</td>
+      <td>[ICAO] ILS/DME, JUIZ DE FORA</td>
+      <td>-21.783333</td>
+      <td>-43.383335</td>
+      <td>108.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>109.300</td>
+      <td>1008242052</td>
+      <td>[ICAO] ILS, RIO DE JANEIRO INTL.</td>
+      <td>-22.799999</td>
+      <td>-43.216667</td>
+      <td>108.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>110.300</td>
+      <td>1000822769</td>
+      <td>[ICAO] ILS, CAMPINAS VIRACOPOS, SP | [AISW] SB...</td>
+      <td>-23.017500</td>
+      <td>-47.117500</td>
+      <td>108.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>110.700</td>
+      <td>1000823269</td>
+      <td>[ICAO] ILS, SAO PAULO GUARULHOS INTL. | [AISW]...</td>
+      <td>-23.425468</td>
+      <td>-46.464542</td>
+      <td>108.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>111.100</td>
+      <td>1000823242</td>
+      <td>[ICAO] ILS, SAO PAULO GUARULHOS INTL. | [AISW]...</td>
+      <td>-23.436501</td>
+      <td>-46.486748</td>
+      <td>108.0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>1606</th>
+      <td>1193.000</td>
+      <td>1000822904</td>
+      <td>[DOC] SBME-RDONAV, VOR/DME MCA, MACAE (Ground-...</td>
+      <td>-22.344475</td>
+      <td>-41.769001</td>
+      <td>108.0</td>
+    </tr>
+    <tr>
+      <th>1607</th>
+      <td>1195.000</td>
+      <td>1000823692</td>
+      <td>[DOC] SBUL-RDONAV, VOR/DME ULD, TEN CEL AV CÉS...</td>
+      <td>-18.876638</td>
+      <td>-48.221313</td>
+      <td>108.0</td>
+    </tr>
+    <tr>
+      <th>1608</th>
+      <td>1198.000</td>
+      <td>1000823781</td>
+      <td>[DOC] SBVT-RDONAV, VOR/DME VRI, Eurico de Agui...</td>
+      <td>-20.260166</td>
+      <td>-40.285000</td>
+      <td>108.0</td>
+    </tr>
+    <tr>
+      <th>1609</th>
+      <td>0.355</td>
+      <td>690266120</td>
+      <td>[AISG] NDB - URUCU OPR PETROBRAS</td>
+      <td>-4.886500</td>
+      <td>-65.349831</td>
+      <td>108.0</td>
+    </tr>
+    <tr>
+      <th>1610</th>
+      <td>991.000</td>
+      <td>1000823218</td>
+      <td>[AISG] DME -  30X</td>
+      <td>-2.422000</td>
+      <td>-54.789165</td>
+      <td>108.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>1484 rows × 6 columns</p>
+</div></div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">merge_diff</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Merge two dataframes&quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">Description_x</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">Description_y</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">x</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">y</span><span class="p">,</span> <span class="s1">&#39;Description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">x</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">y</span><span class="p">,</span> <span class="s1">&#39;Description_x&#39;</span><span class="p">]</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;Description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;Description_y&#39;</span><span class="p">]</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">x</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">y</span><span class="p">,</span> <span class="s1">&#39;Latitude&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">x</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">y</span><span class="p">,</span> <span class="s1">&#39;Latitude_x&#39;</span><span class="p">]</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">x</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">y</span><span class="p">,</span> <span class="s1">&#39;Longitude&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">x</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">y</span><span class="p">,</span> <span class="s1">&#39;Longitude_x&#39;</span><span class="p">]</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;Latitude&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;Latitude_y&#39;</span><span class="p">]</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;Longitude&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;Longitude_y&#39;</span><span class="p">]</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;Service&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;Service_x&#39;</span><span class="p">]</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;Service&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;Service_y&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s1">&#39;_&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">c</span><span class="p">]]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">]</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">icao</span><span class="p">[</span><span class="n">icao</span><span class="o">.</span><span class="n">Station</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Service&#39;</span><span class="p">,</span> <span class="s1">&#39;Station&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">pmec</span><span class="p">[</span><span class="n">pmec</span><span class="o">.</span><span class="n">Station</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Service&#39;</span><span class="p">,</span> <span class="s1">&#39;Station&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">geo</span><span class="p">[</span><span class="n">geo</span><span class="o">.</span><span class="n">Station</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Service&#39;</span><span class="p">,</span> <span class="s1">&#39;Station&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea "><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">(</span><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1148</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">4</span><span style="font-weight: bold">)</span>
+<span style="font-weight: bold">(</span><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">600</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">4</span><span style="font-weight: bold">)</span>
+<span style="font-weight: bold">(</span><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">213</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">4</span><span style="font-weight: bold">)</span>
+</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">abc</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="n">cols</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="n">cols</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">abc</span>
 </pre></div>
 
     </div>
@@ -747,103 +567,79 @@ memory usage: 44.5+ KB
       <th>Latitude_x</th>
       <th>Longitude_x</th>
       <th>Description_x</th>
-      <th>Service_x</th>
-      <th>Station</th>
       <th>Latitude_y</th>
       <th>Longitude_y</th>
       <th>Description_y</th>
-      <th>Service_y</th>
       <th>Latitude</th>
       <th>Longitude</th>
       <th>Description</th>
-      <th>Service</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>209</th>
-      <td>112.1</td>
-      <td>-9.366667</td>
-      <td>-40.566666</td>
-      <td>[FFD] VOR/DME, PETROLINA</td>
-      <td>108.0</td>
-      <td>1000842573</td>
-      <td>-9.363334</td>
-      <td>-40.561501</td>
-      <td>[AIS] SBPL-RDONAV, VOR/DME PTL, SENADOR NILO C...</td>
-      <td>108.0</td>
-      <td>-9.363261</td>
-      <td>-40.561577</td>
-      <td>[GEOAISWEB] VOR - PETROLINA OPR INFRAERO</td>
-      <td>108.0</td>
+      <th>0</th>
+      <td>109.1</td>
+      <td>-25.600000</td>
+      <td>-54.466667</td>
+      <td>[ICAO] ILS, FOZ DO IGUACU CATARATAS</td>
+      <td>-25.602833</td>
+      <td>-54.478500</td>
+      <td>[AISW] SBFI-RDONAV, ILS/DME 14 IFI, Cataratas</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>&lt;NA&gt;</td>
     </tr>
     <tr>
-      <th>212</th>
-      <td>112.2</td>
-      <td>-6.233333</td>
-      <td>-57.766666</td>
-      <td>[FFD] VOR/DME, JACAREACANGA</td>
-      <td>108.0</td>
-      <td>1000842433</td>
-      <td>-6.235667</td>
-      <td>-57.770500</td>
-      <td>[AIS] SBEK-RDONAV, VOR/DME JAC, Jacareacanga</td>
-      <td>108.0</td>
-      <td>-6.235744</td>
-      <td>-57.770527</td>
-      <td>[GEOAISWEB] VOR - JACAREACANGA VOR NO AVBL SEC...</td>
-      <td>108.0</td>
+      <th>1</th>
+      <td>109.3</td>
+      <td>-1.366667</td>
+      <td>-48.466667</td>
+      <td>[ICAO] ILS/DME, BELEM VAL DE CAES</td>
+      <td>-2.578333</td>
+      <td>-44.228333</td>
+      <td>[AISW] SBSL-RDONAV, ILS/DME 06 ISL, Marechal C...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>&lt;NA&gt;</td>
     </tr>
     <tr>
-      <th>215</th>
-      <td>112.3</td>
-      <td>-2.450000</td>
-      <td>-54.816666</td>
-      <td>[FFD] VOR/DME, SANTAREM INTL.</td>
-      <td>108.0</td>
-      <td>1000823129</td>
-      <td>-2.426500</td>
-      <td>-54.817501</td>
-      <td>[AIS] SBSN-RDONAV, VOR/DME STM, Maestro Wilson...</td>
-      <td>108.0</td>
-      <td>-2.426419</td>
-      <td>-54.817562</td>
-      <td>[GEOAISWEB] VOR - SANTARÉM OPR INFRAERO</td>
-      <td>108.0</td>
+      <th>2</th>
+      <td>109.3</td>
+      <td>-1.366667</td>
+      <td>-48.466667</td>
+      <td>[ICAO] ILS/DME, BELEM VAL DE CAES</td>
+      <td>-23.637667</td>
+      <td>-46.648834</td>
+      <td>[AISW] SBSP-RDONAV, ILS/DME 17R ISP, Congonhas</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>&lt;NA&gt;</td>
     </tr>
     <tr>
-      <th>218</th>
-      <td>112.4</td>
-      <td>-23.333334</td>
-      <td>-51.116665</td>
-      <td>[FFD] VOR/DME, LONDRINA</td>
-      <td>108.0</td>
-      <td>1000822874</td>
-      <td>-23.339500</td>
-      <td>-51.112499</td>
-      <td>[AIS] SBLO-RDONAV, VOR/DME LON, Governador Jos...</td>
-      <td>108.0</td>
-      <td>-23.339516</td>
-      <td>-51.112526</td>
-      <td>[GEOAISWEB] VOR - LONDRINA CH 71XOPR INFRAERO</td>
-      <td>108.0</td>
+      <th>3</th>
+      <td>109.3</td>
+      <td>-1.366667</td>
+      <td>-48.466667</td>
+      <td>[ICAO] ILS/DME, BELEM VAL DE CAES</td>
+      <td>-20.267000</td>
+      <td>-40.292835</td>
+      <td>[AISW] SBVT-RDONAV, ILS/DME 24 IVI, Eurico de ...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>&lt;NA&gt;</td>
     </tr>
     <tr>
-      <th>227</th>
-      <td>112.7</td>
-      <td>-5.516667</td>
-      <td>-47.450001</td>
-      <td>[FFD] VOR/DME, IMPERATRIZ</td>
-      <td>108.0</td>
-      <td>1000842417</td>
-      <td>-5.523833</td>
-      <td>-47.449833</td>
-      <td>[AIS] SBIZ-RDONAV, VOR/DME YTZ, PREFEITO RENAT...</td>
-      <td>108.0</td>
-      <td>-5.523889</td>
-      <td>-47.449844</td>
-      <td>[GEOAISWEB] VOR - IMPERATRIZ CH 74XOPR INFRAERO</td>
-      <td>108.0</td>
+      <th>4</th>
+      <td>109.3</td>
+      <td>-1.366667</td>
+      <td>-48.466667</td>
+      <td>[ICAO] ILS/DME, BELEM VAL DE CAES</td>
+      <td>-9.861167</td>
+      <td>-67.881668</td>
+      <td>[AISW] SBRB-RDONAV, ILS/DME 06 IRB, Plácido de...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>&lt;NA&gt;</td>
     </tr>
     <tr>
       <th>...</th>
@@ -857,99 +653,75 @@ memory usage: 44.5+ KB
       <td>...</td>
       <td>...</td>
       <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
     </tr>
     <tr>
-      <th>4078</th>
-      <td>1178.0</td>
+      <th>4270</th>
+      <td>116.1</td>
       <td>NaN</td>
       <td>NaN</td>
+      <td>&lt;NA&gt;</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>1000842506</td>
-      <td>-6.119667</td>
-      <td>-50.001999</td>
-      <td>[ICA] Ground-based DME</td>
-      <td>108.0</td>
-      <td>-6.119645</td>
-      <td>-50.001995</td>
-      <td>[GEOAISWEB] DME - CARAJÁS 91X</td>
-      <td>108.0</td>
+      <td>&lt;NA&gt;</td>
+      <td>-27.135693</td>
+      <td>-52.662968</td>
+      <td>[AISG] VOR - CHAPECÓ OPR CITY HALL CH 108X</td>
     </tr>
     <tr>
-      <th>4079</th>
-      <td>1185.0</td>
+      <th>4271</th>
+      <td>967.0</td>
       <td>NaN</td>
       <td>NaN</td>
+      <td>&lt;NA&gt;</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>1000822831</td>
-      <td>-26.222334</td>
-      <td>-48.798000</td>
-      <td>[ICA] Ground-based DME</td>
-      <td>108.0</td>
-      <td>-26.222261</td>
-      <td>-48.798046</td>
-      <td>[GEOAISWEB] DME - JOINVILLE 98X</td>
-      <td>108.0</td>
+      <td>&lt;NA&gt;</td>
+      <td>-2.578333</td>
+      <td>-44.228333</td>
+      <td>[AISG] DME - SÃO LUIZ 6X</td>
     </tr>
     <tr>
-      <th>4084</th>
-      <td>1193.0</td>
+      <th>4272</th>
+      <td>985.0</td>
       <td>NaN</td>
       <td>NaN</td>
+      <td>&lt;NA&gt;</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>1000822904</td>
-      <td>-22.344500</td>
-      <td>-41.769001</td>
-      <td>[ICA] Ground-based DME</td>
-      <td>108.0</td>
-      <td>-22.344448</td>
-      <td>-41.769001</td>
-      <td>[GEOAISWEB] DME - MACAÉ 106X</td>
-      <td>108.0</td>
+      <td>&lt;NA&gt;</td>
+      <td>-21.700470</td>
+      <td>-41.307671</td>
+      <td>[AISG] DME - CAMPOS 24X</td>
     </tr>
     <tr>
-      <th>4085</th>
+      <th>4273</th>
+      <td>1182.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>&lt;NA&gt;</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>&lt;NA&gt;</td>
+      <td>-22.967175</td>
+      <td>-42.890945</td>
+      <td>[AISG] DME - MARICÁ 95X</td>
+    </tr>
+    <tr>
+      <th>4274</th>
       <td>1195.0</td>
       <td>NaN</td>
       <td>NaN</td>
+      <td>&lt;NA&gt;</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>1000823692</td>
-      <td>-18.876667</td>
-      <td>-48.221333</td>
-      <td>[ICA] Ground-based DME</td>
-      <td>108.0</td>
-      <td>-18.876610</td>
-      <td>-48.221298</td>
-      <td>[GEOAISWEB] DME - UBERLÂNDIA 108X</td>
-      <td>108.0</td>
-    </tr>
-    <tr>
-      <th>4086</th>
-      <td>1198.0</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>1000823781</td>
-      <td>-20.260166</td>
-      <td>-40.285000</td>
-      <td>[ICA] Ground-based DME</td>
-      <td>108.0</td>
-      <td>-20.260166</td>
-      <td>-40.285000</td>
-      <td>[GEOAISWEB] DME - VITÓRIA 111X</td>
-      <td>108.0</td>
+      <td>&lt;NA&gt;</td>
+      <td>-27.135693</td>
+      <td>-52.662968</td>
+      <td>[AISG] DME - CHAPECÓ 108X</td>
     </tr>
   </tbody>
 </table>
-<p>65 rows × 14 columns</p>
+<p>4275 rows × 10 columns</p>
 </div></div>
 
 </div>
@@ -967,7 +739,490 @@ memory usage: 44.5+ KB
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">para</span> <span class="n">Station</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">pegar</span> <span class="n">só</span> <span class="n">descrição</span> <span class="o">|</span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">abc</span><span class="o">.</span><span class="n">Description_x</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">abc</span><span class="o">.</span><span class="n">Description_y</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">abc</span><span class="o">.</span><span class="n">Description</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span>
+<span class="n">new</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;Latitude&#39;</span><span class="p">,</span> <span class="s1">&#39;Longitude&#39;</span><span class="p">,</span> <span class="s1">&#39;Description&#39;</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">c</span><span class="p">,</span><span class="n">n</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">y</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">z</span><span class="p">),</span> <span class="p">(</span><span class="o">~</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">y</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">z</span><span class="p">),</span> <span class="p">(</span><span class="o">~</span><span class="n">x</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">y</span> <span class="o">&amp;</span> <span class="n">z</span><span class="p">)],</span> <span class="p">[</span><span class="s1">&#39;_x&#39;</span><span class="p">,</span> <span class="s1">&#39;_y&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">]):</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">abc</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">c</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Latitude</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Longitude</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Description</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]]</span>
+    <span class="n">temp</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;Latitude&#39;</span><span class="p">,</span> <span class="s1">&#39;Longitude&#39;</span><span class="p">,</span> <span class="s1">&#39;Description&#39;</span><span class="p">]</span>
+    <span class="n">new</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">new</span><span class="p">,</span> <span class="n">temp</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">new</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s1">&#39;first&#39;</span><span class="p">)</span>
+<span class="n">new</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Frequency</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>112.2</td>
+      <td>-22.35</td>
+      <td>-49.049999</td>
+      <td>[ICAO] VOR/DME, BAURU</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>112.2</td>
+      <td>-14.8</td>
+      <td>-39.016666</td>
+      <td>[ICAO] VOR/DME, ILHEUS</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>112.3</td>
+      <td>-12.9</td>
+      <td>-38.400002</td>
+      <td>[ICAO] VOR, ITAPARICA</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>112.3</td>
+      <td>-5.066667</td>
+      <td>-42.816666</td>
+      <td>[ICAO] VOR/DME, TERESINA</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>112.5</td>
+      <td>-5.8</td>
+      <td>-61.283333</td>
+      <td>[ICAO] VOR, MANICORE</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>976</th>
+      <td>116.1</td>
+      <td>-27.135693</td>
+      <td>-52.662968</td>
+      <td>[AISG] VOR - CHAPECÓ OPR CITY HALL CH 108X</td>
+    </tr>
+    <tr>
+      <th>977</th>
+      <td>967.0</td>
+      <td>-2.578333</td>
+      <td>-44.228333</td>
+      <td>[AISG] DME - SÃO LUIZ 6X</td>
+    </tr>
+    <tr>
+      <th>978</th>
+      <td>985.0</td>
+      <td>-21.70047</td>
+      <td>-41.307671</td>
+      <td>[AISG] DME - CAMPOS 24X</td>
+    </tr>
+    <tr>
+      <th>979</th>
+      <td>1182.0</td>
+      <td>-22.967175</td>
+      <td>-42.890945</td>
+      <td>[AISG] DME - MARICÁ 95X</td>
+    </tr>
+    <tr>
+      <th>980</th>
+      <td>1195.0</td>
+      <td>-27.135693</td>
+      <td>-52.662968</td>
+      <td>[AISG] DME - CHAPECÓ 108X</td>
+    </tr>
+  </tbody>
+</table>
+<p>981 rows × 4 columns</p>
+</div></div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">y</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">z</span><span class="p">),</span> <span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">y</span> <span class="o">&amp;</span> <span class="n">z</span><span class="p">),</span> <span class="p">(</span><span class="o">~</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">y</span> <span class="o">&amp;</span> <span class="n">z</span><span class="p">)],</span> <span class="p">[(</span><span class="s1">&#39;_x&#39;</span><span class="p">,</span><span class="s1">&#39;_y&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;_x&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;_y&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)]):</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">abc</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">itertuples</span><span class="p">():</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">geodesic</span><span class="p">((</span><span class="nb">getattr</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Latitude</span><span class="si">{</span><span class="n">left</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">),</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Longitude</span><span class="si">{</span><span class="n">left</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)),</span> <span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Latitude</span><span class="si">{</span><span class="n">right</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">),</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Longitude</span><span class="si">{</span><span class="n">right</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)))</span><span class="o">.</span><span class="n">m</span>
+        <span class="k">if</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="mi">500</span><span class="p">:</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">Frequency</span>
+            <span class="n">lat</span> <span class="o">=</span> <span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Latitude</span><span class="si">{</span><span class="n">left</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Latitude</span><span class="si">{</span><span class="n">right</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="n">lon</span> <span class="o">=</span> <span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Longitude</span><span class="si">{</span><span class="n">left</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Longitude</span><span class="si">{</span><span class="n">right</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Description</span><span class="si">{</span><span class="n">left</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; | &#39;</span> <span class="o">+</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Description</span><span class="si">{</span><span class="n">right</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">))</span>
+            <span class="n">new</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">new</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([[</span><span class="n">f</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">d</span><span class="p">]],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;Latitude&#39;</span><span class="p">,</span> <span class="s1">&#39;Longitude&#39;</span><span class="p">,</span> <span class="s1">&#39;Description&#39;</span><span class="p">])],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">l</span> <span class="o">=</span> <span class="n">abc</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">row</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Latitude</span><span class="si">{</span><span class="n">left</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Longitude</span><span class="si">{</span><span class="n">left</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Description</span><span class="si">{</span><span class="n">left</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+            <span class="n">l</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">new</span><span class="o">.</span><span class="n">columns</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">abc</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">row</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Latitude</span><span class="si">{</span><span class="n">right</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Longitude</span><span class="si">{</span><span class="n">right</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Description</span><span class="si">{</span><span class="n">right</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+            <span class="n">r</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">new</span><span class="o">.</span><span class="n">columns</span>
+            <span class="n">new</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">new</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">new</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s1">&#39;first&#39;</span><span class="p">)</span>
+<span class="n">new</span>            
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Frequency</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>112.2</td>
+      <td>-22.35</td>
+      <td>-49.049999</td>
+      <td>[ICAO] VOR/DME, BAURU</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>112.2</td>
+      <td>-14.8</td>
+      <td>-39.016666</td>
+      <td>[ICAO] VOR/DME, ILHEUS</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>112.3</td>
+      <td>-12.9</td>
+      <td>-38.400002</td>
+      <td>[ICAO] VOR, ITAPARICA</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>112.3</td>
+      <td>-5.066667</td>
+      <td>-42.816666</td>
+      <td>[ICAO] VOR/DME, TERESINA</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>112.5</td>
+      <td>-5.8</td>
+      <td>-61.283333</td>
+      <td>[ICAO] VOR, MANICORE</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2723</th>
+      <td>1192.0</td>
+      <td>-21.984501</td>
+      <td>-47.344501</td>
+      <td>[DOC] SBYS-RDONAV, VOR/DME PIR, CAMPO FONTENEL...</td>
+    </tr>
+    <tr>
+      <th>2724</th>
+      <td>1192.0</td>
+      <td>-3.04003</td>
+      <td>-60.054737</td>
+      <td>[AISG] DME - MANAUS 105X</td>
+    </tr>
+    <tr>
+      <th>2725</th>
+      <td>1198.0</td>
+      <td>-9.87599</td>
+      <td>-67.905357</td>
+      <td>[DOC] SBRB-RDONAV, VOR/DME RCO, Plácido de Cas...</td>
+    </tr>
+    <tr>
+      <th>2726</th>
+      <td>1200.0</td>
+      <td>-0.150306</td>
+      <td>-66.990536</td>
+      <td>[DOC] SBUA-RDONAV, VOR/DME GBR, São Gabriel da...</td>
+    </tr>
+    <tr>
+      <th>2727</th>
+      <td>1202.0</td>
+      <td>-16.24535</td>
+      <td>-48.979128</td>
+      <td>[DOC] SBAN-RDONAV, VOR/DME APO, Campo Marechal...</td>
+    </tr>
+  </tbody>
+</table>
+<p>1496 rows × 4 columns</p>
+</div></div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">abc</span><span class="p">[</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">y</span> <span class="o">&amp;</span> <span class="n">z</span><span class="p">]</span><span class="o">.</span><span class="n">itertuples</span><span class="p">():</span>
+    <span class="n">d1</span> <span class="o">=</span> <span class="n">geodesic</span><span class="p">((</span><span class="nb">getattr</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="s1">&#39;Latitude_x&#39;</span><span class="p">),</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="s1">&#39;Longitude_x&#39;</span><span class="p">)),</span> <span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="s1">&#39;Latitude_y&#39;</span><span class="p">),</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="s1">&#39;Longitude_y&#39;</span><span class="p">)))</span><span class="o">.</span><span class="n">m</span>
+    <span class="n">d2</span> <span class="o">=</span> <span class="n">geodesic</span><span class="p">((</span><span class="nb">getattr</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="s1">&#39;Latitude_x&#39;</span><span class="p">),</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="s1">&#39;Longitude_x&#39;</span><span class="p">)),</span> <span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="s1">&#39;Latitude&#39;</span><span class="p">),</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="s1">&#39;Longitude&#39;</span><span class="p">)))</span><span class="o">.</span><span class="n">m</span>
+    <span class="n">d3</span> <span class="o">=</span> <span class="n">geodesic</span><span class="p">((</span><span class="nb">getattr</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="s1">&#39;Latitude_y&#39;</span><span class="p">),</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="s1">&#39;Longitude_y&#39;</span><span class="p">)),</span> <span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="s1">&#39;Latitude&#39;</span><span class="p">),</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="s1">&#39;Longitude&#39;</span><span class="p">)))</span><span class="o">.</span><span class="n">m</span>
+    <span class="k">if</span> <span class="n">d1</span> <span class="o">&lt;</span> <span class="mi">500</span> <span class="ow">and</span> <span class="n">d2</span> <span class="o">&lt;</span> <span class="mi">500</span> <span class="ow">and</span> <span class="n">d3</span> <span class="o">&lt;</span> <span class="mi">500</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">Frequency</span>
+        <span class="n">lat</span> <span class="o">=</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">Latitude_x</span> <span class="o">+</span> <span class="n">row</span><span class="o">.</span><span class="n">Latitude_y</span> <span class="o">+</span> <span class="n">row</span><span class="o">.</span><span class="n">Latitude</span><span class="p">)</span> <span class="o">/</span> <span class="mi">3</span>
+        <span class="n">lon</span> <span class="o">=</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">Longitude_x</span> <span class="o">+</span> <span class="n">row</span><span class="o">.</span><span class="n">Longitude_y</span> <span class="o">+</span> <span class="n">row</span><span class="o">.</span><span class="n">Longitude</span><span class="p">)</span> <span class="o">/</span> <span class="mi">3</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="s1">&#39; | &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">row</span><span class="o">.</span><span class="n">Description_x</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">Description_y</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">Description</span><span class="p">])</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">new</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([[</span><span class="n">f</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">d</span><span class="p">]],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;Latitude&#39;</span><span class="p">,</span> <span class="s1">&#39;Longitude&#39;</span><span class="p">,</span> <span class="s1">&#39;Description&#39;</span><span class="p">])],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">d1</span> <span class="o">&lt;</span> <span class="mi">500</span> <span class="ow">and</span> <span class="n">d2</span> <span class="o">&lt;</span> <span class="mi">500</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">Frequency</span>
+        <span class="n">lat</span> <span class="o">=</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">Latitude_x</span> <span class="o">+</span> <span class="n">row</span><span class="o">.</span><span class="n">Latitude_y</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">lon</span> <span class="o">=</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">Longitude_x</span> <span class="o">+</span> <span class="n">row</span><span class="o">.</span><span class="n">Longitude_y</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="s1">&#39; | &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">row</span><span class="o">.</span><span class="n">Description_x</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">Description_y</span><span class="p">])</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">new</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([[</span><span class="n">f</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">d</span><span class="p">]],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;Latitude&#39;</span><span class="p">,</span> <span class="s1">&#39;Longitude&#39;</span><span class="p">,</span> <span class="s1">&#39;Description&#39;</span><span class="p">])],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">d1</span> <span class="o">&lt;</span> <span class="mi">500</span> <span class="ow">and</span> <span class="n">d3</span> <span class="o">&lt;</span> <span class="mi">500</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">Frequency</span>
+        <span class="n">lat</span> <span class="o">=</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">Latitude_x</span> <span class="o">+</span> <span class="n">row</span><span class="o">.</span><span class="n">Latitude</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">lon</span> <span class="o">=</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">Longitude_x</span> <span class="o">+</span> <span class="n">row</span><span class="o">.</span><span class="n">Longitude</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="s1">&#39; | &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">row</span><span class="o">.</span><span class="n">Description_x</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">Description</span><span class="p">])</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">new</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([[</span><span class="n">f</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">d</span><span class="p">]],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;Latitude&#39;</span><span class="p">,</span> <span class="s1">&#39;Longitude&#39;</span><span class="p">,</span> <span class="s1">&#39;Description&#39;</span><span class="p">])],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">d2</span> <span class="o">&lt;</span> <span class="mi">500</span> <span class="ow">and</span> <span class="n">d3</span> <span class="o">&lt;</span> <span class="mi">500</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">Frequency</span>
+        <span class="n">lat</span> <span class="o">=</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">Latitude_y</span> <span class="o">+</span> <span class="n">row</span><span class="o">.</span><span class="n">Latitude</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">lon</span> <span class="o">=</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">Longitude_y</span> <span class="o">+</span> <span class="n">row</span><span class="o">.</span><span class="n">Longitude</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="s1">&#39; | &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">row</span><span class="o">.</span><span class="n">Description_y</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">Description</span><span class="p">])</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">new</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([[</span><span class="n">f</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">d</span><span class="p">]],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;Latitude&#39;</span><span class="p">,</span> <span class="s1">&#39;Longitude&#39;</span><span class="p">,</span> <span class="s1">&#39;Description&#39;</span><span class="p">])],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="n">abc</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">row</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;Latitude_x&#39;</span><span class="p">,</span> <span class="s1">&#39;Longitude_x&#39;</span><span class="p">,</span> <span class="s1">&#39;Description_x&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">l</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">new</span><span class="o">.</span><span class="n">columns</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">abc</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">row</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;Latitude_y&#39;</span><span class="p">,</span> <span class="s1">&#39;Longitude_y&#39;</span><span class="p">,</span> <span class="s1">&#39;Description_y&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">new</span><span class="o">.</span><span class="n">columns</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">abc</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">row</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;Latitude&#39;</span><span class="p">,</span> <span class="s1">&#39;Longitude&#39;</span><span class="p">,</span> <span class="s1">&#39;Description&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">new</span><span class="o">.</span><span class="n">columns</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">new</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">s</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">new</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s1">&#39;first&#39;</span><span class="p">)</span>
+<span class="n">new</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Frequency</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>112.2</td>
+      <td>-22.35</td>
+      <td>-49.049999</td>
+      <td>[ICAO] VOR/DME, BAURU</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>112.2</td>
+      <td>-14.8</td>
+      <td>-39.016666</td>
+      <td>[ICAO] VOR/DME, ILHEUS</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>112.3</td>
+      <td>-12.9</td>
+      <td>-38.400002</td>
+      <td>[ICAO] VOR, ITAPARICA</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>112.3</td>
+      <td>-5.066667</td>
+      <td>-42.816666</td>
+      <td>[ICAO] VOR/DME, TERESINA</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>112.5</td>
+      <td>-5.8</td>
+      <td>-61.283333</td>
+      <td>[ICAO] VOR, MANICORE</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>8605</th>
+      <td>1211.0</td>
+      <td>-19.833334</td>
+      <td>-44.0</td>
+      <td>[DOC] VOR/DME, BELO HORIZONTE PAMPULHA (Ground...</td>
+    </tr>
+    <tr>
+      <th>8606</th>
+      <td>1211.0</td>
+      <td>-19.835833</td>
+      <td>-44.003502</td>
+      <td>[DOC] SBBH-RDONAV, VOR/DME BHZ  a. SECT 100/11...</td>
+    </tr>
+    <tr>
+      <th>8607</th>
+      <td>1211.0</td>
+      <td>4.693</td>
+      <td>-61.028831</td>
+      <td>[AISG] DME - LA DIVINA PASTORA 124X</td>
+    </tr>
+    <tr>
+      <th>8610</th>
+      <td>1211.0</td>
+      <td>-25.778656</td>
+      <td>-49.763241</td>
+      <td>[AISG] DME - LAPA-PR 124X</td>
+    </tr>
+    <tr>
+      <th>8611</th>
+      <td>1211.0</td>
+      <td>-19.834979</td>
+      <td>-44.002355</td>
+      <td>[DOC] VOR/DME, BELO HORIZONTE PAMPULHA (Ground...</td>
+    </tr>
+  </tbody>
+</table>
+<p>1878 rows × 4 columns</p>
+</div></div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">new</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">pasta</span> <span class="o">/</span> <span class="s1">&#39;aeronautica.xlsx&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 
     </div>

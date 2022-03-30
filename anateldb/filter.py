@@ -14,6 +14,7 @@ from .constants import console, APP_ANALISE
 from fastcore.test import *
 from fastcore.script import call_parse, Param, store_true
 from pyarrow import ArrowInvalid
+from geopy.distance import geodesic
 from rich import print
 
 # Cell
