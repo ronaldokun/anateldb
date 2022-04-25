@@ -19,15 +19,21 @@ from rich import print
 
 # Cell
 def bump_version(version, part=2):
-    version = version.split('.')
+    version = version.split(".")
     version[part] = str(int(version[part]) + 1)
-    for i in range(part+1, 3): version[i] = '0'
-    return '.'.join(version)
+    for i in range(part + 1, 3):
+        version[i] = "0"
+    return ".".join(version)
 
 # Internal Cell
-def append_df_to_excel(filename, df, sheet_name='Sheet1', startrow=None,
-                       truncate_sheet=False,
-                       **to_excel_kwargs):
+def append_df_to_excel(
+    filename,
+    df,
+    sheet_name="Sheet1",
+    startrow=None,
+    truncate_sheet=False,
+    **to_excel_kwargs,
+):
     """
     Append a DataFrame [df] to existing Excel file [filename]
     into [sheet_name] Sheet.
@@ -67,14 +73,17 @@ def append_df_to_excel(filename, df, sheet_name='Sheet1', startrow=None,
             filename,
             sheet_name=sheet_name,
             startrow=startrow if startrow is not None else 0,
-            **to_excel_kwargs)
+            **to_excel_kwargs,
+        )
         return
 
     # ignore [engine] parameter if it was passed
-    if 'engine' in to_excel_kwargs:
-        to_excel_kwargs.pop('engine')
+    if "engine" in to_excel_kwargs:
+        to_excel_kwargs.pop("engine")
 
-    writer = pd.ExcelWriter(filename, engine='openpyxl', mode='a', if_sheet_exists='replace')
+    writer = pd.ExcelWriter(
+        filename, engine="openpyxl", mode="a", if_sheet_exists="replace"
+    )
 
     # try to open an existing workbook
     writer.book = load_workbook(filename)
@@ -94,7 +103,7 @@ def append_df_to_excel(filename, df, sheet_name='Sheet1', startrow=None,
         writer.book.create_sheet(sheet_name, idx)
 
     # copy existing sheets
-    writer.sheets = {ws.title:ws for ws in writer.book.worksheets}
+    writer.sheets = {ws.title: ws for ws in writer.book.worksheets}
 
     if startrow is None:
         startrow = 0
@@ -121,27 +130,36 @@ def formatar_db(
     time = datetime.today().strftime("%d/%m/%Y %H:%M:%S")
     console.print(":scroll:[green]Lendo as bases de dados...")
     rd = read_base(path, up_stel, up_radcom, up_mosaico, up_icao)
-    rd['Validade_RF'] = rd.Validade_RF.astype('string').fillna('')
-    rd['Data_Ato'] = rd.Data_Ato.astype('string').fillna('')
-    rd['Status'] = rd.Status.astype('string')
-    rd['Classe'] = rd.Classe.astype('string')
-    rd.loc[rd['Status'] != '', 'Status'] = rd.loc[rd['Status'] != '', 'Status'] + ", " \
-        + rd.loc[rd['Status'] != '', 'Classe']
-    rd.loc[rd['Status'].isna(), 'Status'] = rd.loc[rd['Status'].isna(), 'Num_Serviço'].astype('string')
+    rd["Validade_RF"] = rd.Validade_RF.astype("string").fillna("")
+    rd["Data_Ato"] = rd.Data_Ato.astype("string").fillna("")
+    rd["Status"] = rd.Status.astype("string")
+    rd["Classe"] = rd.Classe.astype("string")
+    rd.loc[rd["Classe"].notna(), "Status"] = (
+        rd.loc[rd["Classe"].notna(), "Status"]
+        + ", "
+        + rd.loc[rd["Classe"].notna(), "Classe"]
+    )
+    # rd.loc[rd["Status"].isna(), "Status"] = rd.loc[
+    #     rd["Status"].isna(), "Num_Serviço"
+    # ].astype("string")
 
     rd["Descrição"] = (
-        '[' + rd.Fonte.astype('string') + '] ' +
-        rd.Status.astype('string').fillna('-')
+        "["
+        + rd.Fonte.astype("string")
+        + "] "
+        + rd.Status.astype("string").fillna("-")
         + ", "
-        + rd.Entidade.astype('string').fillna('-').str.title()
+        # + rd.Classe.astype("string").fillna("-")
+        # + ", "
+        + rd.Entidade.astype("string").fillna("-").str.title()
         + " ("
-        + rd.Fistel.astype('string').fillna('-')
+        + rd.Fistel.astype("string").fillna("-")
         + ", "
-        + rd["Número_da_Estação"].astype('string').fillna('-')
+        + rd["Número_da_Estação"].astype("string").fillna("-")
         + "), "
-        + rd.Município.astype('string').fillna('-')
+        + rd.Município.astype("string").fillna("-")
         + "/"
-        + rd.UF.astype('string').fillna('-')
+        + rd.UF.astype("string").fillna("-")
     )
 
     export_columns = [
@@ -156,30 +174,34 @@ def formatar_db(
     ]
     rd = rd.loc[:, export_columns]
     rd.columns = APP_ANALISE
-    rd  = merge_aero(rd, read_aero(path, up_icao, up_pmec, up_geo))
-    rd = df_optimize(rd, exclude=['Frequency'])
+    common, new = read_aero(path, up_icao, up_pmec, up_geo)
+    rd = merge_aero(rd, common, new)
+    rd = df_optimize(rd, exclude=["Frequency"])
     console.print(":card_file_box:[green]Salvando os arquivos...")
-    d = json.loads((dest / 'VersionFile.json').read_text())
+    d = json.loads((dest / "VersionFile.json").read_text())
     try:
         cache = pd.read_feather(f"{dest}/AnatelDB.fth")
     except (ArrowInvalid, FileNotFoundError):
         cache = pd.DataFrame()
 
     if not rd.equals(cache):
-        console.print(":new: [green] A base de dados mudou desde a última atualização! Salvando o novo arquivo e atualizando a versão")
+        console.print(
+            ":new: [green] A base de dados mudou desde a última atualização! Salvando o novo arquivo e atualizando a versão"
+        )
         date = pd.DataFrame(columns=[time])
         try:
-            rd.to_feather(Path(f"{dest}/AnatelDB.fth").open('bw'))
+            rd.to_feather(Path(f"{dest}/AnatelDB.fth").open("bw"))
         except ArrowInvalid:
             Path(f"{dest}/AnatelDB.fth").unlink()
-        with pd.ExcelWriter(f"{dest}/AnatelDB.xlsx", engine='xlsxwriter') as workbook:
+        with pd.ExcelWriter(f"{dest}/AnatelDB.xlsx", engine="xlsxwriter") as workbook:
             date.to_excel(workbook, sheet_name="ExtractDate", index=False)
             rd.to_excel(workbook, sheet_name="DataBase", index=False)
-        d['anateldb']['Version'] = bump_version(d['anateldb']['Version'])
+        d["anateldb"]["Version"] = bump_version(d["anateldb"]["Version"])
     else:
-        console.print(":recycle: [green] A base de dados não mudou desde a última atualização, a versão não será atualizada, somente a data de verificação")
-
+        console.print(
+            ":recycle: [green] A base de dados não mudou desde a última atualização, a versão não será atualizada, somente a data de verificação"
+        )
 
     console.print("Sucesso :zap:")
-    d['anateldb']['ReleaseDate'] = datetime.today().strftime('%d/%m/%Y')
-    json.dump(d, (dest / 'VersionFile.json').open('w'))
+    d["anateldb"]["ReleaseDate"] = datetime.today().strftime("%d/%m/%Y")
+    json.dump(d, (dest / "VersionFile.json").open("w"))
