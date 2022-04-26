@@ -179,6 +179,8 @@ RADIODIFUSAO = (
     "Validade_RF",
     "Num_Ato",
     "Data_Ato",
+    "Classe_Emissão",
+    "Largura_Emissão",
 )
 
 APP_ANALISE = (

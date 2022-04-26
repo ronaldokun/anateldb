@@ -170,7 +170,7 @@ def formatar_db(
         "Num_Serviço",
         "Número_da_Estação",
         "Classe_Emissão",
-        "Largura_Emissão",
+        "BW(kHz)",
     ]
     rd = rd.loc[:, export_columns]
     rd.columns = APP_ANALISE
