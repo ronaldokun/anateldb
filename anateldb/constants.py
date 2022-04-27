@@ -181,6 +181,7 @@ RADIODIFUSAO = (
     "Data_Ato",
     "Classe_Emissão",
     "Largura_Emissão",
+    "Fonte"
 )
 
 APP_ANALISE = (

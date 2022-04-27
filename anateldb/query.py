@@ -718,7 +718,8 @@ def update_base(pasta, up_stel=False, up_radcom=False, up_mosaico=False, up_icao
     radcom["Status"] = "RADCOM"
     radcom["Classe_Emissão"] = ""
     radcom["Largura_Emissão"] = BW_MAP['231']
-    radcom["Classe"] = f'{radcom.Fase.str.strip()}-{radcom.Situação.str.strip()}'
+    filtro = radcom.Fase.notna() & radcom.Situação.notna()
+    radcom.loc[filtro, "Classe"] = radcom.loc[filtro, "Fase"].astype("string") + '-' + radcom.loc[filtro, "Situação"].astype("string")
     radcom["Entidade"] = radcom.Entidade.str.rstrip().str.lstrip()
     radcom["Num_Ato"] = "-1"
     radcom["Data_Ato"] = ""
