@@ -1,10 +1,8 @@
 {
   "anateldb": {
     "Overview": "/",
+    "Constants": "constants.html",
     "Filtragem": "filter.html",
-    "Parser": "parser.html",
-    "Queries": "queries.html",
-    "Redmine": "redmine.html",
-    "Tests": "tests.html"
+    "Queries": "queries.html"
   }
 }

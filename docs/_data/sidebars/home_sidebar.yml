@@ -10,20 +10,14 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
+      title: Constants
+      url: constants.html
+    - output: web,pdf
       title: Filtragem
       url: filter.html
     - output: web,pdf
-      title: Parser
-      url: parser.html
-    - output: web,pdf
       title: Queries
       url: queries.html
-    - output: web,pdf
-      title: Redmine
-      url: redmine.html
-    - output: web,pdf
-      title: Tests
-      url: tests.html
     output: web
     title: anateldb
   output: web

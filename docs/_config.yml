@@ -3,7 +3,7 @@ output: web
 topnav_title: anateldb
 site_title: anateldb
 company_name: Ronaldo S.A. Batista
-description: This repository hold automation scripts to fetch useful data from the ANATEL Database Systems.
+description: This repository hold automation scripts to fetch useful data from the ANATEL Database Systems and Redmine Instance Fiscaliza.
 # Set to false to disable KaTeX math
 use_math: true
 # Add Google analytics id if you have one and want to use it here
@@ -56,9 +56,11 @@ defaults:
       search: true
       tooltip: true
 
-sidebars: [home_sidebar]
-baseurl: /anateldb/
+sidebars:
+- home_sidebar
+
 plugins:
     - jekyll-remote-theme
     
 remote_theme: fastai/nbdev-jekyll-theme
+baseurl: /anateldb/

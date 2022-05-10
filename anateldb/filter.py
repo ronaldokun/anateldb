@@ -9,6 +9,7 @@ import json
 import pandas as pd
 from datetime import datetime
 from openpyxl import load_workbook
+from pyexcelerate import Workbook
 from .query import *
 from .constants import console, APP_ANALISE
 from fastcore.test import *
@@ -120,7 +121,8 @@ def get_modtimes(pasta):
     Retorna a data de modificação dos arquivos de dados
     """
     # Pasta
-    if not Path(pasta).is_dir():
+    pasta = Path(pasta)
+    if not pasta.is_dir():
         raise FileNotFoundError(f"Pasta {pasta} não encontrada")
     # Arquivos
     if not (stel := pasta / 'stel.fth').is_file():
@@ -142,12 +144,12 @@ def get_modtimes(pasta):
     mod_icao = pd.read_excel(icao, engine='openpyxl', sheet_name='ExtractDate').columns[0]
     mod_pmec = pd.read_excel(pmec, engine='openpyxl', sheet_name='ExtractDate').columns[0]
     mod_geo = pd.read_excel(geo, engine='openpyxl', sheet_name='ExtractDate').columns[0]
-    # mod_icao = datetime.fromtimestamp(icao.stat().st_mtime)
-    # mod_pmec = datetime.fromtimestamp(pmec.stat().st_mtime)
-    # mod_geo = datetime.fromtimestamp(geo.stat().st_mtime)
-    columns = ['STEL', 'RADCOM', 'MOSAICO', 'ICAO', 'AISW', 'AISG']
-    records = [[mod_stel], [mod_radcom], [mod_mosaico], [mod_icao], [mod_pmec], [mod_geo]]
-    return pd.DataFrame(dict(zip(columns, records)))
+    return {'STEL': mod_stel,
+            'RADCOM': mod_radcom,
+            'MOSAICO': mod_mosaico,
+            'ICAO': mod_icao,
+            'AISW': mod_pmec,
+            'AISG': mod_geo}
 
 @call_parse
 def formatar_db(
@@ -161,7 +163,6 @@ def formatar_db(
 ) -> None:
     dest = Path(path)
     dest.mkdir(parents=True, exist_ok=True)
-    time = datetime.today().strftime("%d/%m/%Y %H:%M:%S")
     console.print(":scroll:[green]Lendo as bases de dados...")
     rd = read_base(path, up_stel, up_radcom, up_mosaico, up_icao)
     rd["Status"] = rd.Status.astype("string")
@@ -171,6 +172,8 @@ def formatar_db(
         + ", "
         + rd.loc[rd["Classe"].notna(), "Classe"]
     )
+    rd[rd.Classe == '-1'] = pd.NA
+    rd['Classe'] = rd['Classe'].fillna('')
     rd["Descrição"] = (
         "["
         + rd.Fonte.astype("string")
@@ -203,36 +206,22 @@ def formatar_db(
     rd.columns = APP_ANALISE
     common, new = read_aero(path, up_icao, up_pmec, up_geo)
     rd = merge_aero(rd, common, new)
-    rd = df_optimize(rd, exclude=["Frequency", 'BW'])
-    rd['BW'] = rd['BW'].astype('float32')
+    rd = df_optimize(rd, exclude=["Frequency"])
+#    rd['BW'] = rd['BW'].astype('float32')
+    rd['Frequency'] = rd['Frequency'].astype('float')
     console.print(":card_file_box:[green]Salvando os arquivos...")
     d = json.loads((dest / "VersionFile.json").read_text())
     mod_times = get_modtimes(path)
-    try:
-        cache = pd.read_feather(f"{dest}/AnatelDB.fth")
-    except (ArrowInvalid, FileNotFoundError):
-        cache = pd.read_excel(f"{dest}/AnatelDB.xlsx", engine="openpyxl", sheet_name='DataBase')
+    mod_times['ReleaseDate'] = datetime.today().strftime("%d/%m/%Y %H:%M:%S")
 
-    if not rd.equals(cache):
-        console.print(
-            ":new: [green] A base de dados mudou desde a última atualização! Salvando o novo arquivo e atualizando a versão"
-        )
-        date = pd.DataFrame(columns=[time])
-        try:
-            with open(f"{dest}/AnatelDB.fth", "wb") as file:
-                rd.to_feather(file)
-        except ArrowInvalid:
-            Path(f"{dest}/AnatelDB.fth").unlink()
-        with pd.ExcelWriter(f"{dest}/AnatelDB.xlsx", engine="xlsxwriter") as workbook:
-            date.to_excel(workbook, sheet_name="ExtractDate", index=False)
-            rd.to_excel(workbook, sheet_name="DataBase", index=False)
-            mod_times.to_excel(workbook, sheet_name="Versions", index=False)
-        d["anateldb"]["Version"] = bump_version(d["anateldb"]["Version"])
-    else:
-        console.print(
-            ":recycle: [green] A base de dados não mudou desde a última atualização, a versão não será atualizada, somente a data de verificação"
-        )
 
-    console.print("Sucesso :zap:")
-    d["anateldb"]["ReleaseDate"] = datetime.today().strftime("%d/%m/%Y")
+    # with pd.ExcelWriter(f"{dest}/AnatelDB.xlsx", engine="xlsxwriter") as workbook:
+    #     rd.to_excel(workbook, sheet_name="DataBase", index=False)
+
+    wb = Workbook()
+    wb.new_sheet('DataBase', data=[rd.columns] + list(rd.values))
+    wb.save(f'{dest}/AnatelDB.xlsx')
+    d["anateldb"]["Version"] = bump_version(d["anateldb"]["Version"])
+    d['anateldb'].update(mod_times)
     json.dump(d, (dest / "VersionFile.json").open("w"))
+    console.print("Sucesso :zap:")

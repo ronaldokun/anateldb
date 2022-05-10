@@ -1,30 +1,30 @@
 # Anatel - Consulta e Processamento do Banco de Dados
-> Este repositÛrio concentra um conjunto de scripts para navegar e baixar informaÁıes dos principais bancos de dados da Anatel. Cujo dados ser„o utilizados em tarefas fiscalizatÛrias. O p˙blico alvo s„o os servidores do Ûrg„o, uma vez que a maioria dos sistemas utilizados aqui necessitam de autenticaÁ„o cujo acesso È restrito aos servidores da ANATEL.
+> Este reposit√≥rio concentra um conjunto de scripts para navegar e baixar informa√ß√µes dos principais bancos de dados da Anatel. Cujo dados ser√£o utilizados em tarefas fiscalizat√≥rias. O p√∫blico alvo s√£o os servidores do √≥rg√£o, uma vez que a maioria dos sistemas utilizados aqui necessitam de autentica√ß√£o cujo acesso √© restrito aos servidores da ANATEL.
 
 
-## InstalaÁ„o
+## Instala√ß√£o
 
 <code>pip install anateldb</code>
 
 ## Como utilizar
 
-### MÈtodos para baixar ou atualizar os arquivos das bases de dados
+### M√©todos para baixar ou atualizar os arquivos das bases de dados
 
 ```python
 from anateldb.query import update_mosaico, update_radcom, update_stel
 ```
 
-A funÁ„o seguinte baixa os dados diretamente da interface p˙blica online do [Spectrum E](http://sistemas.anatel.gov.br/se/public/view/b/srd.php) 
+A fun√ß√£o seguinte baixa os dados diretamente da interface p√∫blica online do [Spectrum E](http://sistemas.anatel.gov.br/se/public/view/b/srd.php) 
 
 ```python
 %%time
 update_mosaico(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados')
 ```
 
-    Baixando as EstaÁıes do Mosaico...
-    Baixando o Plano B·sico das EstaÁıes...
-    Baixando o HistÛrico de AtualizaÁıes...
-    KbÙ
+    Baixando as Esta√ß√µes do Mosaico...
+    Baixando o Plano B√°sico das Esta√ß√µes...
+    Baixando o Hist√≥rico de Atualiza√ß√µes...
+    Kb√¥
     Wall time: 8.12 s
 
 
@@ -36,7 +36,7 @@ update_radcom('D:\OneDrive - ANATEL\GR01FI3\BaseDados')
     Lendo o Banco de Dados de Radcom
     Wall time: 1 s
 
-A funÁ„o <code>update_stel</code> È bem mais lenta que as demais, dado que o banco de dados do STEL È antigo e abarca todos os registros de outorga de serviÁos de telecomunicaÁıes da ANATEL, com mais de **400.000** registros ativos. Esse banco de dados È atualizado 1 vez ao dia ‡ meia-noite e remete ao estado do dia anterior, portanto n„o faz sentido atualiz·-lo mais de 1 vez por dia.
+A fun√ß√£o <code>update_stel</code> √© bem mais lenta que as demais, dado que o banco de dados do STEL √© antigo e abarca todos os registros de outorga de servi√ßos de telecomunica√ß√µes da ANATEL, com mais de **400.000** registros ativos. Esse banco de dados √© atualizado 1 vez ao dia √† meia-noite e remete ao estado do dia anterior, portanto n√£o faz sentido atualiz√°-lo mais de 1 vez por dia.
 
 ```python
 %%time
@@ -44,7 +44,7 @@ update_stel('D:\OneDrive - ANATEL\GR01FI3\BaseDados')
 ```
 
 
-### MÈtodos para ler as Bases de Dados
+### M√©todos para ler as Bases de Dados
 
 
 ```python
@@ -73,17 +73,17 @@ radcom = read_radcom(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; radcom.he
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>FrequÍncia</th>
+      <th>Frequ√™ncia</th>
       <th>Unidade</th>
       <th>Latitude</th>
       <th>Longitude</th>
       <th>Fase</th>
-      <th>SituaÁ„o</th>
-      <th>Numero da EstaÁ„o</th>
+      <th>Situa√ß√£o</th>
+      <th>Numero da Esta√ß√£o</th>
       <th>CNPJ</th>
       <th>Fistel</th>
       <th>Entidade</th>
-      <th>MunicÌpio</th>
+      <th>Munic√≠pio</th>
       <th>UF</th>
     </tr>
   </thead>
@@ -115,7 +115,7 @@ radcom = read_radcom(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; radcom.he
       <td>00284576000128</td>
       <td>50012524409</td>
       <td>ASSOCIACAO DOS MORADORES E PRODUT. RURAIS DE A...</td>
-      <td>AssunÁ„o</td>
+      <td>Assun√ß√£o</td>
       <td>PB</td>
     </tr>
     <tr>
@@ -145,7 +145,7 @@ radcom = read_radcom(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; radcom.he
       <td>00792795000118</td>
       <td>50011398132</td>
       <td>ASSOCIACAO DOS TRABALHADORES DE GUIMARANIA (ATG)</td>
-      <td>Guimar‚nia</td>
+      <td>Guimar√¢nia</td>
       <td>MG</td>
     </tr>
     <tr>
@@ -160,7 +160,7 @@ radcom = read_radcom(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; radcom.he
       <td>00794510000188</td>
       <td>50011398990</td>
       <td>FUNDACAO ASSISTENCIAL LAR DA PAZ - FALP</td>
-      <td>Dores do Indai·</td>
+      <td>Dores do Indai√°</td>
       <td>MG</td>
     </tr>
   </tbody>
@@ -168,9 +168,9 @@ radcom = read_radcom(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; radcom.he
 </div>
 
 
-Se o argumento <code>update=True</code> for fornecido ou arquivo local n„o existir, a base de dados È atualizada por meio da funÁ„o <code>update_radcom</code>. 
+Se o argumento <code>update=True</code> for fornecido ou arquivo local n√£o existir, a base de dados √© atualizada por meio da fun√ß√£o <code>update_radcom</code>. 
 
-> *A funÁ„o <code>update_radcom</code> somente ir· funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.*
+> *A fun√ß√£o <code>update_radcom</code> somente ir√° funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.*
 
 ```python
 radcom = read_radcom(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados', update=True) ; radcom.tail()
@@ -200,17 +200,17 @@ radcom = read_radcom(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados', update=True
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>FrequÍncia</th>
+      <th>Frequ√™ncia</th>
       <th>Unidade</th>
       <th>Latitude</th>
       <th>Longitude</th>
       <th>Fase</th>
-      <th>SituaÁ„o</th>
-      <th>Numero da EstaÁ„o</th>
+      <th>Situa√ß√£o</th>
+      <th>Numero da Esta√ß√£o</th>
       <th>CNPJ</th>
       <th>Fistel</th>
       <th>Entidade</th>
-      <th>MunicÌpio</th>
+      <th>Munic√≠pio</th>
       <th>UF</th>
     </tr>
   </thead>
@@ -286,7 +286,7 @@ radcom = read_radcom(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados', update=True
       <td>1011110250</td>
       <td>10877144000184</td>
       <td>50411382063</td>
-      <td>ASSOCIA«√O DE DESENVOLVIMENTO CULTURAL DA R¡DI...</td>
+      <td>ASSOCIA√á√ÉO DE DESENVOLVIMENTO CULTURAL DA R√ÅDI...</td>
       <td>Mataraca</td>
       <td>PB</td>
     </tr>
@@ -298,20 +298,20 @@ radcom = read_radcom(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados', update=True
 ```python
 stel = read_stel(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados', update=True)
 ```
-**Os dados do Stel n„o ser„o ilustrados aqui por se tratar de dados de telecomunicaÁ„o privados, os demais dados de radiodifus„o s„o p˙blicos e disponÌveis para qualquer interessado consultar**
+**Os dados do Stel n√£o ser√£o ilustrados aqui por se tratar de dados de telecomunica√ß√£o privados, os demais dados de radiodifus√£o s√£o p√∫blicos e dispon√≠veis para qualquer interessado consultar**
 
-Se o argumento <code>update=True</code> for fornecido ou arquivo local n„o existir, a base de dados È atualizada por meio da funÁ„o <code>update_stel</code>. 
+Se o argumento <code>update=True</code> for fornecido ou arquivo local n√£o existir, a base de dados √© atualizada por meio da fun√ß√£o <code>update_stel</code>. 
 
-> *A funÁ„o  <code>update_stel</code> somente ir· funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.*
+> *A fun√ß√£o  <code>update_stel</code> somente ir√° funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.*
 
 ```python
 mosaico = read_mosaico(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; mosaico.tail()
 ```
 
-    Baixando as EstaÁıes do Mosaico...
-    Baixando o Plano B·sico das EstaÁıes...
-    Baixando o HistÛrico de AtualizaÁıes...
-    KbÙ
+    Baixando as Esta√ß√µes do Mosaico...
+    Baixando o Plano B√°sico das Esta√ß√µes...
+    Baixando o Hist√≥rico de Atualiza√ß√µes...
+    Kb√¥
 
 
 
@@ -335,21 +335,21 @@ mosaico = read_mosaico(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; mosaico
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>ServiÁo</th>
-      <th>SituaÁ„o</th>
+      <th>Servi√ßo</th>
+      <th>Situa√ß√£o</th>
       <th>Entidade</th>
       <th>Fistel</th>
       <th>CNPJ</th>
-      <th>MunicÌpio</th>
+      <th>Munic√≠pio</th>
       <th>UF</th>
       <th>Id</th>
-      <th>N˙mero da EstaÁ„o</th>
+      <th>N√∫mero da Esta√ß√£o</th>
       <th>Classe</th>
-      <th>FrequÍncia</th>
+      <th>Frequ√™ncia</th>
       <th>Latitude</th>
       <th>Longitude</th>
       <th>Num_Ato</th>
-      <th>”rgao</th>
+      <th>√ìrgao</th>
       <th>Data_Ato</th>
     </tr>
   </thead>
@@ -399,7 +399,7 @@ mosaico = read_mosaico(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; mosaico
       <td>FUNDACAO EDUCACIONAL E CULTURAL DE IPANEMA</td>
       <td>50433856696</td>
       <td>04608796000110</td>
-      <td>Sabar·</td>
+      <td>Sabar√°</td>
       <td>MG</td>
       <td>5f32c1c918e6b</td>
       <td></td>
@@ -454,6 +454,6 @@ mosaico = read_mosaico(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; mosaico
 </div>
 
 
-Se o argumento <code>update=True</code> for fornecido ou o arquivo local n„o existir, a base de dados È atualizada por meio da funÁ„o <code>update_mosaico</code>. 
+Se o argumento <code>update=True</code> for fornecido ou o arquivo local n√£o existir, a base de dados √© atualizada por meio da fun√ß√£o <code>update_mosaico</code>. 
 
-> A funÁ„o <code>update_mosaico</code> usa a base de dados P˙blica do Spectrum E, portanto basta somente estar conectado na internet &#x1F60E;.
+> A fun√ß√£o <code>update_mosaico</code> usa a base de dados P√∫blica do Spectrum E, portanto basta somente estar conectado na internet &#x1F60E;.

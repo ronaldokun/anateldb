@@ -28,7 +28,7 @@ getcontext().prec = 5
 
 BW = {'H': 0.001, 'K': 1, 'M': 1000, 'G': 1000000}
 BW_pattern = re.compile("^(\d{1,3})([HKMG])(\d{0,2})$")
-BW_MAP = {'230': '256K', '231': '256K', '205': '10K0', '800': '6M00', '801': '5M70', '248': '6M00', '247': '5M70', '167': '6M00'}
+BW_MAP = {'167': '6M00', '205': '10K0', '230': '256K', '231': '256K', '247': '5M70', '248': '6M00', '800': '6M00', '801': '5M70', '805': '256K'}
 
 
 # Cell
@@ -421,7 +421,8 @@ def update_mosaico(pasta):
             df.reset_index(drop=True).to_excel(
                 workbook, sheet_name="Sheet1", engine="openpyxl", index=False
             )
-    console.print("Kbô :vampire:")
+    Path(f"{pasta}/estações.zip").unlink()
+    Path(f"{pasta}/Canais.zip").unlink()
     return df
 
 
