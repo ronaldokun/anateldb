@@ -145,7 +145,7 @@ def get_modtimes(pasta):
     mod_pmec = pd.read_excel(pmec, engine='openpyxl', sheet_name='ExtractDate').columns[0]
     mod_geo = pd.read_excel(geo, engine='openpyxl', sheet_name='ExtractDate').columns[0]
     return {'STEL': mod_stel,
-            'RADCOM': mod_radcom,
+            'SRD': mod_radcom,
             'MOSAICO': mod_mosaico,
             'ICAO': mod_icao,
             'AISW': mod_pmec,
