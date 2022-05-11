@@ -2,6 +2,10 @@
 > Este repositório concentra um conjunto de scripts para navegar e baixar informações dos principais bancos de dados da Anatel. Cujo dados serão utilizados em tarefas fiscalizatórias. O público alvo são os servidores do órgão, uma vez que a maioria dos sistemas utilizados aqui necessitam de autenticação cujo acesso é restrito aos servidores da ANATEL.
 
 
+<a href="https://gitmoji.dev">
+  <img src="https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg?style=flat-square" alt="Gitmoji">
+</a>
+
 ## Instalação
 
 <code>pip install anateldb</code>

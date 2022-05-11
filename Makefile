@@ -4,7 +4,7 @@ SRC = $(wildcard ./*.ipynb)
 
 all: anateldb docs
 
-anatelsurf: $(SRC)
+build_lib: $(SRC)
 	nbdev_build_lib
 	touch anateldb
 
@@ -35,3 +35,10 @@ dist: clean
 
 clean:
 	rm -rf dist
+
+build: 
+	nbdev_build_lib
+	nbdev_build_docs
+	git add -A
+	git commit
+	

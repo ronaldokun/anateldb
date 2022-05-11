@@ -172,7 +172,7 @@ def formatar_db(
         + ", "
         + rd.loc[rd["Classe"].notna(), "Classe"]
     )
-    rd[rd.Classe == '-1'] = pd.NA
+    rd.loc[rd.Classe == '-1', 'Classe'] = pd.NA
     rd['Classe'] = rd['Classe'].fillna('')
     rd["Descrição"] = (
         "["
@@ -207,21 +207,18 @@ def formatar_db(
     common, new = read_aero(path, up_icao, up_pmec, up_geo)
     rd = merge_aero(rd, common, new)
     rd = df_optimize(rd, exclude=["Frequency"])
-#    rd['BW'] = rd['BW'].astype('float32')
     rd['Frequency'] = rd['Frequency'].astype('float')
     console.print(":card_file_box:[green]Salvando os arquivos...")
     d = json.loads((dest / "VersionFile.json").read_text())
     mod_times = get_modtimes(path)
     mod_times['ReleaseDate'] = datetime.today().strftime("%d/%m/%Y %H:%M:%S")
-
-
-    # with pd.ExcelWriter(f"{dest}/AnatelDB.xlsx", engine="xlsxwriter") as workbook:
+    # with pd.ExcelWriter(f"{dest}/AnatelDB.xlsx", engine="xlsxwriter") as workbosok:
     #     rd.to_excel(workbook, sheet_name="DataBase", index=False)
-
     wb = Workbook()
     wb.new_sheet('DataBase', data=[rd.columns] + list(rd.values))
     wb.save(f'{dest}/AnatelDB.xlsx')
     d["anateldb"]["Version"] = bump_version(d["anateldb"]["Version"])
     d['anateldb'].update(mod_times)
     json.dump(d, (dest / "VersionFile.json").open("w"))
+    Path(dest / ".version").write_text(f"v{d['anateldb']['Version']}")
     console.print("Sucesso :zap:")
