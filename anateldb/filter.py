@@ -9,7 +9,6 @@ import json
 import pandas as pd
 from datetime import datetime
 from openpyxl import load_workbook
-from pyexcelerate import Workbook
 from .query import *
 from .constants import console, APP_ANALISE
 from fastcore.test import *
@@ -212,11 +211,11 @@ def formatar_db(
     d = json.loads((dest / "VersionFile.json").read_text())
     mod_times = get_modtimes(path)
     mod_times['ReleaseDate'] = datetime.today().strftime("%d/%m/%Y %H:%M:%S")
-    # with pd.ExcelWriter(f"{dest}/AnatelDB.xlsx", engine="xlsxwriter") as workbosok:
-    #     rd.to_excel(workbook, sheet_name="DataBase", index=False)
-    wb = Workbook()
-    wb.new_sheet('DataBase', data=[rd.columns] + list(rd.values))
-    wb.save(f'{dest}/AnatelDB.xlsx')
+    with pd.ExcelWriter(f"{dest}/AnatelDB.xlsx", engine="xlsxwriter") as workbook:
+        rd.to_excel(workbook, sheet_name="DataBase", index=False)
+    # wb = Workbook()
+    # wb.new_sheet('DataBase', data=[rd.columns] + list(rd.values))
+    # wb.save(f'{dest}/AnatelDB.xlsx')
     d["anateldb"]["Version"] = bump_version(d["anateldb"]["Version"])
     d['anateldb'].update(mod_times)
     json.dump(d, (dest / "VersionFile.json").open("w"))
