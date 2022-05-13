@@ -13,7 +13,6 @@ from .query import *
 from .constants import console, APP_ANALISE
 from fastcore.test import *
 from fastcore.script import call_parse, Param, store_true
-from pyarrow import ArrowInvalid
 from geopy.distance import geodesic
 from rich import print
 
@@ -210,14 +209,12 @@ def formatar_db(
     console.print(":card_file_box:[green]Salvando os arquivos...")
     d = json.loads((dest / "VersionFile.json").read_text())
     mod_times = get_modtimes(path)
-    mod_times['ReleaseDate'] = datetime.today().strftime("%d/%m/%Y %H:%M:%S")
+    mod_times['ReleaseDate'] = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     with pd.ExcelWriter(f"{dest}/AnatelDB.xlsx", engine="xlsxwriter") as workbook:
         rd.to_excel(workbook, sheet_name="DataBase", index=False)
-    # wb = Workbook()
-    # wb.new_sheet('DataBase', data=[rd.columns] + list(rd.values))
-    # wb.save(f'{dest}/AnatelDB.xlsx')
+        pd.DataFrame(columns=[mod_times['ReleaseDate']]).to_excel(workbook, sheet_name="ExtractDate", index=False)
     d["anateldb"]["Version"] = bump_version(d["anateldb"]["Version"])
     d['anateldb'].update(mod_times)
-    json.dump(d, (dest / "VersionFile.json").open("w"))
+    (dest / "VersionFile.json").write_text(json.dumps(d, indent=4))
     Path(dest / ".version").write_text(f"v{d['anateldb']['Version']}")
     console.print("Sucesso :zap:")
