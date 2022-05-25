@@ -47,7 +47,7 @@ nb_path: "nbs\filter.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bump_version" class="doc_header"><code>bump_version</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/filter.py#L20" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bump_version</code>(<strong><code>version</code></strong>, <strong><code>part</code></strong>=<em><code>2</code></em>)</p>
+<h4 id="bump_version" class="doc_header"><code>bump_version</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/filter.py#L24" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bump_version</code>(<strong><code>version</code></strong>, <strong><code>part</code></strong>=<em><code>2</code></em>)</p>
 </blockquote>
 
 </div>
@@ -78,7 +78,7 @@ nb_path: "nbs\filter.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_modtimes" class="doc_header"><code>get_modtimes</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/filter.py#L117" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_modtimes</code>(<strong><code>pasta</code></strong>)</p>
+<h4 id="get_modtimes" class="doc_header"><code>get_modtimes</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/filter.py#L32" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_modtimes</code>(<strong><code>pasta</code></strong>)</p>
 </blockquote>
 <p>Retorna a data de modificação dos arquivos de dados</p>
 
@@ -103,7 +103,7 @@ nb_path: "nbs\filter.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="formatar_db" class="doc_header"><code>formatar_db</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/filter.py#L152" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>formatar_db</code>(<strong><code>path</code></strong>:"Pasta onde salvar os arquivos", <strong><code>up_stel</code></strong>:"Atualizar a base do Stel"=<em><code>False</code></em>, <strong><code>up_radcom</code></strong>:"Atualizar a base do Radcom"=<em><code>False</code></em>, <strong><code>up_mosaico</code></strong>:"Atualizar a base do Mosaico"=<em><code>False</code></em>, <strong><code>up_icao</code></strong>:"Atualizar a base do ICAO"=<em><code>False</code></em>, <strong><code>up_pmec</code></strong>:"Atualizar a base do PMEC"=<em><code>False</code></em>, <strong><code>up_geo</code></strong>:"Atualizar a base do Geo"=<em><code>False</code></em>)</p>
+<h4 id="formatar_db" class="doc_header"><code>formatar_db</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/filter.py#L67" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>formatar_db</code>(<strong><code>path</code></strong>:"Pasta onde salvar os arquivos", <strong><code>up_base</code></strong>:"Atualizar as bases da Anatel"=<em><code>False</code></em>, <strong><code>up_icao</code></strong>:"Atualizar a base do ICAO"=<em><code>False</code></em>, <strong><code>up_pmec</code></strong>:"Atualizar a base do PMEC"=<em><code>False</code></em>, <strong><code>up_geo</code></strong>:"Atualizar a base do Geo"=<em><code>False</code></em>)</p>
 </blockquote>
 
 </div>
@@ -131,7 +131,57 @@ nb_path: "nbs\filter.ipynb"
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">pasta</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s1">&#39;dados&#39;</span>
-<span class="n">pasta</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">b</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_feather</span><span class="p">(</span><span class="n">pasta</span> <span class="o">/</span> <span class="s1">&#39;base.fth&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sp</span> <span class="o">=</span> <span class="n">b</span><span class="p">[(</span><span class="n">b</span><span class="o">.</span><span class="n">Frequência</span> <span class="o">==</span> <span class="mf">87.5</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">UF</span> <span class="o">==</span> <span class="s1">&#39;SP&#39;</span><span class="p">)]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sp</span>
 </pre></div>
 
     </div>
@@ -144,13 +194,373 @@ nb_path: "nbs\filter.ipynb"
 <div class="output_area">
 
 
+<div class="output_html rendered_html output_subarea output_execute_result"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-<div class="output_text output_subarea output_execute_result">
-<pre>Path(&#39;c:/Users/rsilva/anateldb/dados&#39;)</pre>
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Frequência</th>
+      <th>Num_Serviço</th>
+      <th>Status</th>
+      <th>Classe</th>
+      <th>Entidade</th>
+      <th>Fistel</th>
+      <th>Número_da_Estação</th>
+      <th>Município</th>
+      <th>UF</th>
+      <th>Latitude</th>
+      <th>...</th>
+      <th>Num_Ato</th>
+      <th>Data_Ato</th>
+      <th>Classe_Emissão</th>
+      <th>Largura_Emissão</th>
+      <th>Fonte</th>
+      <th>Fase</th>
+      <th>Situação</th>
+      <th>CNPJ</th>
+      <th>Unidade</th>
+      <th>BW(kHz)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>15814</th>
+      <td>87.5</td>
+      <td>231</td>
+      <td>RADCOM</td>
+      <td>NaN</td>
+      <td>ASSOCIAÇÃO CULTURAL COMUNITARIA NOSSA SENHORA ...</td>
+      <td>50401292460</td>
+      <td>684667908</td>
+      <td>Guarulhos</td>
+      <td>SP</td>
+      <td>-23.462778</td>
+      <td>...</td>
+      <td>-1</td>
+      <td></td>
+      <td></td>
+      <td>256K</td>
+      <td>SRD</td>
+      <td>3</td>
+      <td>NaN</td>
+      <td>01788648000137</td>
+      <td>MHz</td>
+      <td>256.0</td>
+    </tr>
+    <tr>
+      <th>15815</th>
+      <td>87.5</td>
+      <td>231</td>
+      <td>RADCOM</td>
+      <td>NaN</td>
+      <td>ASSOCIACAO DE DIFUSAO COMUNITARIA LINDOIA-SP</td>
+      <td>50403983878</td>
+      <td>692713832</td>
+      <td>Lindóia</td>
+      <td>SP</td>
+      <td>-22.528055</td>
+      <td>...</td>
+      <td>-1</td>
+      <td></td>
+      <td></td>
+      <td>256K</td>
+      <td>SRD</td>
+      <td>3</td>
+      <td>NaN</td>
+      <td>06158761000152</td>
+      <td>MHz</td>
+      <td>256.0</td>
+    </tr>
+    <tr>
+      <th>15816</th>
+      <td>87.5</td>
+      <td>231</td>
+      <td>RADCOM</td>
+      <td>NaN</td>
+      <td>ASSOCIACAO CULTURAL COMUNITARIA PONTE ALTA</td>
+      <td>50405748515</td>
+      <td>693052767</td>
+      <td>Guarulhos</td>
+      <td>SP</td>
+      <td>-23.407499</td>
+      <td>...</td>
+      <td>-1</td>
+      <td></td>
+      <td></td>
+      <td>256K</td>
+      <td>SRD</td>
+      <td>3</td>
+      <td>NaN</td>
+      <td>03592434000116</td>
+      <td>MHz</td>
+      <td>256.0</td>
+    </tr>
+    <tr>
+      <th>15817</th>
+      <td>87.5</td>
+      <td>231</td>
+      <td>RADCOM</td>
+      <td>3-A</td>
+      <td>ASS. ASTRAL DE DIFUSAO CULT. COMUNIT. DE JANDIRA</td>
+      <td>50403982715</td>
+      <td>690851448</td>
+      <td>Jandira</td>
+      <td>SP</td>
+      <td>-23.537500</td>
+      <td>...</td>
+      <td>-1</td>
+      <td></td>
+      <td></td>
+      <td>256K</td>
+      <td>SRD</td>
+      <td>3</td>
+      <td>A</td>
+      <td>01558787000174</td>
+      <td>MHz</td>
+      <td>256.0</td>
+    </tr>
+    <tr>
+      <th>15818</th>
+      <td>87.5</td>
+      <td>231</td>
+      <td>RADCOM</td>
+      <td>3-B</td>
+      <td>ASSOCIACAO CULTURAL E ARTISTICA DO JARDIM ITAQUA</td>
+      <td>50403897360</td>
+      <td>689432356</td>
+      <td>Itaquaquecetuba</td>
+      <td>SP</td>
+      <td>-23.451389</td>
+      <td>...</td>
+      <td>-1</td>
+      <td></td>
+      <td></td>
+      <td>256K</td>
+      <td>SRD</td>
+      <td>3</td>
+      <td>B</td>
+      <td>02973795000140</td>
+      <td>MHz</td>
+      <td>256.0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>15986</th>
+      <td>87.5</td>
+      <td>231</td>
+      <td>RADCOM</td>
+      <td>NaN</td>
+      <td>ASSOCIACAO CUTL. AMIGOS DO BROOKLIN</td>
+      <td>50405699395</td>
+      <td>692006435</td>
+      <td>São Paulo</td>
+      <td>SP</td>
+      <td>-23.605278</td>
+      <td>...</td>
+      <td>-1</td>
+      <td></td>
+      <td></td>
+      <td>256K</td>
+      <td>SRD</td>
+      <td>3</td>
+      <td>NaN</td>
+      <td>03865126000117</td>
+      <td>MHz</td>
+      <td>256.0</td>
+    </tr>
+    <tr>
+      <th>15987</th>
+      <td>87.5</td>
+      <td>231</td>
+      <td>RADCOM</td>
+      <td>NaN</td>
+      <td>UNAS-UNIAO DE N. ASS. E SOCIED. DE HELIOPOLIS ...</td>
+      <td>50404976956</td>
+      <td>691411433</td>
+      <td>São Paulo</td>
+      <td>SP</td>
+      <td>-23.616388</td>
+      <td>...</td>
+      <td>-1</td>
+      <td></td>
+      <td></td>
+      <td>256K</td>
+      <td>SRD</td>
+      <td>3</td>
+      <td>NaN</td>
+      <td>38883732000140</td>
+      <td>MHz</td>
+      <td>256.0</td>
+    </tr>
+    <tr>
+      <th>15988</th>
+      <td>87.5</td>
+      <td>231</td>
+      <td>RADCOM</td>
+      <td>3-B</td>
+      <td>ASSOCIACAO CIDADA</td>
+      <td>50405698666</td>
+      <td>692006885</td>
+      <td>São Paulo</td>
+      <td>SP</td>
+      <td>-23.576389</td>
+      <td>...</td>
+      <td>-1</td>
+      <td></td>
+      <td></td>
+      <td>256K</td>
+      <td>SRD</td>
+      <td>3</td>
+      <td>B</td>
+      <td>08668928000150</td>
+      <td>MHz</td>
+      <td>256.0</td>
+    </tr>
+    <tr>
+      <th>15989</th>
+      <td>87.5</td>
+      <td>231</td>
+      <td>RADCOM</td>
+      <td>NaN</td>
+      <td>INSTITUTO MARIA JOSE AMORIM - IMJA</td>
+      <td>50406618275</td>
+      <td>692976515</td>
+      <td>São Paulo</td>
+      <td>SP</td>
+      <td>-23.489166</td>
+      <td>...</td>
+      <td>-1</td>
+      <td></td>
+      <td></td>
+      <td>256K</td>
+      <td>SRD</td>
+      <td>3</td>
+      <td>NaN</td>
+      <td>54604251000104</td>
+      <td>MHz</td>
+      <td>256.0</td>
+    </tr>
+    <tr>
+      <th>15991</th>
+      <td>87.5</td>
+      <td>231</td>
+      <td>RADCOM</td>
+      <td>NaN</td>
+      <td>ASSOCIACAO CULTURAL COMUNITARIA ASA DOURADA</td>
+      <td>50405698909</td>
+      <td>692006850</td>
+      <td>São Paulo</td>
+      <td>SP</td>
+      <td>-23.695833</td>
+      <td>...</td>
+      <td>-1</td>
+      <td></td>
+      <td></td>
+      <td>256K</td>
+      <td>SRD</td>
+      <td>3</td>
+      <td>NaN</td>
+      <td>08680129000108</td>
+      <td>MHz</td>
+      <td>256.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>92 rows × 22 columns</p>
+</div></div>
+
 </div>
 
 </div>
+</div>
 
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">sp</span><span class="o">.</span><span class="n">itertuples</span><span class="p">():</span>
+    <span class="n">sp</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">row</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="s1">&#39;Distância_RFeye_Sorocaba&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">geodesic</span><span class="p">((</span><span class="n">row</span><span class="o">.</span><span class="n">Latitude</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">Longitude</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">23.487039</span><span class="p">,</span> <span class="o">-</span><span class="mf">47.449856</span><span class="p">))</span><span class="o">.</span><span class="n">km</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>C:\Users\rsilva\AppData\Local\Temp\ipykernel_12852\2748553175.py:2: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  sp.loc[row.Index, &#39;Distância_RFeye_Sorocaba&#39;] = geodesic((row.Latitude, row.Longitude), (-23.487039, -47.449856)).km
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sp</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;Distância_RFeye_Sorocaba&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">pasta</span> <span class="o">/</span> <span class="s1">&#39;87.5_com_Distância.xlsx&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
 </div>
 </div>
 
@@ -211,13 +621,49 @@ nb_path: "nbs\filter.ipynb"
 
 </div>
 
-<div class="output_area">
-
-
-<div class="output_html rendered_html output_subarea "><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Sucesso ⚡
-</pre>
+</div>
 </div>
 
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">rd</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 885407 entries, 0 to 885406
+Data columns (total 8 columns):
+ #   Column       Non-Null Count   Dtype   
+---  ------       --------------   -----   
+ 0   Frequency    885407 non-null  float64 
+ 1   Latitude     885407 non-null  category
+ 2   Longitude    885407 non-null  category
+ 3   Description  885407 non-null  category
+ 4   Service      885407 non-null  category
+ 5   Station      885407 non-null  category
+ 6   Class        885407 non-null  category
+ 7   BW           885407 non-null  float32 
+dtypes: category(6), float32(1), float64(1)
+memory usage: 55.3 MB
+</pre>
+</div>
 </div>
 
 </div>
@@ -264,32 +710,32 @@ nb_path: "nbs\filter.ipynb"
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
-RangeIndex: 883530 entries, 0 to 883529
+RangeIndex: 883452 entries, 0 to 883451
 Data columns (total 22 columns):
  #   Column             Non-Null Count   Dtype   
 ---  ------             --------------   -----   
- 0   Frequência         883530 non-null  float64 
- 1   Num_Serviço        883530 non-null  int32   
- 2   Status             883530 non-null  category
- 3   Classe             880840 non-null  category
- 4   Entidade           883512 non-null  category
- 5   Fistel             883530 non-null  category
- 6   Número_da_Estação  883530 non-null  int32   
- 7   Município          883526 non-null  category
- 8   UF                 883528 non-null  category
- 9   Latitude           883530 non-null  float32 
- 10  Longitude          883530 non-null  float32 
- 11  Validade_RF        880752 non-null  category
- 12  Num_Ato            869362 non-null  category
- 13  Data_Ato           868403 non-null  category
- 14  Classe_Emissão     883530 non-null  category
- 15  Largura_Emissão    883530 non-null  category
- 16  Fonte              883530 non-null  category
+ 0   Frequência         883452 non-null  float64 
+ 1   Num_Serviço        883452 non-null  int32   
+ 2   Status             883452 non-null  category
+ 3   Classe             880762 non-null  category
+ 4   Entidade           883434 non-null  category
+ 5   Fistel             883452 non-null  category
+ 6   Número_da_Estação  883452 non-null  int32   
+ 7   Município          883447 non-null  category
+ 8   UF                 883450 non-null  category
+ 9   Latitude           883452 non-null  float32 
+ 10  Longitude          883452 non-null  float32 
+ 11  Validade_RF        880753 non-null  category
+ 12  Num_Ato            869365 non-null  category
+ 13  Data_Ato           868406 non-null  category
+ 14  Classe_Emissão     883452 non-null  category
+ 15  Largura_Emissão    883452 non-null  category
+ 16  Fonte              883452 non-null  category
  17  Fase               4914 non-null    category
  18  Situação           2242 non-null    category
  19  CNPJ               4914 non-null    string  
  20  Unidade            4914 non-null    category
- 21  BW(kHz)            883530 non-null  category
+ 21  BW(kHz)            883452 non-null  category
 dtypes: category(16), float32(2), float64(1), int32(2), string(1)
 memory usage: 51.8 MB
 </pre>
@@ -309,363 +755,7 @@ memory usage: 51.8 MB
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">base</span><span class="p">[</span><span class="n">base</span><span class="o">.</span><span class="n">Unidade</span><span class="o">.</span><span class="n">notna</span><span class="p">()]</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_html rendered_html output_subarea output_execute_result"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Frequência</th>
-      <th>Num_Serviço</th>
-      <th>Status</th>
-      <th>Classe</th>
-      <th>Entidade</th>
-      <th>Fistel</th>
-      <th>Número_da_Estação</th>
-      <th>Município</th>
-      <th>UF</th>
-      <th>Latitude</th>
-      <th>...</th>
-      <th>Num_Ato</th>
-      <th>Data_Ato</th>
-      <th>Classe_Emissão</th>
-      <th>Largura_Emissão</th>
-      <th>Fonte</th>
-      <th>Fase</th>
-      <th>Situação</th>
-      <th>CNPJ</th>
-      <th>Unidade</th>
-      <th>BW(kHz)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>15814</th>
-      <td>87.5</td>
-      <td>231</td>
-      <td>RADCOM</td>
-      <td>3-A</td>
-      <td>ASSOCIACAO RADIO COMUNITARIA CORUPA</td>
-      <td>50405783183</td>
-      <td>692120882</td>
-      <td>Corupá</td>
-      <td>SC</td>
-      <td>-26.424444</td>
-      <td>...</td>
-      <td>-1</td>
-      <td></td>
-      <td></td>
-      <td>256K</td>
-      <td>SRD</td>
-      <td>3</td>
-      <td>A</td>
-      <td>09378435000149</td>
-      <td>MHz</td>
-      <td>256.0</td>
-    </tr>
-    <tr>
-      <th>15815</th>
-      <td>87.5</td>
-      <td>231</td>
-      <td>RADCOM</td>
-      <td>3-A</td>
-      <td>ASS. ASTRAL DE DIFUSAO CULT. COMUNIT. DE JANDIRA</td>
-      <td>50403982715</td>
-      <td>690851448</td>
-      <td>Jandira</td>
-      <td>SP</td>
-      <td>-23.537500</td>
-      <td>...</td>
-      <td>-1</td>
-      <td></td>
-      <td></td>
-      <td>256K</td>
-      <td>SRD</td>
-      <td>3</td>
-      <td>A</td>
-      <td>01558787000174</td>
-      <td>MHz</td>
-      <td>256.0</td>
-    </tr>
-    <tr>
-      <th>15816</th>
-      <td>87.5</td>
-      <td>231</td>
-      <td>RADCOM</td>
-      <td>NaN</td>
-      <td>UNAS-UNIAO DE N. ASS. E SOCIED. DE HELIOPOLIS ...</td>
-      <td>50404976956</td>
-      <td>691411433</td>
-      <td>São Paulo</td>
-      <td>SP</td>
-      <td>-23.616388</td>
-      <td>...</td>
-      <td>-1</td>
-      <td></td>
-      <td></td>
-      <td>256K</td>
-      <td>SRD</td>
-      <td>3</td>
-      <td>NaN</td>
-      <td>38883732000140</td>
-      <td>MHz</td>
-      <td>256.0</td>
-    </tr>
-    <tr>
-      <th>15817</th>
-      <td>87.5</td>
-      <td>231</td>
-      <td>RADCOM</td>
-      <td>3-A</td>
-      <td>ASSOCIACAO DE COMUNICACAO COMUNITARIA ALVORADA...</td>
-      <td>50413679900</td>
-      <td>693013419</td>
-      <td>São Paulo</td>
-      <td>SP</td>
-      <td>-23.692778</td>
-      <td>...</td>
-      <td>-1</td>
-      <td></td>
-      <td></td>
-      <td>256K</td>
-      <td>SRD</td>
-      <td>3</td>
-      <td>A</td>
-      <td>03892166000158</td>
-      <td>MHz</td>
-      <td>256.0</td>
-    </tr>
-    <tr>
-      <th>15818</th>
-      <td>87.5</td>
-      <td>231</td>
-      <td>RADCOM</td>
-      <td>3-B</td>
-      <td>UNIAO DOS MORADORES E DO COMERCIO DE PARAISOPOLIS</td>
-      <td>50405698747</td>
-      <td>692006931</td>
-      <td>São Paulo</td>
-      <td>SP</td>
-      <td>-23.615833</td>
-      <td>...</td>
-      <td>-1</td>
-      <td></td>
-      <td></td>
-      <td>256K</td>
-      <td>SRD</td>
-      <td>3</td>
-      <td>B</td>
-      <td>53820619000109</td>
-      <td>MHz</td>
-      <td>256.0</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>24945</th>
-      <td>107.9</td>
-      <td>231</td>
-      <td>RADCOM</td>
-      <td>3-A</td>
-      <td>ASSOCIACAO COMUNITARIA E ECOLOGICA DE OURO PRE...</td>
-      <td>50011401885</td>
-      <td>631413413</td>
-      <td>Ouro Preto</td>
-      <td>MG</td>
-      <td>-20.392778</td>
-      <td>...</td>
-      <td>-1</td>
-      <td></td>
-      <td></td>
-      <td>256K</td>
-      <td>SRD</td>
-      <td>3</td>
-      <td>A</td>
-      <td>02800364000181</td>
-      <td>MHz</td>
-      <td>256.0</td>
-    </tr>
-    <tr>
-      <th>24947</th>
-      <td>107.9</td>
-      <td>231</td>
-      <td>RADCOM</td>
-      <td>3-B</td>
-      <td>COMUNIDADE DO BAIRRO SANTA TEREZINHA - COBAST</td>
-      <td>50404489966</td>
-      <td>691141487</td>
-      <td>Canas</td>
-      <td>SP</td>
-      <td>-22.703611</td>
-      <td>...</td>
-      <td>-1</td>
-      <td></td>
-      <td></td>
-      <td>256K</td>
-      <td>SRD</td>
-      <td>3</td>
-      <td>B</td>
-      <td>04421639000100</td>
-      <td>MHz</td>
-      <td>256.0</td>
-    </tr>
-    <tr>
-      <th>24949</th>
-      <td>107.9</td>
-      <td>231</td>
-      <td>RADCOM</td>
-      <td>3-B</td>
-      <td>RADIO COMUN.DE MARECHAL CANDIDO RONDON - RADIOMAR</td>
-      <td>50403328667</td>
-      <td>689063830</td>
-      <td>Marechal Cândido Rondon</td>
-      <td>PR</td>
-      <td>-24.561111</td>
-      <td>...</td>
-      <td>-1</td>
-      <td></td>
-      <td></td>
-      <td>256K</td>
-      <td>SRD</td>
-      <td>3</td>
-      <td>B</td>
-      <td>02589214000170</td>
-      <td>MHz</td>
-      <td>256.0</td>
-    </tr>
-    <tr>
-      <th>24950</th>
-      <td>107.9</td>
-      <td>231</td>
-      <td>RADCOM</td>
-      <td>3-B</td>
-      <td>ASSOCIACAO COMUNITARIA DE BOA VISTA DO INCRA</td>
-      <td>50405781563</td>
-      <td>692256458</td>
-      <td>Boa Vista do Incra</td>
-      <td>RS</td>
-      <td>-28.819166</td>
-      <td>...</td>
-      <td>-1</td>
-      <td></td>
-      <td></td>
-      <td>256K</td>
-      <td>SRD</td>
-      <td>3</td>
-      <td>B</td>
-      <td>01928177000115</td>
-      <td>MHz</td>
-      <td>256.0</td>
-    </tr>
-    <tr>
-      <th>24952</th>
-      <td>107.9</td>
-      <td>231</td>
-      <td>RADCOM</td>
-      <td>3-B</td>
-      <td>ASSOCIACAO CACHOEIRENSE DE INTEGRACAO E COMUNI...</td>
-      <td>50011906650</td>
-      <td>665599161</td>
-      <td>Ouro Preto</td>
-      <td>MG</td>
-      <td>-20.346390</td>
-      <td>...</td>
-      <td>-1</td>
-      <td></td>
-      <td></td>
-      <td>256K</td>
-      <td>SRD</td>
-      <td>3</td>
-      <td>B</td>
-      <td>02760611000163</td>
-      <td>MHz</td>
-      <td>256.0</td>
-    </tr>
-  </tbody>
-</table>
-<p>4914 rows × 22 columns</p>
-</div></div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">hdf5storage</span> <span class="k">as</span> <span class="nn">hdf</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">hdf</span><span class="o">.</span><span class="n">savemat</span><span class="p">()</span>
 </pre></div>
 
     </div>

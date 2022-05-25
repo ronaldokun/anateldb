@@ -55,123 +55,6 @@ nb_path: "nbs\queries.ipynb"
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Otimiza%C3%A7%C3%A3o-dos-Tipos-de-dados">Otimiza&#231;&#227;o dos Tipos de dados<a class="anchor-link" href="#Otimiza%C3%A7%C3%A3o-dos-Tipos-de-dados"> </a></h2><p>A serem criados dataframes, normalmente a tipo de data é aquele com maior resolução possível, nem sempre isso é necessário, os arquivos de espectro mesmo possuem somente uma casa decimal, portanto um <code>float16</code> já é suficiente para armazená-los. As funções a seguir fazem essa otimização</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Code below borrowed from <a href="https://medium.com/bigdatarepublic/advanced-pandas-optimize-speed-and-memory-a654b53be6c2">https://medium.com/bigdatarepublic/advanced-pandas-optimize-speed-and-memory-a654b53be6c2</a></p>
-
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="optimize_floats" class="doc_header"><code>optimize_floats</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L35" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>optimize_floats</code>(<strong><code>df</code></strong>:<code>DataFrame</code>, <strong><code>exclude</code></strong>=<em><code>None</code></em>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="optimize_ints" class="doc_header"><code>optimize_ints</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L42" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>optimize_ints</code>(<strong><code>df</code></strong>:<code>DataFrame</code>, <strong><code>exclude</code></strong>=<em><code>None</code></em>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="optimize_objects" class="doc_header"><code>optimize_objects</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L49" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>optimize_objects</code>(<strong><code>df</code></strong>:<code>DataFrame</code>, <strong><code>datetime_features</code></strong>:<code>List</code>[<code>str</code>], <strong><code>exclude</code></strong>=<em><code>None</code></em>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="df_optimize" class="doc_header"><code>df_optimize</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L68" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>df_optimize</code>(<strong><code>df</code></strong>:<code>DataFrame</code>, <strong><code>datetime_features</code></strong>:<code>List</code>[<code>str</code>]=<em><code>None</code></em>, <strong><code>exclude</code></strong>=<em><code>None</code></em>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Conex%C3%A3o-com-o-banco-de-dados">Conex&#227;o com o banco de dados<a class="anchor-link" href="#Conex%C3%A3o-com-o-banco-de-dados"> </a></h2><p>A função a seguir é um <code>wrapper</code> simples que utiliza o <code>pyodbc</code> para se conectar ao banco de dados base da Anatel e retorna o objeto da conexão</p>
 
 </div>
@@ -188,7 +71,7 @@ nb_path: "nbs\queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="connect_db" class="doc_header"><code>connect_db</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L77" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>connect_db</code>()</p>
+<h4 id="connect_db" class="doc_header"><code>connect_db</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L28" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>connect_db</code>()</p>
 </blockquote>
 <p>Conecta ao Banco ANATELBDRO01 e retorna o 'cursor' (iterador) do Banco pronto para fazer iterações</p>
 
@@ -233,19 +116,6 @@ nb_path: "nbs\queries.ipynb"
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Fun%C3%A7%C3%B5es-auxiliares-de-Formata%C3%A7%C3%A3o">Fun&#231;&#245;es auxiliares de Formata&#231;&#227;o<a class="anchor-link" href="#Fun%C3%A7%C3%B5es-auxiliares-de-Formata%C3%A7%C3%A3o"> </a></h2><p>As funções a seguir são utilizadas para formatar diversos objetos intermediários utilizados nas funções de leitura e atualização da base de dados e não são chamadas diretamente.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Fun%C3%A7%C3%B5es-de-Leitura">Fun&#231;&#245;es de Leitura<a class="anchor-link" href="#Fun%C3%A7%C3%B5es-de-Leitura"> </a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Atualiza%C3%A7%C3%A3o-das-bases-de-dados">Atualiza&#231;&#227;o das bases de dados<a class="anchor-link" href="#Atualiza%C3%A7%C3%A3o-das-bases-de-dados"> </a></h2><p>As bases de dados são atualizadas atráves das funções a seguir, o único argumento passado em todas elas é a pasta na qual os arquivos locais processados serão salvos, os nomes dos arquivos são padronizados e não podem ser editados para que as funções de leitura e processamento recebam somente a pasta na qual esses arquivos foram salvos.</p>
 
 </div>
@@ -262,7 +132,7 @@ nb_path: "nbs\queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="update_radcom" class="doc_header"><code>update_radcom</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L343" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>update_radcom</code>(<strong><code>pasta</code></strong>)</p>
+<h4 id="update_radcom" class="doc_header"><code>update_radcom</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L40" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>update_radcom</code>(<strong><code>pasta</code></strong>)</p>
 </blockquote>
 <p>Atualiza a tabela local retornada pela query <a href="/anateldb/constants.html#RADCOM"><code>RADCOM</code></a></p>
 
@@ -287,7 +157,7 @@ nb_path: "nbs\queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="update_stel" class="doc_header"><code>update_stel</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L364" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>update_stel</code>(<strong><code>pasta</code></strong>)</p>
+<h4 id="update_stel" class="doc_header"><code>update_stel</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L62" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>update_stel</code>(<strong><code>pasta</code></strong>)</p>
 </blockquote>
 <p>Atualiza a tabela local retornada pela query <a href="/anateldb/constants.html#STEL"><code>STEL</code></a></p>
 
@@ -312,7 +182,7 @@ nb_path: "nbs\queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="update_mosaico" class="doc_header"><code>update_mosaico</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L395" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>update_mosaico</code>(<strong><code>pasta</code></strong>)</p>
+<h4 id="update_mosaico" class="doc_header"><code>update_mosaico</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L94" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>update_mosaico</code>(<strong><code>pasta</code></strong>)</p>
 </blockquote>
 <p>Atualiza a tabela local do Mosaico. É baixado e processado arquivos xml zipados da página pública do Spectrum E</p>
 
@@ -337,7 +207,7 @@ nb_path: "nbs\queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_aero" class="doc_header"><code>read_aero</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L681" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_aero</code>(<strong><code>pasta</code></strong>, <strong><code>up_icao</code></strong>=<em><code>False</code></em>, <strong><code>up_pmec</code></strong>=<em><code>False</code></em>, <strong><code>up_geo</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="read_aero" class="doc_header"><code>read_aero</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L380" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_aero</code>(<strong><code>pasta</code></strong>, <strong><code>up_icao</code></strong>=<em><code>False</code></em>, <strong><code>up_pmec</code></strong>=<em><code>False</code></em>, <strong><code>up_geo</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 
 </div>
@@ -361,7 +231,7 @@ nb_path: "nbs\queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="merge_aero" class="doc_header"><code>merge_aero</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L693" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>merge_aero</code>(<strong><code>df</code></strong>, <strong><code>common</code></strong>, <strong><code>new</code></strong>)</p>
+<h4 id="merge_aero" class="doc_header"><code>merge_aero</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L392" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>merge_aero</code>(<strong><code>df</code></strong>, <strong><code>common</code></strong>, <strong><code>new</code></strong>)</p>
 </blockquote>
 <p>Mescla a base da Anatel com as tabelas retiradas da Aeronáutica</p>
 
@@ -386,7 +256,7 @@ nb_path: "nbs\queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="update_base" class="doc_header"><code>update_base</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L713" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>update_base</code>(<strong><code>pasta</code></strong>, <strong><code>up_stel</code></strong>=<em><code>False</code></em>, <strong><code>up_radcom</code></strong>=<em><code>False</code></em>, <strong><code>up_mosaico</code></strong>=<em><code>False</code></em>, <strong><code>up_icao</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="update_base" class="doc_header"><code>update_base</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L412" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>update_base</code>(<strong><code>pasta</code></strong>, <strong><code>up_stel</code></strong>=<em><code>False</code></em>, <strong><code>up_radcom</code></strong>=<em><code>False</code></em>, <strong><code>up_mosaico</code></strong>=<em><code>False</code></em>, <strong><code>up_icao</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Wrapper que atualiza opcionalmente lê e atualiza as três bases indicadas anteriormente, as combina e salva o arquivo consolidado na pasta <code>pasta</code></p>
 
@@ -431,7 +301,7 @@ nb_path: "nbs\queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_stel" class="doc_header"><code>read_stel</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L760" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_stel</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="read_stel" class="doc_header"><code>read_stel</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L459" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_stel</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Lê o banco de dados salvo localmente do STEL. Opcionalmente o atualiza pelo Banco de Dados ANATELBDRO01 caso <code>update = True</code> ou não exista o arquivo local</p>
 
@@ -456,7 +326,7 @@ nb_path: "nbs\queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_radcom" class="doc_header"><code>read_radcom</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L777" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_radcom</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="read_radcom" class="doc_header"><code>read_radcom</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L476" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_radcom</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Lê o banco de dados salvo localmente de RADCOM. Opcionalmente o atualiza pelo Banco de Dados ANATELBDRO01 caso <code>update = True</code> ou não exista o arquivo local</p>
 
@@ -481,7 +351,7 @@ nb_path: "nbs\queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_mosaico" class="doc_header"><code>read_mosaico</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L793" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_mosaico</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="read_mosaico" class="doc_header"><code>read_mosaico</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L492" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_mosaico</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Lê o banco de dados salvo localmente do MOSAICO. Opcionalmente o atualiza antes da leitura baixando os diversos arquivos disponíveis na interface web pública</p>
 
@@ -506,7 +376,7 @@ nb_path: "nbs\queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_icao" class="doc_header"><code>read_icao</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L809" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_icao</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="read_icao" class="doc_header"><code>read_icao</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L508" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_icao</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Lê a base de dados do Frequency Finder e Canalização VOR/ILS/DME</p>
 
@@ -531,7 +401,7 @@ nb_path: "nbs\queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_pmec" class="doc_header"><code>read_pmec</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L829" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_pmec</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="read_pmec" class="doc_header"><code>read_pmec</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L528" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_pmec</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Fontes da informação: AISWEB, REDEMET, Ofício nº 2/SSARP/14410 e Canalização VOR/ILS/DME.</p>
 
@@ -556,7 +426,7 @@ nb_path: "nbs\queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_geo" class="doc_header"><code>read_geo</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L849" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_geo</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="read_geo" class="doc_header"><code>read_geo</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L548" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_geo</code>(<strong><code>pasta</code></strong>, <strong><code>update</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Fontes da informação: AISWEB, REDEMET, Ofício nº 2/SSARP/14410 e Canalização VOR/ILS/DME.</p>
 
@@ -581,7 +451,7 @@ nb_path: "nbs\queries.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_base" class="doc_header"><code>read_base</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L869" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_base</code>(<strong><code>pasta</code></strong>, <strong><code>up_stel</code></strong>=<em><code>False</code></em>, <strong><code>up_radcom</code></strong>=<em><code>False</code></em>, <strong><code>up_mosaico</code></strong>=<em><code>False</code></em>, <strong><code>up_icao</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="read_base" class="doc_header"><code>read_base</code><a href="https://github.com/ronaldokun/anateldb/tree/master/anateldb/query.py#L568" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_base</code>(<strong><code>pasta</code></strong>, <strong><code>up_stel</code></strong>=<em><code>False</code></em>, <strong><code>up_radcom</code></strong>=<em><code>False</code></em>, <strong><code>up_mosaico</code></strong>=<em><code>False</code></em>, <strong><code>up_icao</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Wrapper que combina a chamada das três funções de leitura do banco e opcionalmente é possível atualizá-las antes da leitura</p>
 
