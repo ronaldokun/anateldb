@@ -5,7 +5,7 @@ __all__ = ['row2dict', 'dict2cols', 'parse_plano_basico', 'scrape_dataframe', 'i
 
 # Cell
 import re
-from typing import List
+from typing import List, Iterable, Union
 from pathlib import Path
 from collections import OrderedDict
 from decimal import Decimal
@@ -21,12 +21,12 @@ from .constants import ENTIDADES, COL_PB, ESTACAO, BW, BW_pattern
 
 
 # Cell
-def row2dict(row):
+def row2dict(row: dict)->dict:  # sourcery skip: identity-comprehension
     """Receives a json row and return the dictionary from it"""
     return dict(row.items())
 
 
-def dict2cols(df, reject=()):
+def dict2cols(df: pd.DataFrame, reject: Iterable[str]=())->pd.DataFrame:
     """Recebe um dataframe com dicionários nas células e extrai os dicionários como colunas
     Opcionalmente ignora e exclue as colunas em reject
     """
@@ -44,12 +44,12 @@ def dict2cols(df, reject=()):
     return df
 
 
-def parse_plano_basico(row, cols=COL_PB):
+def parse_plano_basico(row: dict, cols: Iterable[str]=COL_PB)->dict:
     """Receives a json row and filter the column in `cols`"""
     return {k: row[k] for k in cols}
 
 
-def scrape_dataframe(id_list):
+def scrape_dataframe(id_list: Iterable[str])->pd.DataFrame:
     """Receives a list of ids and returns a dataframe with the data from web scraping the MOSAICO page"""
     df = pd.DataFrame()
     for id_ in track(id_list, description="Baixando informações complementares da Web"):
@@ -73,7 +73,7 @@ def scrape_dataframe(id_list):
     ]
 
 # Cell
-def input_coordenates(df, pasta):
+def input_coordenates(df: pd.DataFrame, pasta: Union[str, Path])->pd.DataFrame:
     """Input the NA's in Coordinates with those of the cities"""
     municipios = Path(f"{pasta}/municípios.fth")
     if not municipios.exists():
@@ -130,7 +130,7 @@ def input_coordenates(df, pasta):
     return df
 
 
-def parse_bw(bw):
+def parse_bw(bw: str)->float:
     """Parse the bandwidth string"""
     if match := re.match(BW_pattern, bw):
         multiplier = BW[match.group(2)]
@@ -142,7 +142,7 @@ def parse_bw(bw):
     return -1
 
 # Cell
-def optimize_floats(df: pd.DataFrame, exclude=None) -> pd.DataFrame:
+def optimize_floats(df: pd.DataFrame, exclude: Iterable[str]=None) -> pd.DataFrame:
     """Optimize the floats in the dataframe to reduce the memory usage"""
     floats = df.select_dtypes(include=["float64"]).columns.tolist()
     floats = [c for c in floats if c not in listify(exclude)]
@@ -150,7 +150,7 @@ def optimize_floats(df: pd.DataFrame, exclude=None) -> pd.DataFrame:
     return df
 
 
-def optimize_ints(df: pd.DataFrame, exclude=None) -> pd.DataFrame:
+def optimize_ints(df: pd.DataFrame, exclude: Iterable[str]=None) -> pd.DataFrame:
     """Optimize the ints in the dataframe to reduce the memory usage"""
     ints = df.select_dtypes(include=["int64"]).columns.tolist()
     ints = [c for c in ints if c not in listify(exclude)]
@@ -159,7 +159,7 @@ def optimize_ints(df: pd.DataFrame, exclude=None) -> pd.DataFrame:
 
 
 def optimize_objects(
-    df: pd.DataFrame, datetime_features: List[str], exclude=None
+    df: pd.DataFrame, datetime_features: Iterable[str], exclude: Iterable[str]=None
 ) -> pd.DataFrame:
     """Optimize the objects in the dataframe to category | string to reduce the memory usage"""
     exclude = listify(exclude)
@@ -179,7 +179,7 @@ def optimize_objects(
     return df
 
 
-def df_optimize(df: pd.DataFrame, datetime_features: List[str] = None, exclude=None):
+def df_optimize(df: pd.DataFrame, datetime_features: Iterable[str] = None, exclude: Iterable[str]=None):
     """Optimize the data types in dataframe to reduce the memory usage"""
     if datetime_features is None:
         datetime_features = []

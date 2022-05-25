@@ -3,17 +3,17 @@
 __all__ = ['connect_db', 'update_radcom', 'update_stel', 'update_mosaico', 'update_base']
 
 # Cell
-from decimal import *
-from typing import *
+from decimal import Decimal, getcontext
+from typing import Union
 from pathlib import Path
+from urllib.request import urlopen, urlretrieve
 
-import requests
+
 import pandas as pd
 import pyodbc
 from fastcore.test import *
 from rich.console import Console
 from pyarrow import ArrowInvalid
-from geopy.distance import geodesic
 import pandas_read_xml as pdx
 from unidecode import unidecode
 from fastcore.foundation import L
@@ -102,9 +102,8 @@ def _read_plano_basico(path: Union[str, Path])->pd.DataFrame:
     )
     return df
 
-
 # Cell
-def update_radcom(pasta):
+def update_radcom(pasta: Union[str, Path])->pd.DataFrame:
     """Atualiza a tabela local retornada pela query `RADCOM`"""
     console = Console()
     with console.status(
@@ -124,9 +123,10 @@ def update_radcom(pasta):
             status.console.log(
                 "Não foi possível abrir uma conexão com o SQL Server. Esta conexão somente funciona da rede cabeada!"
             )
+    return df
 
 
-def update_stel(pasta):
+def update_stel(pasta: Union[str, Path])->pd.DataFrame:
     """Atualiza a tabela local retornada pela query `STEL`"""
     console = Console()
     with console.status(
@@ -156,29 +156,26 @@ def update_stel(pasta):
             status.console.log(
                 "Não foi possível abrir uma conexão com o SQL Server. Esta conexão somente funciona da rede cabeada!"
             )
+    return df
 
 
-def update_mosaico(pasta):
+def update_mosaico(pasta: Union[str, Path])->pd.DataFrame:
     """Atualiza a tabela local do Mosaico. É baixado e processado arquivos xml zipados da página pública do Spectrum E"""
     console = Console()
     with console.status(
         "[blue]Baixando as Estações do Mosaico...", spinner="shark"
     ) as status:
-        file = requests.get(ESTACOES)
-        with open(f"{pasta}/estações.zip", "wb") as estações:
-            estações.write(file.content)
+        stations, _ = urlretrieve(ESTACOES, f"{pasta}/estações.zip")
     with console.status(
         "[blue]Baixando o Plano Básico das Estações...", spinner="weather"
     ) as status:
-        file = requests.get(PLANO_BASICO)
-        with open(f"{pasta}/Canais.zip", "wb") as plano_basico:
-            plano_basico.write(file.content)
+        pb, _ = urlretrieve(PLANO_BASICO, f"{pasta}/canais.zip")
     console.print(":package: [blue]Consolidando as bases de dados...")
-    estações = _read_estações(f"{pasta}/estações.zip")
-    plano_basico = _read_plano_basico(f"{pasta}/Canais.zip")
+    estações = _read_estações(stations)
+    plano_basico = _read_plano_basico(pb)
     df = estações.merge(plano_basico, on="Id", how="left")
-    df["Número_da_Estação"] = df["Número_da_Estação"].fillna(-1)
-    df["Número_da_Estação"] = df["Número_da_Estação"].astype("int")
+    df["Número_da_Estação"] = df["Número_da_Estação"].fillna('-1')
+    df["Número_da_Estação"] = df["Número_da_Estação"].astype("string")
     df = clean_mosaico(pasta, df)
     try:
         df.reset_index(drop=True).to_feather(f"{pasta}/mosaico.fth")
@@ -188,11 +185,11 @@ def update_mosaico(pasta):
             df.reset_index(drop=True).to_excel(
                 workbook, sheet_name="Sheet1", engine="openpyxl", index=False
             )
-    Path(f"{pasta}/estações.zip").unlink()
-    Path(f"{pasta}/Canais.zip").unlink()
+    Path(stations).unlink()
+    Path(pb).unlink()
     return df
 
-def update_base(pasta):
+def update_base(pasta: Union[str, Path])->pd.DataFrame:
     """Wrapper que atualiza opcionalmente lê e atualiza as três bases indicadas anteriormente, as combina e salva o arquivo consolidado na pasta `pasta`"""
     console = Console()
     stel = update_stel(pasta).loc[:, TELECOM]

@@ -3,14 +3,13 @@
 __all__ = ['read_mosaico', 'read_stel', 'read_radcom', 'read_icao', 'read_aisw', 'read_aisg', 'read_aero', 'read_base']
 
 # Cell
-from typing import Union
+from typing import Union, Tuple
 from pathlib import Path
 
 import pandas as pd
 from pyarrow import ArrowInvalid
 
 
-from .format import df_optimize
 from .query import update_mosaico, update_stel, update_radcom, update_base
 from .merge import aero_common, aero_new
 
@@ -33,7 +32,7 @@ def read_mosaico(pasta: Union[str, Path], update: bool=False)->pd.DataFrame:
     return df
 
 # Cell
-def read_stel(pasta, update=False):
+def read_stel(pasta: Union[str, Path], update: bool=False)->pd.DataFrame:
     """Lê o banco de dados salvo localmente do STEL. Opcionalmente o atualiza pelo Banco de Dados ANATELBDRO01 caso `update = True` ou não exista o arquivo local"""
     if update:
         update_stel(pasta)
@@ -50,7 +49,7 @@ def read_stel(pasta, update=False):
     return stel
 
 
-def read_radcom(pasta, update=False):
+def read_radcom(pasta: Union[str, Path], update: bool=False)->pd.DataFrame:
     """Lê o banco de dados salvo localmente de RADCOM. Opcionalmente o atualiza pelo Banco de Dados ANATELBDRO01 caso `update = True` ou não exista o arquivo local"""
     if update:
         update_radcom(pasta)
@@ -66,7 +65,7 @@ def read_radcom(pasta, update=False):
     return radcom
 
 # Cell
-def read_icao(pasta, update=False):
+def read_icao(pasta: Union[str, Path], update: bool=False)->pd.DataFrame:
     """Lê a base de dados do Frequency Finder e Canalização VOR/ILS/DME"""
     if update:
         # TODO: atualizar a base de dados do Frequency Finder e Canalização VOR/ILS/DME
@@ -86,7 +85,7 @@ def read_icao(pasta, update=False):
     return icao
 
 
-def read_aisw(pasta, update=False):
+def read_aisw(pasta: Union[str, Path], update: bool=False)->pd.DataFrame:
     """Fontes da informação: AISWEB, REDEMET, Ofício nº 2/SSARP/14410 e Canalização VOR/ILS/DME."""
     if update:
         # TODO: Atualizar a base de dados do AISWEB, REDEMET, Ofício nº 2/SSARP/14410 e Canalização VOR/ILS/DME
@@ -106,7 +105,7 @@ def read_aisw(pasta, update=False):
     return df
 
 
-def read_aisg(pasta, update=False):
+def read_aisg(pasta: Union[str, Path], update: bool=False)->pd.DataFrame:
     """Fontes da informação: AISWEB, REDEMET, Ofício nº 2/SSARP/14410 e Canalização VOR/ILS/DME."""
     if update:
         # TODO: Atualizar a base de dados do GEOAISWEB
@@ -125,10 +124,11 @@ def read_aisg(pasta, update=False):
             return read_icao(pasta, update=True)
     return df
 
-def read_aero(pasta, up_icao=False, up_pmec=False, up_geo=False):
+def read_aero(pasta: Union[str, Path], up_icao: bool=False, up_aisw: bool=False, up_aisg: bool=False)->Tuple[pd.DataFrame, pd.DataFrame]:
+    """Lê os arquivos de dados da aeronáutico e retorna os registros comuns e únicos"""
     icao = read_icao(pasta, up_icao)
-    pmec = read_aisw(pasta, up_pmec)
-    geo = read_aisg(pasta, up_geo)
+    pmec = read_aisw(pasta, up_aisw)
+    geo = read_aisg(pasta, up_aisg)
     icao["Description"] = icao.Description.astype("string")
     pmec["Description"] = pmec.Description.astype("string")
     geo["Description"] = geo.Description.astype("string")
@@ -138,8 +138,8 @@ def read_aero(pasta, up_icao=False, up_pmec=False, up_geo=False):
 
 
 # Cell
-def read_base(pasta, update=False):
-    """Wrapper que combina a chamada das três funções de leitura do banco e opcionalmente é possível atualizá-las antes da leitura"""
+def read_base(pasta: Union[str, Path], update: bool=False)->pd.DataFrame:
+    """Lê a base de dados e opcionalmente a atualiza antes da leitura"""
     if update:
         update_base(pasta)
     file = Path(f"{pasta}/base.fth")
