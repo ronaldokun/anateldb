@@ -17,7 +17,7 @@ from rich.console import Console
 from .constants import APP_ANALISE
 from .read import read_base, read_aero
 from .merge import merge_aero
-from .format import df_optimize
+from .format import df_optimize, optimize_objects
 
 
 # Cell
@@ -44,11 +44,11 @@ def get_modtimes(pasta):
         raise FileNotFoundError(f"Arquivo {radcom} não encontrado")
     if not (mosaico := pasta / 'mosaico.fth').is_file():
         raise FileNotFoundError(f"Arquivo {mosaico} não encontrado")
-    if not (icao := pasta / 'icao.csv').is_file():  # ICAO
+    if not (icao := pasta / 'icao.xlsx').is_file():  # ICAO
         raise FileNotFoundError(f"Arquivo {icao} não encontrado")
-    if not (pmec := pasta / 'aisw.csv').is_file():  # PMEC
+    if not (pmec := pasta / 'aisw.xlsx').is_file():  # PMEC
         raise FileNotFoundError(f"Arquivo {pmec} não encontrado")
-    if not (geo := pasta / 'aisg.csv').is_file():  # GEO
+    if not (geo := pasta / 'aisg.xlsx').is_file():  # GEO
         raise FileNotFoundError(f"Arquivo {geo} não encontrado")
     # Modificação
     mod_stel = datetime.fromtimestamp(stel.stat().st_mtime).strftime("%d/%m/%Y %H:%M:%S")
@@ -77,15 +77,16 @@ def formatar_db(
     console = Console()
     console.print(":scroll:[green]Lendo as bases de dados da Anatel...")
     rd = read_base(path, up_base)
-    rd["Status"] = rd.Status.astype("string")
-    rd["Classe"] = rd.Classe.astype("string")
-    rd.loc[rd["Classe"].notna(), "Status"] = (
-        rd.loc[rd["Classe"].notna(), "Status"]
-        + ", "
-        + rd.loc[rd["Classe"].notna(), "Classe"]
-    )
-    rd.loc[rd.Classe == '-1', 'Classe'] = pd.NA
-    rd['Classe'] = rd['Classe'].fillna('')
+#    rd = rd.fillna()
+#     rd["Status"] = rd.Status.astype("string")
+#     rd["Classe"] = rd.Classe.astype("string")
+#     rd.loc[rd["Classe"].notna(), "Status"] = (
+#         rd.loc[rd["Classe"].notna(), "Status"]
+#         + ", "
+#         + rd.loc[rd["Classe"].notna(), "Classe"]
+#     )
+#     rd.loc[rd.Classe == '-1', 'Classe'] = pd.NA
+#     rd['Classe'] = rd['Classe'].fillna('')
     rd["Descrição"] = (
         "["
         + rd.Fonte.astype("string")
@@ -118,16 +119,23 @@ def formatar_db(
     rd.columns = APP_ANALISE
     common, new = read_aero(path, up_icao, up_pmec, up_geo)
     rd = merge_aero(rd, common, new)
-    rd = df_optimize(rd, exclude=["Frequency"])
+#     rd = df_optimize(rd, exclude=["Frequency"])
     rd['Frequency'] = rd['Frequency'].astype('float')
     console.print(":card_file_box:[green]Salvando os arquivos...")
     d = json.loads((dest / "VersionFile.json").read_text())
     mod_times = get_modtimes(path)
     mod_times['ReleaseDate'] = datetime.today().strftime("%d/%m/%Y %H:%M:%S")
-    with pd.ExcelWriter(f"{dest}/AnatelDB.xlsx", engine="xlsxwriter") as workbook:
-        rd.to_excel(workbook, sheet_name="DataBase", index=False)
+    for c in ['Latitude', 'Longitude', 'BW']:
+        rd.loc[:, c] = rd.loc[:, c].astype('float32')
+    rd['Service'] = rd.Service.astype('int')
+    rd['Station'] = rd.Station.fillna(-1).astype('int')
+    rd = optimize_objects(rd, [])
+    rd.to_parquet(f"{dest}/AnatelDB.parquet.gzip", compression='gzip')
+#     with pd.ExcelWriter(f"{dest}/AnatelDB.xlsx", engine="xlsxwriter") as workbook:
+#         rd.to_excel(workbook, sheet_name="DataBase", index=False)
     d["anateldb"]["Version"] = bump_version(d["anateldb"]["Version"])
     d['anateldb'].update(mod_times)
     json.dump(d, (dest / "VersionFile.json").open("w"))
     Path(dest / ".version").write_text(f"v{d['anateldb']['Version']}")
     console.print("Sucesso :zap:")
+    return rd

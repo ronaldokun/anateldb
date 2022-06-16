@@ -345,16 +345,15 @@ def clean_mosaico(pasta, df):
     for r in df[(df.Entidade.isna()) | (df.Entidade == "")].itertuples():
         df.loc[r.Index, "Entidade"] = ENTIDADES.get(r.Fistel, "")
 
-    df.loc[df["Número_da_Estação"] == "", "Número_da_Estação"] = -1
-    df["Latitude"] = df["Latitude"].astype("float")
-    df["Longitude"] = df["Longitude"].astype("float")
+    df.loc[df["Número_da_Estação"] == "", "Número_da_Estação"] = pd.NA
+    df["Latitude"] = df["Latitude"].astype("float32")
+    df["Longitude"] = df["Longitude"].astype("float32")
     df["Frequência"] = df.Frequência.astype("float")
-    df.loc[df.Serviço == "OM", "sFrequência"] = df.loc[
+    df.loc[df.Serviço == "OM", "Frequência"] = df.loc[
         df.Serviço == "OM", "Frequência"
     ].apply(lambda x: Decimal(x) / Decimal(1000))
     df["Frequência"] = df.Frequência.astype("float")
     df["Validade_RF"] = df.Validade_RF.astype("string").str.slice(0, 10)
-    df.loc[df["Num_Ato"] == "", "Num_Ato"] = -1
-    df["Num_Ato"] = df.Num_Ato.astype("string")
-    df["Num_Serviço"] = df.Num_Serviço.astype("category")
-    return df_optimize(df, exclude=["Frequência"])
+    df.loc[df["Num_Ato"] == "", "Num_Ato"] = pd.NA
+    # return df_optimize(df, exclude=["Frequência"])
+    return df
