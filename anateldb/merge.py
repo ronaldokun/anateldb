@@ -258,8 +258,8 @@ def aero_new(dfa, dfb, dfc, dist=500):
             new = pd.concat([new, l, r, s], ignore_index=True)
 
     new = new.drop_duplicates(keep="first").reset_index(drop=True)
-    new["Service"] = -1
-    new["Station"] = -1
+    new["Service"] = pd.NA
+    new["Station"] = pd.NA
     return new
 
 # Cell
@@ -275,14 +275,13 @@ def merge_aero(df, common, new):
     )
     df.drop(columns=["Description_y"], inplace=True)
     df.rename(columns={"Description_x": "Description"}, inplace=True)
-    new['Class'] = '-1'
-    new['BW'] = '-1'
+    new['Class'] = pd.NA
+    new['BW'] = pd.NA
     return (
         pd.concat([df, new], ignore_index=True)
         .sort_values("Frequency")
         .reset_index(drop=True)
     )
-
 
 # Cell
 def clean_mosaico(pasta, df):

@@ -19,7 +19,6 @@ from .read import read_base, read_aero
 from .merge import merge_aero
 from .format import df_optimize, optimize_objects
 
-
 # Cell
 def bump_version(version, part=2):
     version = version.split(".")
