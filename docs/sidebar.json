@@ -1,8 +1,11 @@
 {
   "anateldb": {
     "Overview": "/",
-    "Constants": "constants.html",
-    "Filtragem": "filter.html",
-    "Queries": "queries.html"
+    "constants": "constants.html",
+    "filter": "filter.html",
+    "format": "format.html",
+    "merge": "merge.html",
+    "query": "query.html",
+    "read": "read.html"
   }
 }

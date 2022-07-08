@@ -46,13 +46,11 @@ NEW_ESTACOES = (
     "Fistel",
     "UF",
     "Id",
-    "Número_da_Estação",
+    "Número_Estação",
     "Latitude_Transmissor",
     "Longitude_Transmissor",
     "CNPJ",
     "Validade_RF",
-    "Num_Ato",
-    "Data_Ato",
 )
 COL_PB = (
     "id",
@@ -67,7 +65,6 @@ COL_PB = (
     "status",
     "cnpj",
     "fistel",
-    'canal'
 )
 NEW_PB = (
     "Id",
@@ -82,14 +79,13 @@ NEW_PB = (
     "Status",
     "CNPJ",
     "Fistel",
-    "Canal"
 )
 
 SRD = (
 "Frequência",
 "Entidade",
 "Fistel",
-"Número_da_Estação",
+"Número_Estação",
 "Município",
 "UF",
 "Latitude",
@@ -108,8 +104,8 @@ TELECOM = SRD + (
 RADIODIFUSAO = SRD + (
     "Validade_RF",
     "Status",
-    "Num_Ato",
-    "Data_Ato",
+    # "Num_Ato",
+    # "Data_Ato",
 )
 
 APP_ANALISE = (

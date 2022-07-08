@@ -10,14 +10,23 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
-      title: Constants
+      title: constants
       url: constants.html
     - output: web,pdf
-      title: Filtragem
+      title: filter
       url: filter.html
     - output: web,pdf
-      title: Queries
-      url: queries.html
+      title: format
+      url: format.html
+    - output: web,pdf
+      title: merge
+      url: merge.html
+    - output: web,pdf
+      title: query
+      url: query.html
+    - output: web,pdf
+      title: read
+      url: read.html
     output: web
     title: anateldb
   output: web

@@ -284,19 +284,18 @@ def merge_aero(df, common, new):
     )
 
 # Cell
-def clean_mosaico(pasta, df):
+def clean_mosaico(df, pasta):
     """Clean the merged dataframe with the data from the MOSAICO page"""
-    df = df.copy()
     COLS = [c for c in df.columns if "_x" in c]
     for col in COLS:
         col_x = col
         col_y = col.split("_")[0] + "_y"
-        if df[col_x].count() > df[col_y].count():
+        df.loc[df[col_x].isna(), col_x] = df.loc[df[col_x].isna(), col_y]
+        df.loc[df[col_y].isna(), col_y] = df.loc[df[col_y].isna(), col_x]
+        if df[col_x].notna().sum() > df[col_y].notna().sum():
             a, b = col_x, col_y
         else:
             a, b = col_y, col_x
-
-        df.loc[df[a].isna(), a] = df.loc[df[a].isna(), b]
         df.drop(b, axis=1, inplace=True)
         df.rename({a: a[:-2]}, axis=1, inplace=True)
 
@@ -322,9 +321,7 @@ def clean_mosaico(pasta, df):
     )
 
     df = input_coordenates(df, pasta)
-
     df["Frequência"] = df.Frequência.str.replace(",", ".")
-
     if freq_nans := df[df.Frequência.isna()].Id.tolist():
         complement_df = scrape_dataframe(freq_nans)
         df.loc[
@@ -341,18 +338,9 @@ def clean_mosaico(pasta, df):
             ],
         ] = complement_df.values
 
-    for r in df[(df.Entidade.isna()) | (df.Entidade == "")].itertuples():
-        df.loc[r.Index, "Entidade"] = ENTIDADES.get(r.Fistel, "")
-
-    df.loc[df["Número_da_Estação"] == "", "Número_da_Estação"] = pd.NA
-    df["Latitude"] = df["Latitude"].astype("float32")
-    df["Longitude"] = df["Longitude"].astype("float32")
     df["Frequência"] = df.Frequência.astype("float")
     df.loc[df.Serviço == "OM", "Frequência"] = df.loc[
         df.Serviço == "OM", "Frequência"
     ].apply(lambda x: Decimal(x) / Decimal(1000))
-    df["Frequência"] = df.Frequência.astype("float")
     df["Validade_RF"] = df.Validade_RF.astype("string").str.slice(0, 10)
-    df.loc[df["Num_Ato"] == "", "Num_Ato"] = pd.NA
-    # return df_optimize(df, exclude=["Frequência"])
-    return df
+    return df.drop_duplicates(keep="first").reset_index(drop=True)

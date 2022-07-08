@@ -125,8 +125,8 @@ def formatar_db(
     mod_times = get_modtimes(path)
     mod_times['ReleaseDate'] = datetime.today().strftime("%d/%m/%Y %H:%M:%S")
     for c in ['Latitude', 'Longitude', 'BW']:
-        rd.loc[:, c] = rd.loc[:, c].astype('float32')
-    rd['Service'] = rd.Service.astype('int')
+        rd.loc[:, c] = rd.loc[:, c].fillna(-1).astype('float32')
+    rd['Service'] = rd.Service.fillna(-1).astype('int')
     rd['Station'] = rd.Station.fillna(-1).astype('int')
     rd = optimize_objects(rd, [])
     rd.to_parquet(f"{dest}/AnatelDB.parquet.gzip", compression='gzip')
