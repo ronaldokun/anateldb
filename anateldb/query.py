@@ -6,7 +6,6 @@ __all__ = ['connect_db', 'save_df', 'update_radcom', 'update_stel', 'update_mosa
 from decimal import Decimal, getcontext
 from typing import Union
 from urllib.request import urlretrieve
-from numpy import save
 import xmltodict
 from zipfile import ZipFile
 
@@ -14,16 +13,15 @@ from zipfile import ZipFile
 import pandas as pd
 import pyodbc
 from rich.console import Console
-from pyarrow import ArrowInvalid
+from pyarrow import ArrowInvalid, ArrowTypeError
 from unidecode import unidecode
 from fastcore.xtras import Path
 from fastcore.foundation import L
-from fastcore.utils import listify
 from fastcore.test import test_eq
 
 
 from .constants import *
-from .format import parse_bw, dict2cols, format_types
+from .format import parse_bw, format_types
 from .merge import clean_mosaico
 
 getcontext().prec = 5
@@ -33,7 +31,7 @@ def connect_db():
     """Conecta ao Banco ANATELBDRO01 e retorna o 'cursor' (iterador) do Banco pronto para fazer iterações"""
     return pyodbc.connect(
         "Driver={ODBC Driver 17 for SQL Server};"
-        "Server=ANATELBDRO01;"
+        "Server=ANATELBDRO05;"
         "Database=SITARWEB;"
         "Trusted_Connection=yes;"
         "MultipleActiveResultSets=True;",
@@ -114,15 +112,16 @@ def _read_plano_basico(path: Union[str, Path]) -> pd.DataFrame:
 def save_df(df: pd.DataFrame, folder: Union[str, Path], stem: str) -> pd.DataFrame:
     """Format, Save and return a dataframe"""
     df = format_types(df, stem)
+    df = df.drop_duplicates(keep='first').reset_index(drop=True)
     try:
         file = Path(f"{folder}/{stem}.parquet.gzip")
-        df.to_parquet(file, compression="gzip")
-    except ArrowInvalid:
+        df.to_parquet(file, compression="gzip", index=False)
+    except (ArrowInvalid, ArrowTypeError):
         file.unlink()
         try:
             file = Path(f"{folder}/{stem}.fth")
             df.to_feather(file)
-        except ArrowInvalid:
+        except (ArrowInvalid, ArrowTypeError):
             file.unlink()
             try:
                 file = Path(f"{folder}/{stem}.xlsx")
@@ -181,17 +180,19 @@ def update_mosaico(folder: Union[str, Path]) -> pd.DataFrame:
         estações = _read_estações(stations)
         plano_basico = _read_plano_basico(pb)
         df = estações.merge(plano_basico, on="Id", how="left")
-        df = clean_mosaico(folder, df)
+        df = clean_mosaico(df, folder)
         return save_df(df, folder, "mosaico")
 
 
 def update_base(folder: Union[str, Path]) -> pd.DataFrame:
+    # sourcery skip: use-fstring-for-concatenation
     """Wrapper que atualiza opcionalmente lê e atualiza as três bases indicadas anteriormente, as combina e salva o arquivo consolidado na folder `folder`"""
     stel = update_stel(folder).loc[:, TELECOM]
     radcom = update_radcom(folder).loc[:, SRD]
     mosaico = update_mosaico(folder).loc[:, RADIODIFUSAO]
     radcom["Num_Serviço"] = "231"
     radcom["Status"] = "RADCOM"
+    radcom.loc[radcom.Classe.notna(), 'Status'] = radcom.Status.astype('string') + ', ' + radcom.loc[radcom.Classe.notna(), "Classe"].astype("string")
     radcom["Classe_Emissão"] = pd.NA
     radcom["Largura_Emissão"] = BW_MAP["231"]
     radcom["Entidade"] = radcom.Entidade.str.rstrip().str.lstrip()
@@ -209,5 +210,5 @@ def update_base(folder: Union[str, Path]) -> pd.DataFrame:
         .reset_index(drop=True)
     )
     rd = rd.drop_duplicates(keep="first").reset_index(drop=True)
-    rd["BW(kHz)"] = rd.Largura_Emissão.apply(parse_bw)
+    rd["BW(kHz)"] = rd.Largura_Emissão.astype('string').fillna('-1').apply(parse_bw)
     return save_df(rd, folder, "base")

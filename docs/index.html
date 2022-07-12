@@ -6,8 +6,8 @@ title: Anatel - Consulta e Processamento do Banco de Dados
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "Este repositório concentra um conjunto de scripts para navegar e baixar informações dos principais bancos de dados da Anatel. Cujo dados serão utilizados em tarefas fiscalizatórias. O público alvo são os servidores do órgão, uma vez que a maioria dos sistemas utilizados aqui necessitam de autenticação cujo acesso é restrito aos servidores da ANATEL."
-description: "Este repositório concentra um conjunto de scripts para navegar e baixar informações dos principais bancos de dados da Anatel. Cujo dados serão utilizados em tarefas fiscalizatórias. O público alvo são os servidores do órgão, uma vez que a maioria dos sistemas utilizados aqui necessitam de autenticação cujo acesso é restrito aos servidores da ANATEL."
+summary: "Este repositório concentra um conjunto de scripts para navegar e baixar informações dos principais bancos de dados da Anatel e as bases públicas da Aeronáutica como o AISWEB, GEOAISWEB e ICAO cruzadas com documentações técnicas internas. Cujo dados serão utilizados em tarefas fiscalizatórias. O público alvo são os servidores do órgão, uma vez que a maioria dos sistemas utilizados aqui necessitam de autenticação cujo acesso é restrito aos servidores da ANATEL."
+description: "Este repositório concentra um conjunto de scripts para navegar e baixar informações dos principais bancos de dados da Anatel e as bases públicas da Aeronáutica como o AISWEB, GEOAISWEB e ICAO cruzadas com documentações técnicas internas. Cujo dados serão utilizados em tarefas fiscalizatórias. O público alvo são os servidores do órgão, uma vez que a maioria dos sistemas utilizados aqui necessitam de autenticação cujo acesso é restrito aos servidores da ANATEL."
 nb_path: "nbs\index.ipynb"
 ---
 <!--
@@ -60,13 +60,43 @@ nb_path: "nbs\index.ipynb"
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Consulta-%C3%A0-base-de-dados-formatada-para-o-AppAnalise-de-Anatel">Consulta &#224; base de dados formatada para o AppAnalise de Anatel<a class="anchor-link" href="#Consulta-%C3%A0-base-de-dados-formatada-para-o-AppAnalise-de-Anatel"> </a></h3><p>A motivação original para a presente biblioteca foi disponibilizar os dados de diferentes fontes da Anatel - e posteriormente da Aeronáutica - programaticamente, para serem utilizadas pelo <a href="https://github.com/EricMagalhaesDelgado/appAnalise/releases/">AppAnalise</a> na identificação de emissões captadas pelos planos de monitoração e também em fiscalização de campo.</p>
+<p>Os dados no formato atual em excel são disponibilizados na forma de releases neste repositório juntamente com a versão de código <a href="https://github.com/ronaldokun/anateldb/releases">https://github.com/ronaldokun/anateldb/releases</a>.</p>
+<p>Os dados em formato otimizado <code>.parquet.gzip</code> são disponibilizados junto ao repositório na pasta <code>dados</code> juntamente com as versões das bases individuais. Futuramente o objetivo é descontinuar a liberação de arquivos em formato excel e disponibilizar apenas os dados em formato otimizado.</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">fastcore.xtras</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">pasta</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s1">&#39;dados&#39;</span>
+<span class="n">anateldb</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">pasta</span> <span class="o">/</span> <span class="s1">&#39;AnatelDB.parquet.gzip&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="M%C3%A9todos-para-baixar-ou-atualizar-os-arquivos-das-bases-de-dados">M&#233;todos para baixar ou atualizar os arquivos das bases de dados<a class="anchor-link" href="#M%C3%A9todos-para-baixar-ou-atualizar-os-arquivos-das-bases-de-dados"> </a></h3>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">anateldb.query</span> <span class="kn">import</span> <span class="n">update_mosaico</span><span class="p">,</span> <span class="n">update_radcom</span><span class="p">,</span> <span class="n">update_stel</span>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">anateldb.query</span> <span class="kn">import</span> <span class="n">update_mosaico</span><span class="p">,</span> <span class="n">update_radcom</span><span class="p">,</span> <span class="n">update_stel</span><span class="p">,</span> <span class="n">update_base</span>
 </pre></div>
 
 </div>
@@ -124,13 +154,22 @@ Wall time: 1 s</code></pre>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>A função <a href="/anateldb/query.html#update_base"><code>update_base</code></a> combina as 3 bases anteriores e uniformiza os campos:</p>
+<div class="highlight"><pre><span></span><span class="n">update_base</span><span class="p">(</span><span class="s1">&#39;D:\OneDrive - ANATEL\GR01FI3\BaseDados&#39;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="M%C3%A9todos-para-ler-as-Bases-de-Dados">M&#233;todos para ler as Bases de Dados<a class="anchor-link" href="#M%C3%A9todos-para-ler-as-Bases-de-Dados"> </a></h3>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">anateldb.parser</span> <span class="kn">import</span> <span class="n">read_radcom</span><span class="p">,</span> <span class="n">read_stel</span><span class="p">,</span> <span class="n">read_mosaico</span>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">anateldb.read</span> <span class="kn">import</span> <span class="n">read_radcom</span><span class="p">,</span> <span class="n">read_stel</span><span class="p">,</span> <span class="n">read_mosaico</span><span class="p">,</span> <span class="n">read_base</span>
 <span class="n">radcom</span> <span class="o">=</span> <span class="n">read_radcom</span><span class="p">(</span><span class="n">pasta</span><span class="o">=</span><span class="s1">&#39;D:\OneDrive - ANATEL\GR01FI3\BaseDados&#39;</span><span class="p">)</span> <span class="p">;</span> <span class="n">radcom</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 <div>
@@ -564,6 +603,13 @@ Kbô
 <p>Se o argumento <code>update=True</code> for fornecido ou o arquivo local não existir, a base de dados é atualizada por meio da função <code>update_mosaico</code>.</p>
 <blockquote><p>A função <code>update_mosaico</code> usa a base de dados Pública do Spectrum E, portanto basta somente estar conectado na internet &#x1F60E;.</p>
 </blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>A função <a href="/anateldb/query.html#update_base"><code>update_base</code></a> combina as 3 atualizações de base anteriormente descritas.</p>
 
 </div>
 </div>

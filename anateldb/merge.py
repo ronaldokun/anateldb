@@ -321,7 +321,7 @@ def clean_mosaico(df, pasta):
     )
 
     df = input_coordenates(df, pasta)
-    df["Frequência"] = df.Frequência.str.replace(",", ".")
+    df.loc[:, "Frequência"] = df.Frequência.str.replace(",", ".")
     if freq_nans := df[df.Frequência.isna()].Id.tolist():
         complement_df = scrape_dataframe(freq_nans)
         df.loc[
@@ -338,9 +338,9 @@ def clean_mosaico(df, pasta):
             ],
         ] = complement_df.values
 
-    df["Frequência"] = df.Frequência.astype("float")
+    df.loc[:, "Frequência"] = df.Frequência.astype("float")
     df.loc[df.Serviço == "OM", "Frequência"] = df.loc[
         df.Serviço == "OM", "Frequência"
     ].apply(lambda x: Decimal(x) / Decimal(1000))
-    df["Validade_RF"] = df.Validade_RF.astype("string").str.slice(0, 10)
+    df.loc[:, "Validade_RF"] = df.Validade_RF.astype("string").str.slice(0, 10)
     return df.drop_duplicates(keep="first").reset_index(drop=True)

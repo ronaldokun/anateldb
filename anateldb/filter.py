@@ -37,12 +37,14 @@ def get_modtimes(pasta):
     if not pasta.is_dir():
         raise FileNotFoundError(f"Pasta {pasta} não encontrada")
     # Arquivos
-    if not (stel := pasta / 'stel.fth').is_file():
-        raise FileNotFoundError(f"Arquivo {stel} não encontrado")
-    if not (radcom := pasta / 'radcom.fth').is_file():
-        raise FileNotFoundError(f"Arquivo {radcom} não encontrado")
-    if not (mosaico := pasta / 'mosaico.fth').is_file():
-        raise FileNotFoundError(f"Arquivo {mosaico} não encontrado")
+    for suffix in [".parquet.gzip", ".fth", ".xlsx"]:
+        if not (stel := pasta / f'stel{suffix}').is_file():
+            raise FileNotFoundError(f"Arquivo {stel} não encontrado")
+        if not (radcom := pasta / f'radcom{suffix}').is_file():
+            raise FileNotFoundError(f"Arquivo {radcom} não encontrado")
+        if not (mosaico := pasta / f'mosaico{suffix}').is_file():
+            raise FileNotFoundError(f"Arquivo {mosaico} não encontrado")
+        break
     if not (icao := pasta / 'icao.xlsx').is_file():  # ICAO
         raise FileNotFoundError(f"Arquivo {icao} não encontrado")
     if not (pmec := pasta / 'aisw.xlsx').is_file():  # PMEC
@@ -76,16 +78,6 @@ def formatar_db(
     console = Console()
     console.print(":scroll:[green]Lendo as bases de dados da Anatel...")
     rd = read_base(path, up_base)
-#    rd = rd.fillna()
-#     rd["Status"] = rd.Status.astype("string")
-#     rd["Classe"] = rd.Classe.astype("string")
-#     rd.loc[rd["Classe"].notna(), "Status"] = (
-#         rd.loc[rd["Classe"].notna(), "Status"]
-#         + ", "
-#         + rd.loc[rd["Classe"].notna(), "Classe"]
-#     )
-#     rd.loc[rd.Classe == '-1', 'Classe'] = pd.NA
-#     rd['Classe'] = rd['Classe'].fillna('')
     rd["Descrição"] = (
         "["
         + rd.Fonte.astype("string")
@@ -96,7 +88,7 @@ def formatar_db(
         + " ("
         + rd.Fistel.astype("string").fillna("-")
         + ", "
-        + rd["Número_da_Estação"].astype("string").fillna("-")
+        + rd["Número_Estação"].astype("string").fillna("-")
         + "), "
         + rd.Município.astype("string").fillna("-")
         + "/"
@@ -110,7 +102,7 @@ def formatar_db(
         "Longitude",
         "Descrição",
         "Num_Serviço",
-        "Número_da_Estação",
+        "Número_Estação",
         "Classe_Emissão",
         "BW(kHz)",
     ]
@@ -118,20 +110,22 @@ def formatar_db(
     rd.columns = APP_ANALISE
     common, new = read_aero(path, up_icao, up_pmec, up_geo)
     rd = merge_aero(rd, common, new)
-#     rd = df_optimize(rd, exclude=["Frequency"])
     rd['Frequency'] = rd['Frequency'].astype('float')
     console.print(":card_file_box:[green]Salvando os arquivos...")
     d = json.loads((dest / "VersionFile.json").read_text())
     mod_times = get_modtimes(path)
     mod_times['ReleaseDate'] = datetime.today().strftime("%d/%m/%Y %H:%M:%S")
-    for c in ['Latitude', 'Longitude', 'BW']:
-        rd.loc[:, c] = rd.loc[:, c].fillna(-1).astype('float32')
-    rd['Service'] = rd.Service.fillna(-1).astype('int')
-    rd['Station'] = rd.Station.fillna(-1).astype('int')
+    for c in ['Latitude', 'Longitude']:
+        rd.loc[:, c] = rd.loc[:, c].fillna(-1).astype('float64')
+    rd['BW'] = rd['BW'].fillna(-1).astype('float32')
+    rd['Service'] = rd.Service.fillna('-1').astype('category')
+    rd['Station'] = rd.Station.fillna('-1').astype('string')
     rd = optimize_objects(rd, [])
-    rd.to_parquet(f"{dest}/AnatelDB.parquet.gzip", compression='gzip')
-#     with pd.ExcelWriter(f"{dest}/AnatelDB.xlsx", engine="xlsxwriter") as workbook:
-#         rd.to_excel(workbook, sheet_name="DataBase", index=False)
+    rd = rd.drop_duplicates(keep="first").reset_index(drop=True)
+    rd.sort_values(by=['Frequency', 'Latitude', 'Longitude'], inplace=True)
+    rd['Id'] = rd.index.to_numpy()
+    rd.to_parquet(f"{dest}/AnatelDB.parquet.gzip", compression='gzip', index=False)
+    rd.to_excel(f'{dest}/AnatelDB.xlsx', index=False, engine='openpyxl', sheet_name='DataBase')
     d["anateldb"]["Version"] = bump_version(d["anateldb"]["Version"])
     d['anateldb'].update(mod_times)
     json.dump(d, (dest / "VersionFile.json").open("w"))

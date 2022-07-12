@@ -201,19 +201,20 @@ def df_optimize(
 # Cell
 def format_types(df: pd.DataFrame, # raw DataFrame to format
                  stem: str = None # identifier for format specific conversions
-                ) -> pd.DataFrame: # DataFrame with optimized types
+                ) -> pd.DataFrame:    # DataFrame with optimized types
 
     """Convert the columns of a dataframe to optimized types"""
-    df["Frequência"] = df["Frequência"].astype("float")
-    df["Latitude"] = df["Latitude"].astype("float32")
-    df["Longitude"] = df["Longitude"].astype("float32")
+    df["Frequência"] = df["Frequência"].astype("float64")
+    df["Latitude"] = df["Latitude"].astype("float64")
+    df["Longitude"] = df["Longitude"].astype("float64")
     df["Entidade"] = df["Entidade"].astype("string")
     df["Fistel"] = df["Fistel"].astype("string")
     df["Município"] = df["Município"].astype("category")
     df["UF"] = df["UF"].astype("category")
     df["CNPJ"] = df["CNPJ"].astype("string")
     df["Número_Estação"] = df["Número_Estação"].astype("string")
-    df["Num_Serviço"] = df["Num_Serviço"].astype("category")
+    if stem != 'radcom':
+        df["Num_Serviço"] = df["Num_Serviço"].astype("category")
     if stem == "stel":
         df.loc[:, "Validade_RF"] = df.Validade_RF.astype("string").str.slice(0, 10)
         df.loc[df.Unidade == "kHz", "Frequência"] = df.loc[
@@ -233,4 +234,12 @@ def format_types(df: pd.DataFrame, # raw DataFrame to format
         )
         df.loc[:, "Classe"] = df["Classe"].astype("category")
         df.drop(["Fase", "Situação"], axis=1, inplace=True)
+    elif stem == 'base':
+        df['Status'] = df['Status'].astype('category')
+        df["BW(kHz)"] = df["BW(kHz)"].astype("float32")
+    if stem in {'stel', 'base'}:
+        df['Classe'] = df['Classe'].astype('category')
+        df['Classe_Emissão'] = df['Classe_Emissão'].astype('category')
+        df['Largura_Emissão'] = df['Largura_Emissão'].astype('category')
+
     return optimize_objects(df)

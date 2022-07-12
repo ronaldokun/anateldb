@@ -91,21 +91,20 @@ SRD = (
 "Latitude",
 "Longitude",
 "CNPJ",
-"Num_Serviço",
 "Classe",
 )
 
 TELECOM = SRD + (
+    "Num_Serviço",
     "Classe_Emissão",
     "Largura_Emissão",
     "Validade_RF",
 )
 
 RADIODIFUSAO = SRD + (
+    "Num_Serviço",
     "Validade_RF",
     "Status",
-    # "Num_Ato",
-    # "Data_Ato",
 )
 
 APP_ANALISE = (
@@ -186,29 +185,27 @@ BW = {'H': 0.001, 'K': 1, 'M': 1000, 'G': 1000000}
 BW_MAP = {'167': '6M00', '205': '10K0', '230': '256K', '231': '256K', '247': '5M70', '248': '6M00', '800': '6M00', '801': '5M70', '805': '256K'}
 
 # Cell
-RADCOM = """SELECT F.MedFrequenciaInicial as 'Frequência',
+RADCOM = """SELECT distinct F.MedFrequenciaInicial as 'Frequência',
 SRD.IndFase as 'Fase',
 ID.SiglaSituacao as 'Situação',
 Ent.NomeEntidade as 'Entidade',
 H.NumFistel as 'Fistel',
-E.NumEstacao as 'Número_da_Estação',
+E.NumEstacao as 'Número_Estação',
 M.NomeMunicipio as 'Município',
 PB.SiglaUF as 'UF',
 SRD.MedLatitudeDecimal as 'Latitude',
 SRD.MedLongitudeDecimal as 'Longitude',
 Ent.NumCnpjCpf as 'CNPJ'
-
   FROM SRD_PEDIDORADCOM SRD
-
-  inner join ESTACAO E on E.IdtHabilitacao =  SRD.IdtHabilitacao
+  left join ESTACAO E on E.IdtHabilitacao =  SRD.IdtHabilitacao
   inner join FREQUENCIA F on F.IdtEstacao = E.IdtEstacao
-  inner join HABILITACAO H on H.IdtEntidade = SRD.IdtEntidade
-  inner join ENTIDADE Ent on Ent.IdtEntidade = SRD.IdtEntidade
-  inner join SRD_PLANOBASICO PB on PB.IdtPlanoBasico = SRD.IdtPlanoBasico
-  inner join Municipio M on M.CodMunicipio = PB.CodMunicipio
+  left join HABILITACAO H on H.IdtEntidade = SRD.IdtEntidade
+  left join ENTIDADE Ent on Ent.IdtEntidade = SRD.IdtEntidade
+  left join SRD_PLANOBASICO PB on PB.IdtPlanoBasico = SRD.IdtPlanoBasico
+  left join Municipio M on M.CodMunicipio = PB.CodMunicipio
   left join SRD_INDICESESTACAO ID on ID.IdtHabilitacao = SRD.IdtHabilitacao
+  left join CONTRATO C on C.IdtContrato = E.IdtContrato
   where SRD.IdtPlanoBasico is not Null and SRD.IndFase is not Null
-
   order by Frequência, UF, Município"""
 
 # Cell
@@ -220,23 +217,23 @@ ce.CodTipoClasseEstacao as 'Classe',
 e.NumServico as 'Num_Serviço',
 ent.NomeEntidade as 'Entidade',
 h.NumFistel as 'Fistel',
-e.NumEstacao as 'Número_da_Estação',
+e.NumEstacao as 'Número_Estação',
 mu.NomeMunicipio as 'Município',
 e.SiglaUf as 'UF',
 e.MedLatitudeDecimal as 'Latitude',
 e.MedLongitudeDecimal as 'Longitude',
 ent.NumCnpjCpf as 'CNPJ',
 c.DataValidadeRadiofrequencia as 'Validade_RF'
-from contrato c
-inner join estacao e on e.IdtContrato = c.Idtcontrato
-inner join frequencia f on f.IdtEstacao = e.IdtEstacao
-inner join CLASSEESTACAO ce on ce.IdtFrequencia = f.IdtFrequencia
-inner join DESIGNACAOEMISSAO d  on d.IdtClasseEstacao = ce.IdtClasseEstacao
-inner join HABILITACAO h on h.IdtHabilitacao = c.IdtHabilitacao
-inner join entidade ent on ent.IdtEntidade = h.IdtEntidade
-inner join endereco en on en.IdtEstacao = e.IdtEstacao
-inner join Municipio mu on mu.CodMunicipio = en.CodMunicipio
-inner join Servico s on s.NumServico = h.NumServico and s.IdtServicoAreaAtendimento = 4
+from estacao e
+left join contrato c on e.IdtContrato = c.Idtcontrato
+left join frequencia f on f.IdtEstacao = e.IdtEstacao
+left join CLASSEESTACAO ce on ce.IdtFrequencia = f.IdtFrequencia
+left join DESIGNACAOEMISSAO d  on d.IdtClasseEstacao = ce.IdtClasseEstacao
+left join HABILITACAO h on h.IdtHabilitacao = c.IdtHabilitacao
+left join entidade ent on ent.IdtEntidade = h.IdtEntidade
+left join endereco en on en.IdtEstacao = e.IdtEstacao
+left join Municipio mu on mu.CodMunicipio = en.CodMunicipio
+left join Servico s on s.NumServico = h.NumServico and s.IdtServicoAreaAtendimento = 4
 left join UnidadeFrequencia uf on uf.IdtUnidadeFrequencia = f.IdtUnidadeTransmissao
 where h.NumServico <> '010'
 and e.DataExclusao is null
@@ -244,6 +241,8 @@ and e.IndStatusEstacao = 'L'
 and f.MedTransmissaoInicial is not null
 and f.CodStatusRegistro = 'L'
 and c.DataValidadeRadiofrequencia is not null
+and e.MedLatitudeDecimal is not null
+and e.MedLongitudeDecimal is not null
 order by Frequência, UF, Município"""
 
 # Cell

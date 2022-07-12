@@ -1,5 +1,5 @@
 *.bak
-.gitattributes
+# .gitattributes
 .last_checked
 .gitconfig
 *.bak
@@ -143,10 +143,15 @@ checklink/cookies.txt
 *.xlsx
 *.fth
 *.csv
+*.zip
+*.version
+*.aisweb
+mosaico*
+radcom*
+stel*
+
 
 # VSCODE Files
 .virtual_documents
 
 *desktop.ini
-
-dados

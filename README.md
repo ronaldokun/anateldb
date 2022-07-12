@@ -1,5 +1,5 @@
 # Anatel - Consulta e Processamento do Banco de Dados
-> Este repositório concentra um conjunto de scripts para navegar e baixar informações dos principais bancos de dados da Anatel. Cujo dados serão utilizados em tarefas fiscalizatórias. O público alvo são os servidores do órgão, uma vez que a maioria dos sistemas utilizados aqui necessitam de autenticação cujo acesso é restrito aos servidores da ANATEL.
+> Este repositório concentra um conjunto de scripts para navegar e baixar informações dos principais bancos de dados da Anatel e as bases públicas da Aeronáutica como o AISWEB, GEOAISWEB e ICAO cruzadas com documentações técnicas internas. Cujo dados serão utilizados em tarefas fiscalizatórias. O público alvo são os servidores do órgão, uma vez que a maioria dos sistemas utilizados aqui necessitam de autenticação cujo acesso é restrito aos servidores da ANATEL.
 
 
 <a href="https://gitmoji.dev">
@@ -14,10 +14,26 @@
 
 ## Como utilizar
 
+### Consulta à base de dados formatada para o AppAnalise de Anatel
+
+A motivação original para a presente biblioteca foi disponibilizar os dados de diferentes fontes da Anatel - e posteriormente da Aeronáutica - programaticamente, para serem utilizadas pelo [AppAnalise](https://github.com/EricMagalhaesDelgado/appAnalise/releases/) na identificação de emissões captadas pelos planos de monitoração e também em fiscalização de campo.
+
+Os dados no formato atual em excel são disponibilizados na forma de releases neste repositório juntamente com a versão de código https://github.com/ronaldokun/anateldb/releases. 
+
+Os dados em formato otimizado `.parquet.gzip` são disponibilizados junto ao repositório na pasta `dados` juntamente com as versões das bases individuais. Futuramente o objetivo é descontinuar a liberação de arquivos em formato excel e disponibilizar apenas os dados em formato otimizado. 
+
+```python
+import pandas as pd
+from fastcore.xtras import Path
+
+pasta = Path.cwd().parent / 'dados'
+anateldb = pd.read_parquet(pasta / 'AnatelDB.parquet.gzip')
+```
+
 ### Métodos para baixar ou atualizar os arquivos das bases de dados
 
 ```python
-from anateldb.query import update_mosaico, update_radcom, update_stel
+from anateldb.query import update_mosaico, update_radcom, update_stel, update_base
 ```
 
 A função seguinte baixa os dados diretamente da interface pública online do [Spectrum E](http://sistemas.anatel.gov.br/se/public/view/b/srd.php) 
@@ -50,11 +66,17 @@ update_stel('D:\OneDrive - ANATEL\GR01FI3\BaseDados')
 ```
 
 
+A função `update_base` combina as 3 bases anteriores e uniformiza os campos:
+```python
+update_base('D:\OneDrive - ANATEL\GR01FI3\BaseDados')
+```
+
+
 ### Métodos para ler as Bases de Dados
 
 
 ```python
-from anateldb.parser import read_radcom, read_stel, read_mosaico
+from anateldb.read import read_radcom, read_stel, read_mosaico, read_base
 radcom = read_radcom(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; radcom.head()
 ```
 
@@ -463,3 +485,5 @@ mosaico = read_mosaico(pasta='D:\OneDrive - ANATEL\GR01FI3\BaseDados') ; mosaico
 Se o argumento <code>update=True</code> for fornecido ou o arquivo local não existir, a base de dados é atualizada por meio da função <code>update_mosaico</code>. 
 
 > A função <code>update_mosaico</code> usa a base de dados Pública do Spectrum E, portanto basta somente estar conectado na internet &#x1F60E;.
+
+A função `update_base` combina as 3 atualizações de base anteriormente descritas.
