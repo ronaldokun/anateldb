@@ -22,7 +22,7 @@ from fastcore.test import test_eq
 
 
 from .constants import *
-from .format import parse_bw, format_types
+from .format import parse_bw, format_types, input_coordenates
 
 getcontext().prec = 5
 
@@ -263,7 +263,7 @@ def update_base(folder: Union[str, Path]) -> pd.DataFrame:
         from anateldb.reading import read_radcom
         radcom = read_radcom(folder).loc[:, SRD]
     try:
-        mosaico = update_mosaico(folder).loc[:, MOSAICO]
+        mosaico = update_mosaico(folder).loc[:, RADIODIFUSAO]
     except ConnectionError:
         from anateldb.reading import read_mosaico
         mosaico = read_mosaico(folder).loc[:, RADIODIFUSAO]

@@ -12,7 +12,7 @@ from geopy.distance import geodesic
 
 from .constants import ENTIDADES
 from .format import input_coordenates, scrape_dataframe, df_optimize
-from .reading import read_icao, read_aisw, read_aisg, read_base
+from .reading import read_icao, read_aisw, read_aisg, read_aero, read_base
 MAX_DIST = 0.5 #Km
 COLS = ['Frequency', 'Latitude', 'Longitude', 'Description']
 

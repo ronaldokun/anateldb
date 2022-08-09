@@ -155,3 +155,6 @@ stel*
 .virtual_documents
 
 *desktop.ini
+
+_docs/
+sidebar.yml
