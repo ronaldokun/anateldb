@@ -11,10 +11,9 @@ import pandas as pd
 from pyarrow import ArrowInvalid
 
 
-from anateldb.queries import (
+from anateldb.updates import (
 update_mosaico, update_stel, update_radcom, update_base
 )
-from .merging import aero_common, aero_new
 
 # %% ..\nbs\reading.ipynb 4
 def _read_df(folder: Union[str, Path], stem: str) -> pd.DataFrame:
@@ -86,21 +85,17 @@ def read_aisg(folder: Union[str, Path], update: bool = False) -> pd.DataFrame:
 
 
 def read_aero(
-    folder: Union[str, Path],
-    up_icao: bool = False,
-    up_aisw: bool = False,
-    up_aisg: bool = False,
-) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    folder: Union[str, Path], update: bool = False
+) -> pd.DataFrame:
     """Lê os arquivos de dados da aeronáutica e retorna os registros comuns e únicos"""
-    icao = read_icao(folder, up_icao)
-    pmec = read_aisw(folder, up_aisw)
-    geo = read_aisg(folder, up_aisg)
-    icao["Description"] = icao.Description.astype("string")
-    pmec["Description"] = pmec.Description.astype("string")
-    geo["Description"] = geo.Description.astype("string")
-    common = aero_common(icao, pmec, geo)
-    new = aero_new(icao, pmec, geo)
-    return common, new
+    if update:
+        # TODO: Atualizar a base de dados do GEOAISWEB
+        # update_geo(folder)
+        raise NotImplementedError(
+            "Atualização programática das bases de Dados da Aeronáutica não implementada"
+        )
+    
+    return _read_df(folder, "aero")
 
 # %% ..\nbs\reading.ipynb 21
 def read_base(folder: Union[str, Path], update: bool = False) -> pd.DataFrame:

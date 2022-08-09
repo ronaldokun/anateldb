@@ -81,19 +81,21 @@ def get_db(
     rd = read_base(path, up_base)
     rd["Descrição"] = (
         "["
-        + rd.Fonte.astype("string")
+        + rd.Fonte.astype("string").fillna("NI")
         + "] "
-        + rd.Status.astype("string").fillna("-")
+        + rd.Status.astype("string").fillna("NI")
         + ", "
-        + rd.Entidade.astype("string").fillna("-").str.title()
+        + rd.Classe.astype("string").fillna("NI")
+        + ", "
+        + rd.Entidade.astype("string").fillna("NI").str.title()
         + " ("
-        + rd.Fistel.astype("string").fillna("-")
+        + rd.Fistel.astype("string").fillna("NI")
         + ", "
-        + rd["Número_Estação"].astype("string").fillna("-")
+        + rd["Número_Estação"].astype("string").fillna("NI")
         + "), "
-        + rd.Município.astype("string").fillna("-")
+        + rd.Município.astype("string").fillna("NI")
         + "/"
-        + rd.UF.astype("string").fillna("-")
+        + rd.UF.astype("string").fillna("NI")
     )
 
 
@@ -111,22 +113,24 @@ def get_db(
     rd.columns = APP_ANALISE
     common, new = read_aero(path, up_icao, up_pmec, up_geo)
     rd = merge_aero(rd, common, new)
-    rd['Frequency'] = rd['Frequency'].astype('float')
+    rd['Frequency'] = rd['Frequency'].astype('float64')
     console.print(":card_file_box:[green]Salvando os arquivos...")
     d = json.loads((dest / "VersionFile.json").read_text())
     mod_times = get_modtimes(path)
     mod_times['ReleaseDate'] = datetime.today().strftime("%d/%m/%Y %H:%M:%S")
     for c in ['Latitude', 'Longitude']:
-        rd.loc[:, c] = rd.loc[:, c].fillna(-1).astype('float64')
+        rd.loc[:, c] = rd.loc[:, c].fillna(-1).astype('float32')
+    rd['Description'] = rd['Description'].astype('string').fillna('-1')
+    rd['Service'] = rd.Service.fillna(-1).astype('int16')
+    rd['Station'] = rd.Station.fillna(-1).astype('int32')
     rd['BW'] = rd['BW'].fillna(-1).astype('float32')
-    rd['Service'] = rd.Service.fillna('-1').astype('category')
-    rd['Station'] = rd.Station.fillna('-1').astype('string')
+    rd['Class'] = rd.Class.astype('string').fillna('-1')
     rd = optimize_objects(rd, [])
     rd = rd.drop_duplicates(keep="first").reset_index(drop=True)
     rd.sort_values(by=['Frequency', 'Latitude', 'Longitude'], inplace=True)
-    rd['Id'] = rd.index.to_numpy()
+    rd['Id'] = rd.index.to_numpy().astype('uint32')
     rd.to_parquet(f"{dest}/AnatelDB.parquet.gzip", compression='gzip', index=False)
-    rd.to_excel(f'{dest}/AnatelDB.xlsx', index=False, engine='openpyxl', sheet_name='DataBase')
+    #rd.to_excel(f'{dest}/AnatelDB.xlsx', index=False, engine='openpyxl', sheet_name='DataBase')
     d["anateldb"]["Version"] = bump_version(d["anateldb"]["Version"])
     d['anateldb'].update(mod_times)
     json.dump(d, (dest / "VersionFile.json").open("w"))
