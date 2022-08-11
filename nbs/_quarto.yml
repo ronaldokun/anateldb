@@ -22,14 +22,14 @@ website:
   open-graph: true
   reader-mode: true
   repo-branch: master
-  repo-url: https://github.com/ronaldokun/anateldb/tree/master/
+  repo-url: https://github.com/ronaldokun/anateldb
   repo-actions: [issue]
   navbar:
     background: primary
     search: true
     right:
       - icon: github
-        href: https://github.com/ronaldokun/anateldb/tree/master/
+        href: https://github.com/ronaldokun/anateldb
   sidebar:
     style: "floating"
 
