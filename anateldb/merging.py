@@ -21,7 +21,7 @@ def check_add_row(df, # DataFrame para mesclar adicionar o registro
                   f, # Frequência (MHz) em análise do registro 
                   rows, # Lista de registros para mesclar
                   dicts, # Dicionário fonte dos registros
-):
+)->pd.DataFrame: # DataFrame com o registro adicionado
     """Mescla os registros em `rows` de frequência `f` e os adiciona como uma linha do DataFrame `df`
     Os registros em `rows` somente são mesclados se ainda constarem nos dicionários fonte `dicts`
     Após a mesclagem, os registros são removidos dos dicionários fonte `dicts`   
@@ -40,7 +40,7 @@ def check_add_row(df, # DataFrame para mesclar adicionar o registro
 # %% ..\nbs\merging.ipynb 5
 def get_subsets(f, # Frequência (MHz) em análise do registro
                 *dfs, # Conjunto de DataFrames a serem analisados
-):
+)->list: # Lista com subconjuntos de registros de frequência `f` para cada df em `dfs`
     """Retorna os subconjuntos de registros de frequência `f` em cada dataframe `dfs`
     Os subconjuntos são retornados em forma de dicionário, onde a chave é o índice do registro
     """
@@ -52,7 +52,7 @@ def merge_closer(frequencies, # Lista de frequências em comum
                  df, # DataFrame de saída
                  df_left, # DataFrame 1 de entrada da esquerda
                  df_right # DataFrame 2 de entrada da direita
-):
+)->pd.DataFrame: # DataFrame de saída com as frequências em comum de `df_left` e `df_right` mescladas ou inseridas individualmente
     """Mescla os registros de frequência `frequencies` de `df_left` e `df_right` em `df`
     Essa função é utilizada para mesclar registros que possuem frequências em comum listadas em `frequencies`
     Os registros são mesclados se a distância entre eles for menor que `MAX_DIST`
@@ -74,7 +74,7 @@ def merge_closer(frequencies, # Lista de frequências em comum
 def merge_single(frequencies, # Lista de frequências em comum
                  df, # DataFrame de saída
                  df_left # DataFrame de entrada
-):
+)->pd.DataFrame: # DataFrame de saída com as frequências `frequencies` de `df_left` mescladas ou inseridas individualmente em `df`
     """Mescla os registros de frequência `frequencies` de `df_left` em `df`"""
     for f in frequencies:
         if sa := get_subsets(f, df_left)[0]:
@@ -88,7 +88,7 @@ def merge_triple(frequencies, # Lista de frequências em comum
                  df_left, # DataFrame 1 de entrada
                  df_middle, # DataFrame 2 de entrada 
                  df_right, # DataFrame 3 de entrada 
-):
+)->pd.DataFrame: # DataFrame de saída com as frequências `frequencies` de `df_left`, `df_middle` e `df_right` mescladas ou inseridas individualmente em `df`
     """Mescla os registros de frequência `frequencies` de `df_left`, `df_middle` e `df_right` em `df`
     Essa função é utilizada para mesclar registros que possuem frequências em comum listadas em `frequencies`
     Os registros são mesclados se a distância entre eles for menor que `MAX_DIST`
@@ -119,7 +119,7 @@ def check_merging(df, # DataFrame de saída
                   icao, # DataFrame fonte 1
                   aisw, # DataFrame fonte 2 
                   aisg, # DataFrame fonte 3
-):
+)->bool: # True se a mesclagem dos registros de `icao`, `aisw` e `aisg` no DataFrame `df` está consistente
     """Verifica a validade da mesclagem dos registros de `icao`, `aisw` e `aisg` em `df`"""
     three_merges = df[df.Description.str.contains('\|.*\|')]
     two_merges = df[(df.Description.str.contains('[\|]{1}')) & (~df.index.isin(three_merges.index))]
@@ -128,7 +128,10 @@ def check_merging(df, # DataFrame de saída
 
 
 # %% ..\nbs\merging.ipynb 10
-def get_frequencies_set(df1, df2, df3):
+def get_frequencies_set(df1: pd.DataFrame, # DataFrame 1
+                        df2: pd.DataFrame, # DataFrame 2
+                        df3: pd.DataFrame, # DataFrame 3
+)-> tuple: # Tupla com todos os subconjuntos do Diagrama de Venn das frequências de `df1`, `df2` e `df3`
     """Retorna todos os conjuntos de frequências do Diagrama de Venn entre os registros de `df1`, `df2` e `df3`"""
     f1 = set(df1.Frequency.tolist())
     f2 = set(df2.Frequency.tolist())
@@ -144,7 +147,7 @@ def get_frequencies_set(df1, df2, df3):
 
 # %% ..\nbs\merging.ipynb 11
 def merge_aero(folder, # Pasta onde estão os arquivos de entrada
-):
+)->pd.DataFrame: # DataFrame com as bases da Aeronáutica com registros mesclados
     """Mescla os registros de mesma frequência e próximos dos arquivos da aeronáutica em `folder`"""
     icao = read_icao(folder).drop(columns=['Service', 'Station'])
     aisw = read_aisw(folder).drop(columns=['Service', 'Station'])
@@ -161,4 +164,3 @@ def merge_aero(folder, # Pasta onde estão os arquivos de entrada
     if not check_merging(df, icao, aisw, aisg):
         raise ValueError("Divergência na contagem de linhas entre as bases individuais e a combinação")
     return df
-

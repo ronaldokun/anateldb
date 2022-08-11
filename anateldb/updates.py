@@ -3,7 +3,7 @@
 # %% auto 0
 __all__ = ['connect_db', 'clean_mosaico', 'update_radcom', 'update_stel', 'update_mosaico', 'update_base']
 
-# %% ..\nbs\updates.ipynb 3
+# %% ..\nbs\updates.ipynb 2
 from decimal import Decimal, getcontext
 from typing import Union
 from urllib.request import urlretrieve, URLError
@@ -26,19 +26,23 @@ from .format import parse_bw, format_types, input_coordenates
 
 getcontext().prec = 5
 
-# %% ..\nbs\updates.ipynb 5
-def connect_db():
-    """Conecta ao Banco ANATELBDRO05 e retorna o 'cursor' (iterador) do Banco"""
+# %% ..\nbs\updates.ipynb 4
+def connect_db(server: str = 'ANATELBDRO05', # Servidor do Banco de Dados
+               database: str = 'SITARWEB', # Nome do Banco de Dados
+               trusted_conn: str = 'yes', # Conexão Segura: yes | no
+               mult_results: bool = True, # Múltiplos Resultados
+              )->pyodbc.Connection:
+    """Conecta ao Banco `server` e retorna o 'cursor' (iterador) do Banco"""
     return pyodbc.connect(
         "Driver={ODBC Driver 17 for SQL Server};"
-        "Server=ANATELBDRO05;"
-        "Database=SITARWEB;"
-        "Trusted_Connection=yes;"
-        "MultipleActiveResultSets=True;",
+        f"Server={server};"
+        f"Database={database};"
+        f"Trusted_Connection={trusted_conn};"
+        f"MultipleActiveResultSets={mult_results};",
         timeout=TIMEOUT,
     )
 
-# %% ..\nbs\updates.ipynb 7
+# %% ..\nbs\updates.ipynb 6
 def _parse_estações(row: dict)->dict:
     """Given a row in a MongoDB ( a dict of dicts ), it travels some keys and return a subset dict"""
     
@@ -56,7 +60,7 @@ def _parse_estações(row: dict)->dict:
     d.update({k.replace('@', '').lower():estacao[k] for k in ('@latitude', '@longitude')})
     return d
 
-# %% ..\nbs\updates.ipynb 8
+# %% ..\nbs\updates.ipynb 7
 def _read_estações(path: Union[str, Path]) -> pd.DataFrame:
     """Read the zipped xml file `Estações.zip` from MOSAICO and returns a dataframe"""
     
@@ -75,12 +79,12 @@ def _read_estações(path: Union[str, Path]) -> pd.DataFrame:
         df.loc[df[c] == "", c] = pd.NA
     return df
 
-# %% ..\nbs\updates.ipynb 9
+# %% ..\nbs\updates.ipynb 8
 def _parse_pb(row: dict)->dict:
     """Given a row in the MongoDB file canais.zip ( a dict of dicts ), it travels some keys and return a subset dict"""
     return {unidecode(k).lower().replace("@", ""): v  for k,v in row.items()}
 
-# %% ..\nbs\updates.ipynb 10
+# %% ..\nbs\updates.ipynb 9
 def _read_plano_basico(path: Union[str, Path]) -> pd.DataFrame:
     """Read the zipped xml file `Plano_Básico.zip` from MOSAICO and returns a dataframe"""    
     df = L()
@@ -108,8 +112,10 @@ def _read_plano_basico(path: Union[str, Path]) -> pd.DataFrame:
         df.loc[df[c] == '', c] = pd.NA
     return df    
 
-# %% ..\nbs\updates.ipynb 11
-def clean_mosaico(df, pasta):
+# %% ..\nbs\updates.ipynb 10
+def clean_mosaico(df: pd.DataFrame, # DataFrame com os dados de Estações e Plano_Básico mesclados 
+                pasta: Union[str, Path], # Pasta com os dados de municípios para imputar coordenadas ausentes
+) -> pd.DataFrame: # DataFrame com os dados mesclados e limpos
     """Clean the merged dataframe with the data from the MOSAICO page"""
     COLS = [c for c in df.columns if "_x" in c]
     for col in COLS:
@@ -170,7 +176,7 @@ def clean_mosaico(df, pasta):
     df.loc[:, "Validade_RF"] = df.Validade_RF.astype("string").str.slice(0, 10)
     return df.drop_duplicates(keep="first").reset_index(drop=True)
 
-# %% ..\nbs\updates.ipynb 13
+# %% ..\nbs\updates.ipynb 12
 def _save_df(df: pd.DataFrame, folder: Union[str, Path], stem: str) -> pd.DataFrame:
     """Format, Save and return a dataframe"""
     df = format_types(df, stem)
@@ -197,7 +203,10 @@ def _save_df(df: pd.DataFrame, folder: Union[str, Path], stem: str) -> pd.DataFr
     return df
 
 
-def update_radcom(folder: Union[str, Path]) -> pd.DataFrame:
+
+# %% ..\nbs\updates.ipynb 13
+def update_radcom(folder: Union[str, Path], # Pasta onde salvar os arquivos
+) -> pd.DataFrame: # DataFrame com os dados atualizados
     """Atualiza a tabela local retornada pela query `RADCOM`"""
     console = Console()
     with console.status(
@@ -213,7 +222,9 @@ def update_radcom(folder: Union[str, Path]) -> pd.DataFrame:
             )
             raise ConnectionError from e
 
-def update_stel(folder: Union[str, Path]) -> pd.DataFrame:
+# %% ..\nbs\updates.ipynb 14
+def update_stel(folder:Union[str, Path], # Pasta onde salvar os arquivos
+) -> pd.DataFrame: # DataFrame com os dados atualizados
     """Atualiza a tabela local retornada pela query `STEL`"""
     console = Console()
     with console.status(
@@ -230,7 +241,9 @@ def update_stel(folder: Union[str, Path]) -> pd.DataFrame:
             )
             raise ConnectionError from e
 
-def update_mosaico(folder: Union[str, Path]) -> pd.DataFrame:
+# %% ..\nbs\updates.ipynb 15
+def update_mosaico(folder: Union[str, Path], # Pasta onde salvar os arquivos
+) -> pd.DataFrame: # DataFrame com os dados atualizados
     """Atualiza a tabela local do Mosaico. É baixado e processado arquivos xml zipados da página pública do Spectrum E"""
     console = Console()
     with console.status(
@@ -249,7 +262,10 @@ def update_mosaico(folder: Union[str, Path]) -> pd.DataFrame:
             raise ConnectionError from e
 
 
-def update_base(folder: Union[str, Path]) -> pd.DataFrame:
+
+# %% ..\nbs\updates.ipynb 16
+def update_base(folder: Union[str, Path], # Pasta onde salvar os arquivos
+) -> pd.DataFrame: # DataFrame com os dados atualizados
     # sourcery skip: use-fstring-for-concatenation
     """Wrapper que atualiza opcionalmente lê e atualiza as três bases indicadas anteriormente, as combina e salva o arquivo consolidado na folder `folder`"""
     try:

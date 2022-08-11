@@ -24,7 +24,9 @@ from .format import df_optimize, optimize_objects
 from .merging import get_subsets, check_add_row, product, MAX_DIST
 
 # %% ..\nbs\main.ipynb 3
-def bump_version(version, part=2):
+def bump_version(version: str, # String com a versão atual
+    part: int = 2, # Parte da versão que será incrementada
+) -> str: # Retorna a versão atualizada
     version = version.split(".")
     version[part] = str(int(version[part]) + 1)
     for i in range(part + 1, 3):
@@ -32,9 +34,10 @@ def bump_version(version, part=2):
     return ".".join(version)
 
 # %% ..\nbs\main.ipynb 4
-def get_modtimes(pasta):
+def get_modtimes(pasta: Union[str, Path], # Pasta onde estão os arquivos esperados de monitoramento
+)->dict: # Retorna o mtime de todos os arquivos pertinentes da pasta
     """
-    Retorna a data de modificação dos arquivos de dados
+    Retorna a data de modificação dos arquivos de dados contidos na pasta
     """
     # Pasta
     pasta = Path(pasta)
@@ -75,7 +78,7 @@ def check_modify_row(df, # DataFrame para mesclar adicionar o registro
                   f, # Frequência (MHz) em análise do registro 
                   rows, # Lista de registros para mesclar
                   dicts, # Dicionário fonte dos registros
-):
+)->pd.DataFrame: # Retorna o DataFrame com o registro adicionado se necessário
     """Mescla os registros em `rows` de frequência `f` e os adiciona como uma linha do DataFrame `df`
     Os registros em `rows` somente são mesclados se ainda constarem nos dicionários fonte `dicts`
     Após a mesclagem, os registros são removidos dos dicionários fonte `dicts`   
@@ -94,7 +97,7 @@ def check_modify_row(df, # DataFrame para mesclar adicionar o registro
 # %% ..\nbs\main.ipynb 6
 def add_aero(base, # Base Consolidada Anatel
              aero, # Base da Aeronáutica
-):
+)->pd.DataFrame: # Retorna o DataFrame com o registro adicionados e mesclados
     """Mescla os registros de frequência em comum da base da Aeronáutica com a base da Anatel
     Os registros são mesclados se a distância entre eles for menor que `MAX_DIST`
     do contrário são adicionados individualmente como uma linha na base da Anatel`	
@@ -117,8 +120,8 @@ def get_db(
     up_icao: bool=False, # Atualizar a base do ICAO?
     up_pmec: bool=False, # Atualizar a base do AISWEB?
     up_geo: bool=False, # Atualizar a base do GeoAISWEB?
-) -> None:
-    """Lê e opcionalmente atualiza as bases da Anatel, mescla as bases da Aeronáutica e salva os arquivos"""
+) -> pd.DataFrame: # Retorna o DataFrame com as bases da Anatel e da Aeronáutica
+    """Lê e opcionalmente atualiza as bases da Anatel, mescla as bases da Aeronáutica, salva e retorna o arquivo"""
     dest = Path(path)
     dest.mkdir(parents=True, exist_ok=True)
     print(":scroll:[green]Lendo as bases de dados da Anatel...")
@@ -165,14 +168,13 @@ def get_db(
     for c in ['Latitude', 'Longitude']:
         rd.loc[:, c] = rd.loc[:, c].fillna(-1).astype('float32')
 
-    rd['Frequency'] = rd['Frequency'].astype('category')
+    rd['Frequency'] = rd['Frequency'].astype('float32')
     rd['Description'] = rd['Description'].astype('string').fillna('NI')
     rd['Service'] = rd.Service.astype('float').fillna(-1).astype('int16')
     rd['Station'] = rd.Station.astype('float').fillna(-1).astype('int32') # Fix this
     rd['BW'] = rd['BW'].astype('float32').fillna(-1)
     rd['Class'] = rd.Class.astype('string').fillna('NI').astype('category')
-    rd = rd.drop_duplicates(keep="first").reset_index(drop=True)
-    rd.sort_values(by=['Frequency', 'Latitude', 'Longitude'], inplace=True)
+    rd = rd.drop_duplicates(keep="first").sort_values(by=['Frequency', 'Latitude', 'Longitude']).reset_index(drop=True)
     rd['Id'] = [f'#{i}' for i in rd.index]
     rd['Id'] = rd.Id.astype('string')
     rd = rd.loc[:, ['Id', 'Frequency', 'Latitude', 'Longitude', 'Description', 'Service', 'Station', 'Class', 'BW']]

@@ -4,9 +4,7 @@ website:
   navbar:
     collapse-below: lg
     left:
-      - text: "Comece Aqui"
-        href: index.ipynb
-      - text: "Uso Comum"
+      - text: "Principal"
         href: main.ipynb
       - text: "Leitura"
         href: reading.ipynb

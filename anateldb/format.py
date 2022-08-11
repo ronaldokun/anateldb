@@ -14,15 +14,15 @@ from decimal import Decimal
 import pandas as pd
 from unidecode import unidecode
 from gazpacho import get, Soup
-import requests
 from fastcore.utils import listify
 from rich.progress import track
 
 from .constants import ENTIDADES, COL_PB, ESTACAO, BW, BW_pattern
 
 # %% ..\nbs\format.ipynb 4
-def scrape_dataframe(id_list: Iterable[str]) -> pd.DataFrame:
-    """Receives a list of ids and returns a dataframe with the data from web scraping the MOSAICO page"""
+def scrape_dataframe(id_list: Iterable[str], #Lista de ids do Mosaico
+) -> pd.DataFrame: # Dataframe com os dados raspados da página do Mosaico
+    """Recebe uma lista de ids do Mosaico e retorna um dataframe com os dados raspados da página do MOSAICO"""
     df = pd.DataFrame()
     for id_ in track(id_list, description="Baixando informações complementares da Web"):
         html = get(ESTACAO.format(id_))
@@ -47,8 +47,9 @@ def scrape_dataframe(id_list: Iterable[str]) -> pd.DataFrame:
     ]
 
 # %% ..\nbs\format.ipynb 5
-def input_coordenates(df: pd.DataFrame, pasta: Union[str, Path]) -> pd.DataFrame:
-    """Input the NA's in Coordinates with those of the cities"""
+def input_coordenates(df: pd.DataFrame, # DataFrame a imputar coordenadas inválidas
+                      pasta: Union[str, Path]) -> pd.DataFrame:
+    """Imputa os registros com coordenadas ausentes (NA's) com as coordenadas do município"""
     municipios = Path(f"{pasta}/municípios.fth")
     if not municipios.exists():
         municipios = Path(f"{pasta}/municípios.xlsx")
@@ -103,8 +104,9 @@ def input_coordenates(df: pd.DataFrame, pasta: Union[str, Path]) -> pd.DataFrame
             continue
     return df
 
-
-def parse_bw(bw: str) -> float:
+# %% ..\nbs\format.ipynb 6
+def parse_bw(bw: str, #Largura de Banda codificada como string
+) -> float: #Largura de Banda codificada como float
     """Parse the bandwidth string"""
     if match := re.match(BW_pattern, bw):
         multiplier = BW[match.group(2)]
@@ -115,29 +117,33 @@ def parse_bw(bw: str) -> float:
         return multiplier * number
     return -1
 
-# %% ..\nbs\format.ipynb 8
-def optimize_floats(df: pd.DataFrame, exclude: Iterable[str] = None) -> pd.DataFrame:
-    """Optimize the floats in the dataframe to reduce the memory usage"""
+# %% ..\nbs\format.ipynb 9
+def optimize_floats(df: pd.DataFrame, # DataFrame a ser otimizado
+exclude: Iterable[str] = None, # Colunas a serem excluidas da otimização
+)->pd.DataFrame: # DataFrame com as colunas do tipo `float` otimizadas
+    """Otimiza os floats do dataframe para reduzir o uso de memória"""
     floats = df.select_dtypes(include=["float64"]).columns.tolist()
     floats = [c for c in floats if c not in listify(exclude)]
     df[floats] = df[floats].apply(pd.to_numeric, downcast="float")
     return df
 
-
-def optimize_ints(df: pd.DataFrame, exclude: Iterable[str] = None) -> pd.DataFrame:
-    """Optimize the ints in the dataframe to reduce the memory usage"""
+# %% ..\nbs\format.ipynb 10
+def optimize_ints(df: pd.DataFrame, # Dataframe a ser otimizado
+exclude: Iterable[str] = None, # Colunas a serem excluidas da otimização
+)->pd.DataFrame: # DataFrame com as colunas do tipo `int` otimizadas
+    """Otimiza os ints do dataframe para reduzir o uso de memória"""
     ints = df.select_dtypes(include=["int64"]).columns.tolist()
     ints = [c for c in ints if c not in listify(exclude)]
     df[ints] = df[ints].apply(pd.to_numeric, downcast="integer")
     return df
 
-
+# %% ..\nbs\format.ipynb 11
 def optimize_objects(
-    df: pd.DataFrame,
-    datetime_features: Iterable[str] = None,
-    exclude: Iterable[str] = None,
-) -> pd.DataFrame:
-    """Optimize the objects in the dataframe to category | string to reduce the memory usage"""
+    df: pd.DataFrame, # DataFrame a ser otimizado
+    datetime_features: Iterable[str] = None, # Colunas que serão convertidas para datetime
+    exclude: Iterable[str] = None, # Colunas que não serão convertidas
+) -> pd.DataFrame: # DataFrame com as colunas do tipo `object` otimizadas
+    """Otimiza as colunas do tipo `object` no DataFrame para `category` ou `string` para reduzir a memória e tamanho de arquivo"""
     exclude = listify(exclude)
     datetime_features = listify(datetime_features)
     for col in df.select_dtypes(
@@ -158,12 +164,13 @@ def optimize_objects(
     return df
 
 
+# %% ..\nbs\format.ipynb 12
 def df_optimize(
-    df: pd.DataFrame,
-    datetime_features: Iterable[str] = None,
-    exclude: Iterable[str] = None,
-):
-    """Optimize the data types in dataframe to reduce the memory usage"""
+    df: pd.DataFrame, # DataFrame a ser otimizado
+    datetime_features: Iterable[str] = None, # Colunas que serão convertidas para datetime
+    exclude: Iterable[str] = None, # Colunas que não serão convertidas
+) -> pd.DataFrame: # DataFrame com as colunas com tipos de dados otimizados
+    """Função que encapsula as anteriores para otimizar os tipos de dados e reduzir o tamanho do arquivo e uso de memória"""
     if datetime_features is None:
         datetime_features = []
     return optimize_floats(
@@ -171,10 +178,10 @@ def df_optimize(
         exclude,
     )
 
-# %% ..\nbs\format.ipynb 9
-def format_types(df: pd.DataFrame, # raw DataFrame to format
-                 stem: str = None # identifier for format specific conversions
-                ) -> pd.DataFrame:    # DataFrame with optimized types 
+# %% ..\nbs\format.ipynb 13
+def format_types(df: pd.DataFrame, # DataFrame a ser formatado
+                 stem: str = None, # Identificador do arquivo para otimização específica
+) -> pd.DataFrame:    # DataFrame formatado 
 
     """Convert the columns of a dataframe to optimized types"""
     df["Frequência"] = df["Frequência"].astype("float64")
@@ -216,4 +223,3 @@ def format_types(df: pd.DataFrame, # raw DataFrame to format
         df['Largura_Emissão'] = df['Largura_Emissão'].astype('category')
 
     return optimize_objects(df)
-
