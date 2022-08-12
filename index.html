@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Este repositório concentra um conjunto de scripts para navegar e baixar informações dos principais bancos de dados da Anatel e as bases públicas da Aeronáutica como o AISWEB, GEOAISWEB e ICAO cruzadas com documentações técnicas internas. Cujo dados serão utilizados em tarefas fiscalizatórias. O público alvo são os servidores do órgão, uma vez que a maioria dos sistemas utilizados aqui necessitam de autenticação cujo acesso é restrito aos servidores da ANATEL.">
+
+<title>anateldb - Anatel - Consulta e Processamento do Banco de Dados</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./Puzzle.ico" rel="icon">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="anateldb - Anatel - Consulta e Processamento do Banco de Dados">
+<meta property="og:description" content="Este repositório concentra um conjunto de scripts para navegar e baixar informações dos principais bancos de dados da Anatel e as bases públicas da Aeronáutica como o AISWEB, GEOAISWEB e ICAO cruzadas com documentações técnicas internas. Cujo dados serão utilizados em tarefas fiscalizatórias. O público alvo são os servidores do órgão, uma vez que a maioria dos sistemas utilizados aqui necessitam de autenticação cujo acesso é restrito aos servidores da ANATEL.">
+<meta property="og:site-name" content="anateldb">
+<meta name="twitter:title" content="anateldb - Anatel - Consulta e Processamento do Banco de Dados">
+<meta name="twitter:description" content="Este repositório concentra um conjunto de scripts para navegar e baixar informações dos principais bancos de dados da Anatel e as bases públicas da Aeronáutica como o AISWEB, GEOAISWEB e ICAO cruzadas com documentações técnicas internas. Cujo dados serão utilizados em tarefas fiscalizatórias. O público alvo são os servidores do órgão, uma vez que a maioria dos sistemas utilizados aqui necessitam de autenticação cujo acesso é restrito aos servidores da ANATEL.">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">anateldb</span>
+  </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./main.html">Principal</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./reading.html">Leitura</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./updates.html">Atualização</a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-api" role="button" data-bs-toggle="dropdown" aria-expanded="false">API</a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-api">    
+        <li>
+    <a class="dropdown-item" href="./constants.html">
+ <span class="dropdown-text">Constantes</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./format.html">
+ <span class="dropdown-text">Formatação</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./merging.html">
+ <span class="dropdown-text">Mesclagem</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-ajuda" role="button" data-bs-toggle="dropdown" aria-expanded="false">Ajuda</a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-ajuda">    
+        <li>
+    <a class="dropdown-item" href="https://github.com/ronaldokun/anateldb/issues"><i class="bi bi-bug" role="img">
+</i> 
+ <span class="dropdown-text">Reporte um problema</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./ronaldokun@gmail.com"><i class="bi bi-chat-right-text" role="img">
+</i> 
+ <span class="dropdown-text">Contato</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/ronaldokun/anateldb"><i class="bi bi-github" role="img">
+</i> 
+ </a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/ronaldokun"><i class="bi bi-twitter" role="img" aria-label="Twitter Autor">
+</i> 
+ </a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Anatel - Consulta e Processamento do Banco de Dados</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#instalação" id="toc-instalação" class="nav-link active" data-scroll-target="#instalação">Instalação</a></li>
+  <li><a href="#como-utilizar" id="toc-como-utilizar" class="nav-link" data-scroll-target="#como-utilizar">Como utilizar</a>
+  <ul class="collapse">
+  <li><a href="#consulta-à-base-de-dados-formatada-para-o-appanalise-de-anatel" id="toc-consulta-à-base-de-dados-formatada-para-o-appanalise-de-anatel" class="nav-link" data-scroll-target="#consulta-à-base-de-dados-formatada-para-o-appanalise-de-anatel">Consulta à base de dados formatada para o AppAnalise de Anatel</a>
+  <ul class="collapse">
+  <li><a href="#get_db" id="toc-get_db" class="nav-link" data-scroll-target="#get_db">get_db</a></li>
+  </ul></li>
+  <li><a href="#métodos-para-baixar-ou-atualizar-os-arquivos-das-bases-de-dados" id="toc-métodos-para-baixar-ou-atualizar-os-arquivos-das-bases-de-dados" class="nav-link" data-scroll-target="#métodos-para-baixar-ou-atualizar-os-arquivos-das-bases-de-dados">Métodos para baixar ou atualizar os arquivos das bases de dados</a></li>
+  <li><a href="#métodos-para-ler-as-bases-de-dados" id="toc-métodos-para-ler-as-bases-de-dados" class="nav-link" data-scroll-target="#métodos-para-ler-as-bases-de-dados">Métodos para ler as Bases de Dados</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/ronaldokun/anateldb/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Anatel - Consulta e Processamento do Banco de Dados</h1>
+</div>
+
+<div>
+  <div class="description">
+    Este repositório concentra um conjunto de scripts para navegar e baixar informações dos principais bancos de dados da Anatel e as bases públicas da Aeronáutica como o AISWEB, GEOAISWEB e ICAO cruzadas com documentações técnicas internas. Cujo dados serão utilizados em tarefas fiscalizatórias. O público alvo são os servidores do órgão, uma vez que a maioria dos sistemas utilizados aqui necessitam de autenticação cujo acesso é restrito aos servidores da ANATEL.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<p><a href="https://gitmoji.dev"> <img src="https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg?style=flat-square" alt="Gitmoji"> </a></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://github.com/maxhumber/gazpacho"><img src="https://img.shields.io/badge/scraper-gazpacho-C6422C.png" class="img-fluid figure-img"></a></p>
+<p></p><figcaption class="figure-caption">scraper: gazpacho</figcaption><p></p>
+</figure>
+</div>
+<section id="instalação" class="level2">
+<h2 class="anchored" data-anchor-id="instalação">Instalação</h2>
+<p><code>pip install anateldb</code></p>
+</section>
+<section id="como-utilizar" class="level2">
+<h2 class="anchored" data-anchor-id="como-utilizar">Como utilizar</h2>
+<section id="consulta-à-base-de-dados-formatada-para-o-appanalise-de-anatel" class="level3">
+<h3 class="anchored" data-anchor-id="consulta-à-base-de-dados-formatada-para-o-appanalise-de-anatel">Consulta à base de dados formatada para o AppAnalise de Anatel</h3>
+<p>A motivação original para a presente biblioteca foi disponibilizar os dados de diferentes fontes da Anatel - e posteriormente da Aeronáutica - programaticamente, para serem utilizadas pelo <a href="https://github.com/EricMagalhaesDelgado/appAnalise/releases/">AppAnalise</a> na identificação de emissões captadas pelos planos de monitoração e também em fiscalização de campo.</p>
+<p>Os dados no formato atual em excel são disponibilizados na pasta dados no repositório https://github.com/ronaldokun/anateldb.</p>
+<p>Os dados em formato otimizado <code>.parquet.gzip</code> são disponibilizados junto ao repositório na pasta <code>dados</code> juntamente com as versões das bases individuais. Futuramente o objetivo é descontinuar a liberação de arquivos em formato excel e disponibilizar apenas os dados em formato otimizado.</p>
+<hr>
+<section id="get_db" class="level4">
+<h4 class="anchored" data-anchor-id="get_db">get_db</h4>
+<blockquote class="blockquote">
+<pre><code> get_db (path:Union[str,pathlib.Path], up_base:bool=False,
+         up_icao:bool=False, up_pmec:bool=False, up_geo:bool=False,
+         dist:float=10)</code></pre>
+</blockquote>
+<p>Lê e opcionalmente atualiza as bases da Anatel, mescla as bases da Aeronáutica, salva e retorna o arquivo</p>
+<table class="table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 25%">
+<col style="width: 34%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>path</td>
+<td>Union</td>
+<td></td>
+<td>Pasta onde salvar os arquivos”,</td>
+</tr>
+<tr class="even">
+<td>up_base</td>
+<td>bool</td>
+<td>False</td>
+<td>Atualizar as bases da Anatel?</td>
+</tr>
+<tr class="odd">
+<td>up_icao</td>
+<td>bool</td>
+<td>False</td>
+<td>Atualizar a base do ICAO?</td>
+</tr>
+<tr class="even">
+<td>up_pmec</td>
+<td>bool</td>
+<td>False</td>
+<td>Atualizar a base do AISWEB?</td>
+</tr>
+<tr class="odd">
+<td>up_geo</td>
+<td>bool</td>
+<td>False</td>
+<td>Atualizar a base do GeoAISWEB?</td>
+</tr>
+<tr class="even">
+<td>dist</td>
+<td>float</td>
+<td>10</td>
+<td>Distância máxima entre as coordenadas consideradas iguais</td>
+</tr>
+<tr class="odd">
+<td><strong>Returns</strong></td>
+<td><strong>DataFrame</strong></td>
+<td></td>
+<td><strong>Retorna o DataFrame com as bases da Anatel e da Aeronáutica</strong></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="métodos-para-baixar-ou-atualizar-os-arquivos-das-bases-de-dados" class="level3">
+<h3 class="anchored" data-anchor-id="métodos-para-baixar-ou-atualizar-os-arquivos-das-bases-de-dados">Métodos para baixar ou atualizar os arquivos das bases de dados</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> anateldb.updates <span class="im">import</span> update_mosaico, update_radcom, update_stel, update_base</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A função seguinte baixa os dados diretamente da interface pública online do <a href="http://sistemas.anatel.gov.br/se/public/view/b/srd.php">Spectrum E</a></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>time</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>update_mosaico(pasta<span class="op">=</span><span class="st">'D:\OneDrive - ANATEL\GR01FI3\BaseDados'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>Baixando as Estações do Mosaico...
+Baixando o Plano Básico das Estações...
+Baixando o Histórico de Atualizações...
+Kbô
+Wall time: 8.12 s</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>time</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>update_radcom(<span class="st">'D:\OneDrive - ANATEL\GR01FI3\BaseDados'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>Lendo o Banco de Dados de Radcom
+Wall time: 1 s</code></pre>
+<p>A função <code>update_stel</code> é bem mais lenta que as demais, dado que o banco de dados do STEL é antigo e abarca todos os registros de outorga de serviços de telecomunicações da ANATEL, com mais de <strong>400.000</strong> registros ativos. Esse banco de dados é atualizado 1 vez ao dia à meia-noite e remete ao estado do dia anterior, portanto não faz sentido atualizá-lo mais de 1 vez por dia.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>time</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>update_stel(<span class="st">'D:\OneDrive - ANATEL\GR01FI3\BaseDados'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A função <a href="https://ronaldokun.github.io/anateldb\updates.html#update_base"><code>update_base</code></a> combina as 3 bases anteriores e uniformiza os campos:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>update_base(<span class="st">'D:\OneDrive - ANATEL\GR01FI3\BaseDados'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="métodos-para-ler-as-bases-de-dados" class="level3">
+<h3 class="anchored" data-anchor-id="métodos-para-ler-as-bases-de-dados">Métodos para ler as Bases de Dados</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> anateldb.reading <span class="im">import</span> read_radcom, read_stel, read_mosaico, read_base</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>radcom <span class="op">=</span> read_radcom(pasta<span class="op">=</span><span class="st">'D:\OneDrive - ANATEL\GR01FI3\BaseDados'</span>) <span class="op">;</span> radcom.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div>
+
+
+<table class="dataframe table table-sm table-striped">
+<thead>
+<tr>
+<th>
+</th>
+<th>
+Frequência
+</th>
+<th>
+Unidade
+</th>
+<th>
+Latitude
+</th>
+<th>
+Longitude
+</th>
+<th>
+Fase
+</th>
+<th>
+Situação
+</th>
+<th>
+Numero da Estação
+</th>
+<th>
+CNPJ
+</th>
+<th>
+Fistel
+</th>
+<th>
+Entidade
+</th>
+<th>
+Município
+</th>
+<th>
+UF
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>
+0
+</th>
+<td>
+104.9
+</td>
+<td>
+MHz
+</td>
+<td>
+-24.861389
+</td>
+<td>
+-54.334722
+</td>
+<td>
+3
+</td>
+<td>
+A
+</td>
+<td>
+641168764
+</td>
+<td>
+00104477000117
+</td>
+<td>
+50011685115
+</td>
+<td>
+ACADEMIA CULTURAL DE SANTA HELENA - ACULT - ST…
+</td>
+<td>
+Santa Helena
+</td>
+<td>
+PR
+</td>
+</tr>
+<tr>
+<th>
+1
+</th>
+<td>
+87.9
+</td>
+<td>
+MHz
+</td>
+<td>
+-7.074444
+</td>
+<td>
+-36.731111
+</td>
+<td>
+3
+</td>
+<td>
+M
+</td>
+<td>
+682699349
+</td>
+<td>
+00284576000128
+</td>
+<td>
+50012524409
+</td>
+<td>
+ASSOCIACAO DOS MORADORES E PRODUT. RURAIS DE A…
+</td>
+<td>
+Assunção
+</td>
+<td>
+PB
+</td>
+</tr>
+<tr>
+<th>
+2
+</th>
+<td>
+87.9
+</td>
+<td>
+MHz
+</td>
+<td>
+-20.323611
+</td>
+<td>
+-44.246944
+</td>
+<td>
+3
+</td>
+<td>
+H
+</td>
+<td>
+659028590
+</td>
+<td>
+00575697000129
+</td>
+<td>
+50011824689
+</td>
+<td>
+ASSOCIACAO BONFIM ESPERANCA- ABESPE
+</td>
+<td>
+Bonfim
+</td>
+<td>
+MG
+</td>
+</tr>
+<tr>
+<th>
+3
+</th>
+<td>
+104.9
+</td>
+<td>
+MHz
+</td>
+<td>
+-18.843611
+</td>
+<td>
+-46.792778
+</td>
+<td>
+3
+</td>
+<td>
+B
+</td>
+<td>
+631410937
+</td>
+<td>
+00792795000118
+</td>
+<td>
+50011398132
+</td>
+<td>
+ASSOCIACAO DOS TRABALHADORES DE GUIMARANIA (ATG)
+</td>
+<td>
+Guimarânia
+</td>
+<td>
+MG
+</td>
+</tr>
+<tr>
+<th>
+4
+</th>
+<td>
+87.9
+</td>
+<td>
+MHz
+</td>
+<td>
+-19.466667
+</td>
+<td>
+-45.600000
+</td>
+<td>
+3
+</td>
+<td>
+M
+</td>
+<td>
+631412301
+</td>
+<td>
+00794510000188
+</td>
+<td>
+50011398990
+</td>
+<td>
+FUNDACAO ASSISTENCIAL LAR DA PAZ - FALP
+</td>
+<td>
+Dores do Indaiá
+</td>
+<td>
+MG
+</td>
+</tr>
+</tbody>
+
+</table>
+</div>
+<p>Se o argumento <code>update=True</code> for fornecido ou arquivo local não existir, a base de dados é atualizada por meio da função <code>update_radcom</code>.</p>
+<blockquote class="blockquote">
+<p><em>A função <code>update_radcom</code> somente irá funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.</em></p>
+</blockquote>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>radcom <span class="op">=</span> read_radcom(pasta<span class="op">=</span><span class="st">'D:\OneDrive - ANATEL\GR01FI3\BaseDados'</span>, update<span class="op">=</span><span class="va">True</span>) <span class="op">;</span> radcom.tail()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>Lendo o Banco de Dados de Radcom</code></pre>
+<div>
+
+
+<table class="dataframe table table-sm table-striped">
+<thead>
+<tr>
+<th>
+</th>
+<th>
+Frequência
+</th>
+<th>
+Unidade
+</th>
+<th>
+Latitude
+</th>
+<th>
+Longitude
+</th>
+<th>
+Fase
+</th>
+<th>
+Situação
+</th>
+<th>
+Numero da Estação
+</th>
+<th>
+CNPJ
+</th>
+<th>
+Fistel
+</th>
+<th>
+Entidade
+</th>
+<th>
+Município
+</th>
+<th>
+UF
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>
+4639
+</th>
+<td>
+87.9
+</td>
+<td>
+MHz
+</td>
+<td>
+-10.311667
+</td>
+<td>
+-48.162222
+</td>
+<td>
+1
+</td>
+<td>
+K
+</td>
+<td>
+1011036964
+</td>
+<td>
+08931976000190
+</td>
+<td>
+50411347829
+</td>
+<td>
+ASSOCIACAO AMIGOS DA CULTURA E DO MEIO AMBIENT…
+</td>
+<td>
+Palmas
+</td>
+<td>
+TO
+</td>
+</tr>
+<tr>
+<th>
+4640
+</th>
+<td>
+104.9
+</td>
+<td>
+MHz
+</td>
+<td>
+-10.005000
+</td>
+<td>
+-48.988889
+</td>
+<td>
+1
+</td>
+<td>
+A
+</td>
+<td>
+1011037472
+</td>
+<td>
+19001721000144
+</td>
+<td>
+50416345301
+</td>
+<td>
+ASSOCIACAO RADIO COMUNITARIA MONTE SANTO FM
+</td>
+<td>
+Monte Santo do Tocantins
+</td>
+<td>
+TO
+</td>
+</tr>
+<tr>
+<th>
+4641
+</th>
+<td>
+104.9
+</td>
+<td>
+MHz
+</td>
+<td>
+-5.586389
+</td>
+<td>
+-48.061111
+</td>
+<td>
+P
+</td>
+<td>
+M
+</td>
+<td>
+1011044797
+</td>
+<td>
+19332116000156
+</td>
+<td>
+50416480004
+</td>
+<td>
+ASSOCIACAO RADIO COMUNITARIA TOP FM
+</td>
+<td>
+Araguatins
+</td>
+<td>
+TO
+</td>
+</tr>
+<tr>
+<th>
+4642
+</th>
+<td>
+98.3
+</td>
+<td>
+MHz
+</td>
+<td>
+-28.682222
+</td>
+<td>
+-53.610278
+</td>
+<td>
+2
+</td>
+<td>
+K
+</td>
+<td>
+1011044940
+</td>
+<td>
+97538346000180
+</td>
+<td>
+50416390609
+</td>
+<td>
+ASSOCIACAO DE RADIODIFUSAO CIDADE DE CRUZ ALTA
+</td>
+<td>
+Cruz Alta
+</td>
+<td>
+RS
+</td>
+</tr>
+<tr>
+<th>
+4643
+</th>
+<td>
+104.9
+</td>
+<td>
+MHz
+</td>
+<td>
+-6.594722
+</td>
+<td>
+-35.055278
+</td>
+<td>
+1
+</td>
+<td>
+K
+</td>
+<td>
+1011110250
+</td>
+<td>
+10877144000184
+</td>
+<td>
+50411382063
+</td>
+<td>
+ASSOCIAÇÃO DE DESENVOLVIMENTO CULTURAL DA RÁDI…
+</td>
+<td>
+Mataraca
+</td>
+<td>
+PB
+</td>
+</tr>
+</tbody>
+
+</table>
+</div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>stel <span class="op">=</span> read_stel(pasta<span class="op">=</span><span class="st">'D:\OneDrive - ANATEL\GR01FI3\BaseDados'</span>, update<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Os dados do Stel não serão ilustrados aqui por se tratar de dados de telecomunicação privados, os demais dados de radiodifusão são públicos e disponíveis para qualquer interessado consultar</strong></p>
+<p>Se o argumento <code>update=True</code> for fornecido ou arquivo local não existir, a base de dados é atualizada por meio da função <code>update_stel</code>.</p>
+<blockquote class="blockquote">
+<p><em>A função <code>update_stel</code> somente irá funcionar caso o PC estiver plugado na rede interna cabeada da Anatel.</em></p>
+</blockquote>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>mosaico <span class="op">=</span> read_mosaico(pasta<span class="op">=</span><span class="st">'D:\OneDrive - ANATEL\GR01FI3\BaseDados'</span>) <span class="op">;</span> mosaico.tail()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>Baixando as Estações do Mosaico...
+Baixando o Plano Básico das Estações...
+Baixando o Histórico de Atualizações...
+Kbô</code></pre>
+<div>
+
+
+<table class="dataframe table table-sm table-striped">
+<thead>
+<tr>
+<th>
+</th>
+<th>
+Serviço
+</th>
+<th>
+Situação
+</th>
+<th>
+Entidade
+</th>
+<th>
+Fistel
+</th>
+<th>
+CNPJ
+</th>
+<th>
+Município
+</th>
+<th>
+UF
+</th>
+<th>
+Id
+</th>
+<th>
+Número da Estação
+</th>
+<th>
+Classe
+</th>
+<th>
+Frequência
+</th>
+<th>
+Latitude
+</th>
+<th>
+Longitude
+</th>
+<th>
+Num_Ato
+</th>
+<th>
+Órgao
+</th>
+<th>
+Data_Ato
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>
+21146
+</th>
+<td>
+RTVD
+</td>
+<td>
+TV-C2
+</td>
+<td>
+M. V. L - COMMUNICARE TELECOMUNICACOES LTDA
+</td>
+<td>
+50419656170
+</td>
+<td>
+12071310000186
+</td>
+<td>
+Parauapebas
+</td>
+<td>
+PA
+</td>
+<td>
+5f2068e65ace5
+</td>
+<td>
+</td>
+<td>
+C
+</td>
+<td>
+503
+</td>
+<td>
+-6,0678
+</td>
+<td>
+-49,9037
+</td>
+<td>
+7588
+</td>
+<td>
+ORLE
+</td>
+<td>
+2020-12-10 18:21:09
+</td>
+</tr>
+<tr>
+<th>
+21147
+</th>
+<td>
+RTVD
+</td>
+<td>
+TV-C1
+</td>
+<td>
+MERCES COMUNICACOES LTDA
+</td>
+<td>
+50419663118
+</td>
+<td>
+11322505000199
+</td>
+<td>
+Delmiro Gouveia
+</td>
+<td>
+AL
+</td>
+<td>
+5f218fcfb0d84
+</td>
+<td>
+</td>
+<td>
+C
+</td>
+<td>
+545
+</td>
+<td>
+-9,3853
+</td>
+<td>
+-37,9987
+</td>
+<td>
+9430
+</td>
+<td>
+ORLE
+</td>
+<td>
+2017-06-09 00:00:00
+</td>
+</tr>
+<tr>
+<th>
+21148
+</th>
+<td>
+RTVD
+</td>
+<td>
+TV-C1
+</td>
+<td>
+FUNDACAO EDUCACIONAL E CULTURAL DE IPANEMA
+</td>
+<td>
+50433856696
+</td>
+<td>
+04608796000110
+</td>
+<td>
+Sabará
+</td>
+<td>
+MG
+</td>
+<td>
+5f32c1c918e6b
+</td>
+<td>
+</td>
+<td>
+C
+</td>
+<td>
+207
+</td>
+<td>
+-19,89667
+</td>
+<td>
+-43,80722
+</td>
+<td>
+3301
+</td>
+<td>
+ORLE
+</td>
+<td>
+2020-06-23 00:00:00
+</td>
+</tr>
+<tr>
+<th>
+21149
+</th>
+<td>
+FM
+</td>
+<td>
+FM-C2
+</td>
+<td>
+RADIO ITAPIRANGA LTDA
+</td>
+<td>
+50433860456
+</td>
+<td>
+84375872000124
+</td>
+<td>
+Itapiranga
+</td>
+<td>
+SC
+</td>
+<td>
+5f68d432841a5
+</td>
+<td>
+</td>
+<td>
+B1
+</td>
+<td>
+105,1
+</td>
+<td>
+-27,15778
+</td>
+<td>
+-53,69583
+</td>
+<td>
+567
+</td>
+<td>
+ORLE
+</td>
+<td>
+2021-01-26 17:20:30
+</td>
+</tr>
+<tr>
+<th>
+21150
+</th>
+<td>
+FM
+</td>
+<td>
+FM-C1
+</td>
+<td>
+EMISSORAS SUL BRASILEIRAS LTDA
+</td>
+<td>
+50433937009
+</td>
+<td>
+95818506000119
+</td>
+<td>
+Horizontina
+</td>
+<td>
+RS
+</td>
+<td>
+5f8dcc96f23f9
+</td>
+<td>
+</td>
+<td>
+B1
+</td>
+<td>
+100,3
+</td>
+<td>
+-27,62833
+</td>
+<td>
+-54,30528
+</td>
+<td>
+3166
+</td>
+<td>
+ORLE
+</td>
+<td>
+2020-06-13 00:00:00
+</td>
+</tr>
+</tbody>
+
+</table>
+</div>
+<p>Se o argumento <code>update=True</code> for fornecido ou o arquivo local não existir, a base de dados é atualizada por meio da função <code>update_mosaico</code>.</p>
+<blockquote class="blockquote">
+<p>A função <code>update_mosaico</code> usa a base de dados Pública do Spectrum E, portanto basta somente estar conectado na internet 😎.</p>
+</blockquote>
+<p>A função <a href="https://ronaldokun.github.io/anateldb\updates.html#update_base"><code>update_base</code></a> combina as 3 atualizações de base anteriormente descritas.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

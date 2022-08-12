@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Este módulo atualiza as bases. Executa as queries sql do STEL, RADCOM e baixa os arquivos de estações e plano básico do MOSAICO.">
+
+<title>anateldb - Atualização</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./Puzzle.ico" rel="icon">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="anateldb - Atualização">
+<meta property="og:description" content="Este módulo atualiza as bases. Executa as queries sql do STEL, RADCOM e baixa os arquivos de estações e plano básico do MOSAICO.">
+<meta property="og:site-name" content="anateldb">
+<meta name="twitter:title" content="anateldb - Atualização">
+<meta name="twitter:description" content="Este módulo atualiza as bases. Executa as queries sql do STEL, RADCOM e baixa os arquivos de estações e plano básico do MOSAICO.">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">anateldb</span>
+  </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./main.html">Principal</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./reading.html">Leitura</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./updates.html" aria-current="page">Atualização</a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-api" role="button" data-bs-toggle="dropdown" aria-expanded="false">API</a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-api">    
+        <li>
+    <a class="dropdown-item" href="./constants.html">
+ <span class="dropdown-text">Constantes</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./format.html">
+ <span class="dropdown-text">Formatação</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./merging.html">
+ <span class="dropdown-text">Mesclagem</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-ajuda" role="button" data-bs-toggle="dropdown" aria-expanded="false">Ajuda</a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-ajuda">    
+        <li>
+    <a class="dropdown-item" href="https://github.com/ronaldokun/anateldb/issues"><i class="bi bi-bug" role="img">
+</i> 
+ <span class="dropdown-text">Reporte um problema</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./ronaldokun@gmail.com"><i class="bi bi-chat-right-text" role="img">
+</i> 
+ <span class="dropdown-text">Contato</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/ronaldokun/anateldb"><i class="bi bi-github" role="img">
+</i> 
+ </a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/ronaldokun"><i class="bi bi-twitter" role="img" aria-label="Twitter Autor">
+</i> 
+ </a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Atualização</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#conexão-com-o-banco-de-dados" id="toc-conexão-com-o-banco-de-dados" class="nav-link active" data-scroll-target="#conexão-com-o-banco-de-dados">Conexão com o banco de dados</a>
+  <ul class="collapse">
+  <li><a href="#connect_db" id="toc-connect_db" class="nav-link" data-scroll-target="#connect_db">connect_db</a></li>
+  <li><a href="#clean_mosaico" id="toc-clean_mosaico" class="nav-link" data-scroll-target="#clean_mosaico">clean_mosaico</a></li>
+  </ul></li>
+  <li><a href="#atualização-das-bases-de-dados" id="toc-atualização-das-bases-de-dados" class="nav-link" data-scroll-target="#atualização-das-bases-de-dados">Atualização das bases de dados</a>
+  <ul class="collapse">
+  <li><a href="#update_radcom" id="toc-update_radcom" class="nav-link" data-scroll-target="#update_radcom">update_radcom</a></li>
+  <li><a href="#update_stel" id="toc-update_stel" class="nav-link" data-scroll-target="#update_stel">update_stel</a></li>
+  <li><a href="#update_mosaico" id="toc-update_mosaico" class="nav-link" data-scroll-target="#update_mosaico">update_mosaico</a></li>
+  <li><a href="#update_base" id="toc-update_base" class="nav-link" data-scroll-target="#update_base">update_base</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/ronaldokun/anateldb/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Atualização</h1>
+</div>
+
+<div>
+  <div class="description">
+    Este módulo atualiza as bases. Executa as queries sql do STEL, RADCOM e baixa os arquivos de estações e plano básico do MOSAICO.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<section id="conexão-com-o-banco-de-dados" class="level2">
+<h2 class="anchored" data-anchor-id="conexão-com-o-banco-de-dados">Conexão com o banco de dados</h2>
+<p>A função a seguir é um <code>wrapper</code> simples que utiliza o <code>pyodbc</code> para se conectar ao banco de dados base da Anatel e retorna o objeto da conexão</p>
+<hr>
+<section id="connect_db" class="level4">
+<h4 class="anchored" data-anchor-id="connect_db">connect_db</h4>
+<blockquote class="blockquote">
+<pre><code> connect_db (server:str='ANATELBDRO05', database:str='SITARWEB',
+             trusted_conn:str='yes', mult_results:bool=True)</code></pre>
+</blockquote>
+<p>Conecta ao Banco <code>server</code> e retorna o ‘cursor’ (iterador) do Banco</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>server</td>
+<td>str</td>
+<td>ANATELBDRO05</td>
+<td>Servidor do Banco de Dados</td>
+</tr>
+<tr class="even">
+<td>database</td>
+<td>str</td>
+<td>SITARWEB</td>
+<td>Nome do Banco de Dados</td>
+</tr>
+<tr class="odd">
+<td>trusted_conn</td>
+<td>str</td>
+<td>yes</td>
+<td>Conexão Segura: yes | no</td>
+</tr>
+<tr class="even">
+<td>mult_results</td>
+<td>bool</td>
+<td>True</td>
+<td>Múltiplos Resultados</td>
+</tr>
+<tr class="odd">
+<td><strong>Returns</strong></td>
+<td><strong>Connection</strong></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_connection():</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    conn <span class="op">=</span> connect_db()</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    cursor <span class="op">=</span> conn.cursor()</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> query <span class="kw">in</span> (RADCOM,STEL):</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        cursor.execute(query)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        test_eq(<span class="bu">type</span>(cursor.fetchone()), pyodbc.Row)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="clean_mosaico" class="level4">
+<h4 class="anchored" data-anchor-id="clean_mosaico">clean_mosaico</h4>
+<blockquote class="blockquote">
+<pre><code> clean_mosaico (df:pandas.core.frame.DataFrame,
+                pasta:Union[str,pathlib.Path])</code></pre>
+</blockquote>
+<p>Clean the merged dataframe with the data from the MOSAICO page</p>
+<table class="table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 38%">
+<col style="width: 52%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>df</td>
+<td>DataFrame</td>
+<td>DataFrame com os dados de Estações e Plano_Básico mesclados</td>
+</tr>
+<tr class="even">
+<td>pasta</td>
+<td>Union</td>
+<td>Pasta com os dados de municípios para imputar coordenadas ausentes</td>
+</tr>
+<tr class="odd">
+<td><strong>Returns</strong></td>
+<td><strong>DataFrame</strong></td>
+<td><strong>DataFrame com os dados mesclados e limpos</strong></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="atualização-das-bases-de-dados" class="level2">
+<h2 class="anchored" data-anchor-id="atualização-das-bases-de-dados">Atualização das bases de dados</h2>
+<p>As bases de dados são atualizadas atráves das funções a seguir, o único argumento passado em todas elas é a pasta na qual os arquivos locais processados serão salvos, os nomes dos arquivos são padronizados e não podem ser editados para que as funções de leitura e processamento recebam somente a pasta na qual esses arquivos foram salvos.</p>
+<hr>
+<section id="update_radcom" class="level4">
+<h4 class="anchored" data-anchor-id="update_radcom">update_radcom</h4>
+<blockquote class="blockquote">
+<pre><code> update_radcom (folder:Union[str,pathlib.Path])</code></pre>
+</blockquote>
+<p>Atualiza a tabela local retornada pela query <code>RADCOM</code></p>
+<table class="table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>folder</td>
+<td>Union</td>
+<td>Pasta onde salvar os arquivos</td>
+</tr>
+<tr class="even">
+<td><strong>Returns</strong></td>
+<td><strong>DataFrame</strong></td>
+<td><strong>DataFrame com os dados atualizados</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="update_stel" class="level4">
+<h4 class="anchored" data-anchor-id="update_stel">update_stel</h4>
+<blockquote class="blockquote">
+<pre><code> update_stel (folder:Union[str,pathlib.Path])</code></pre>
+</blockquote>
+<p>Atualiza a tabela local retornada pela query <code>STEL</code></p>
+<table class="table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>folder</td>
+<td>Union</td>
+<td>Pasta onde salvar os arquivos</td>
+</tr>
+<tr class="even">
+<td><strong>Returns</strong></td>
+<td><strong>DataFrame</strong></td>
+<td><strong>DataFrame com os dados atualizados</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="update_mosaico" class="level4">
+<h4 class="anchored" data-anchor-id="update_mosaico">update_mosaico</h4>
+<blockquote class="blockquote">
+<pre><code> update_mosaico (folder:Union[str,pathlib.Path])</code></pre>
+</blockquote>
+<p>Atualiza a tabela local do Mosaico. É baixado e processado arquivos xml zipados da página pública do Spectrum E</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>folder</td>
+<td>Union</td>
+<td>Pasta onde salvar os arquivos</td>
+</tr>
+<tr class="even">
+<td><strong>Returns</strong></td>
+<td><strong>DataFrame</strong></td>
+<td><strong>DataFrame com os dados atualizados</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="update_base" class="level4">
+<h4 class="anchored" data-anchor-id="update_base">update_base</h4>
+<blockquote class="blockquote">
+<pre><code> update_base (folder:Union[str,pathlib.Path])</code></pre>
+</blockquote>
+<p>Wrapper que atualiza opcionalmente lê e atualiza as três bases indicadas anteriormente, as combina e salva o arquivo consolidado na folder <code>folder</code></p>
+<table class="table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>folder</td>
+<td>Union</td>
+<td>Pasta onde salvar os arquivos</td>
+</tr>
+<tr class="even">
+<td><strong>Returns</strong></td>
+<td><strong>DataFrame</strong></td>
+<td><strong>DataFrame com os dados atualizados</strong></td>
+</tr>
+</tbody>
+</table>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># from urllib.request import Request, urlopen</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># from urllib.error import URLError</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># req = Request(ESTACAO)</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># try:</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">#     response = urlopen(req)</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># except URLError as e:</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#     if hasattr(e, 'reason'):</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#         print('We failed to reach a server.')</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#         print('Reason: ', e.reason)</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#     elif hasattr(e, 'code'):</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">#         print('The server couldn\'t fulfill the request.')</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co">#         print('Error code: ', e.code)</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co"># else:</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co">#     Path.cwd().joinpath('estações.zip').write_bytes(response.read())</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
