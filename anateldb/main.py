@@ -136,17 +136,18 @@ def add_aero(base, # Base Consolidada Anatel
 # %% ..\nbs\main.ipynb 7
 def get_db(
     path: Union[str, Path], # Pasta onde salvar os arquivos",
-    up_base: bool=False, # Atualizar as bases da Anatel?
-    up_icao: bool=False, # Atualizar a base do ICAO?
-    up_pmec: bool=False, # Atualizar a base do AISWEB?
-    up_geo: bool=False, # Atualizar a base do GeoAISWEB?
+    update: bool=False, # Atualizar as bases da Anatel e da Aeronáutica?",
     dist: float=MAX_DIST, # Distância máxima entre as coordenadas consideradas iguais
 ) -> pd.DataFrame: # Retorna o DataFrame com as bases da Anatel e da Aeronáutica
     """Lê e opcionalmente atualiza as bases da Anatel, mescla as bases da Aeronáutica, salva e retorna o arquivo"""
     dest = Path(path)
     dest.mkdir(parents=True, exist_ok=True)
     print(":scroll:[green]Lendo as bases de dados da Anatel...")
-    rd = read_base(path, up_base)
+    if not update:
+        cached_file = dest / 'AnatelDB.parquet.gzip'
+        if cached_file.exists():
+            return pd.read_parquet(cached_file)
+    rd = read_base(path, update)
     rd["Descrição"] = (
         "["
         + rd.Fonte.astype("string").fillna("NI")
@@ -180,7 +181,7 @@ def get_db(
     rd = rd.loc[:, export_columns]
     rd.columns = APP_ANALISE
     print(":airplane:[blue]Adicionando os registros da Aeronáutica.")
-    aero = read_aero(path)
+    aero = read_aero(path, update=False) #NotImplemented update
     rd = add_aero(rd, aero, dist)
     print(":card_file_box:[green]Salvando os arquivos...")
     d = json.loads((dest.parent / "VersionFile.json").read_text())
