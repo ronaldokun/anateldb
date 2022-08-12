@@ -140,11 +140,9 @@ checklink/cookies.txt
 .gitconfig
 
 # bin / db files
-*.xlsx
 *.fth
 *.csv
 *.zip
-*.version
 *.aisweb
 mosaico*
 radcom*

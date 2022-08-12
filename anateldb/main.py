@@ -97,20 +97,40 @@ def check_modify_row(df, # DataFrame para mesclar adicionar o registro
 # %% ..\nbs\main.ipynb 6
 def add_aero(base, # Base Consolidada Anatel
              aero, # Base da Aeronáutica
+             dist: float = 0.5, # Distância máxima entre as coordenadas
 )->pd.DataFrame: # Retorna o DataFrame com o registro adicionados e mesclados
+    # sourcery skip: use-fstring-for-concatenation
     """Mescla os registros de frequência em comum da base da Aeronáutica com a base da Anatel
     Os registros são mesclados se a distância entre eles for menor que `MAX_DIST`
     do contrário são adicionados individualmente como uma linha na base da Anatel`	
     """
-    frequencies = set(base.Frequency.unique()).intersection(aero.Frequency.unique())
-    for f in tqdm(frequencies):
+    aero_freqs = set(aero.Frequency.unique())
+    frequencies = set(base.Frequency.unique()).intersection(aero_freqs)
+    extras = aero_freqs.difference(frequencies)
+    extras = list(aero[aero.Frequency.isin(extras)].itertuples())
+    for f in (pbar:= tqdm(frequencies)):
         sa, sb = get_subsets(f, base, aero)
-        if all([sa, sb]): # Somente há registros para mesclar se estiverem nos dois conjuntos
-            for fa, fb in product(sa.copy().values(), sb.copy().values()):
-                if geodesic((fa.Latitude, fa.Longitude), (fb.Latitude, fb.Longitude)).km <= MAX_DIST:
-                    base = check_modify_row(base, f, [fa, fb], [sa, sb]) 
-        for r in sb.copy().values():# Do contrário os registros são adicionados individualmente ao DataFrame
-            base = check_add_row(base, f, [r], [sb])
+        while all([sa,sb]):
+            combinations = list(product(sa.copy().values(), sb.copy().values()))
+            for fa, fb in combinations:
+                pbar.set_description(f'Frequency {f}MHz, #Combinations {len(combinations)}') 
+                if geodesic((fa.Latitude, fa.Longitude), (fb.Latitude, fb.Longitude)).km <= dist:
+                    base.loc[fa.Index, 'Description'] = fa.Description + ' | ' + fb.Description
+                    sa.pop(fa.Index)
+                    sb.pop(fb.Index)
+                    break
+            else:
+                if sb:
+                    d = pd.DataFrame(sb.values()).drop('Index', axis=1)
+                    base = pd.concat([base, d], ignore_index=True)
+                    sb = None
+    for row in (pbar:= tqdm(extras)):
+        pbar.set_description(f'Frequency {row.Frequency}MHz - Extra')
+        d = pd.DataFrame({'Frequency': row.Frequency, 
+                          'Latitude': row.Latitude, 
+                          'Longitude': row.Longitude, 
+                          'Description': row.Description}, index=[0])    
+        base = pd.concat([base, d], ignore_index=True)
     return base
 
 # %% ..\nbs\main.ipynb 7
@@ -120,6 +140,7 @@ def get_db(
     up_icao: bool=False, # Atualizar a base do ICAO?
     up_pmec: bool=False, # Atualizar a base do AISWEB?
     up_geo: bool=False, # Atualizar a base do GeoAISWEB?
+    dist: float=0.5, # Distância máxima entre as coordenadas consideradas iguais
 ) -> pd.DataFrame: # Retorna o DataFrame com as bases da Anatel e da Aeronáutica
     """Lê e opcionalmente atualiza as bases da Anatel, mescla as bases da Aeronáutica, salva e retorna o arquivo"""
     dest = Path(path)
@@ -160,9 +181,9 @@ def get_db(
     rd.columns = APP_ANALISE
     print(":airplane:[blue]Adicionando os registros da Aeronáutica.")
     aero = read_aero(path)
-    rd = add_aero(rd, aero)
+    rd = add_aero(rd, aero, dist)
     print(":card_file_box:[green]Salvando os arquivos...")
-    d = json.loads((dest / "VersionFile.json").read_text())
+    d = json.loads((dest.parent / "VersionFile.json").read_text())
     mod_times = get_modtimes(path)
     mod_times['ReleaseDate'] = datetime.today().strftime("%d/%m/%Y %H:%M:%S")
     for c in ['Latitude', 'Longitude']:
@@ -175,13 +196,12 @@ def get_db(
     rd['BW'] = rd['BW'].astype('float32').fillna(-1)
     rd['Class'] = rd.Class.astype('string').fillna('NI').astype('category')
     rd = rd.drop_duplicates(keep="first").sort_values(by=['Frequency', 'Latitude', 'Longitude']).reset_index(drop=True)
-    rd['Id'] = [f'#{i}' for i in rd.index]
+    rd['Id'] = [f'#{i+1}' for i in rd.index]
     rd['Id'] = rd.Id.astype('string')
     rd = rd.loc[:, ['Id', 'Frequency', 'Latitude', 'Longitude', 'Description', 'Service', 'Station', 'Class', 'BW']]
     rd.to_parquet(f"{dest}/AnatelDB.parquet.gzip", compression='gzip', index=False)
     d["anateldb"]["Version"] = bump_version(d["anateldb"]["Version"])
     d['anateldb'].update(mod_times)
-    json.dump(d, (dest / "VersionFile.json").open("w"))
-    Path(dest / ".version").write_text(f"v{d['anateldb']['Version']}")
+    json.dump(d, (dest.parent / "VersionFile.json").open("w"))
     print("Sucesso :zap:")
     return rd
