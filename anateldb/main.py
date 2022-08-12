@@ -97,7 +97,7 @@ def check_modify_row(df, # DataFrame para mesclar adicionar o registro
 # %% ..\nbs\main.ipynb 6
 def add_aero(base, # Base Consolidada Anatel
              aero, # Base da Aeronáutica
-             dist: float = 0.5, # Distância máxima entre as coordenadas
+             dist: float = MAX_DIST, # Distância máxima entre as coordenadas
 )->pd.DataFrame: # Retorna o DataFrame com o registro adicionados e mesclados
     # sourcery skip: use-fstring-for-concatenation
     """Mescla os registros de frequência em comum da base da Aeronáutica com a base da Anatel
@@ -140,7 +140,7 @@ def get_db(
     up_icao: bool=False, # Atualizar a base do ICAO?
     up_pmec: bool=False, # Atualizar a base do AISWEB?
     up_geo: bool=False, # Atualizar a base do GeoAISWEB?
-    dist: float=0.5, # Distância máxima entre as coordenadas consideradas iguais
+    dist: float=MAX_DIST, # Distância máxima entre as coordenadas consideradas iguais
 ) -> pd.DataFrame: # Retorna o DataFrame com as bases da Anatel e da Aeronáutica
     """Lê e opcionalmente atualiza as bases da Anatel, mescla as bases da Aeronáutica, salva e retorna o arquivo"""
     dest = Path(path)
@@ -189,7 +189,7 @@ def get_db(
     for c in ['Latitude', 'Longitude']:
         rd.loc[:, c] = rd.loc[:, c].fillna(-1).astype('float32')
 
-    rd['Frequency'] = rd['Frequency'].astype('float32')
+    rd['Frequency'] = rd['Frequency'].astype('category')
     rd['Description'] = rd['Description'].astype('string').fillna('NI')
     rd['Service'] = rd.Service.astype('float').fillna(-1).astype('int16')
     rd['Station'] = rd.Station.astype('float').fillna(-1).astype('int32') # Fix this
