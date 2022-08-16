@@ -186,12 +186,12 @@ def _save_df(df: pd.DataFrame, folder: Union[str, Path], stem: str) -> pd.DataFr
         file = Path(f"{folder}/{stem}.parquet.gzip")
         df.to_parquet(file, compression="gzip", index=False)
     except (ArrowInvalid, ArrowTypeError):
-        file.unlink()
+        file.unlink(missing_ok=True)
         try:
             file = Path(f"{folder}/{stem}.fth")
             df.to_feather(file)
         except (ArrowInvalid, ArrowTypeError):
-            file.unlink()
+            file.unlink(missing_ok=True)
             try:
                 file = Path(f"{folder}/{stem}.xlsx")
                 with pd.ExcelWriter(file) as wb:
@@ -241,7 +241,7 @@ def update_stel(folder:Union[str, Path], # Pasta onde salvar os arquivos
             )
             raise ConnectionError from e
 
-# %% ..\nbs\updates.ipynb 15
+# %% ..\nbs\updates.ipynb 17
 def update_mosaico(folder: Union[str, Path], # Pasta onde salvar os arquivos
 ) -> pd.DataFrame: # DataFrame com os dados atualizados
     """Atualiza a tabela local do Mosaico. É baixado e processado arquivos xml zipados da página pública do Spectrum E"""
@@ -263,7 +263,7 @@ def update_mosaico(folder: Union[str, Path], # Pasta onde salvar os arquivos
 
 
 
-# %% ..\nbs\updates.ipynb 16
+# %% ..\nbs\updates.ipynb 18
 def update_base(folder: Union[str, Path], # Pasta onde salvar os arquivos
 ) -> pd.DataFrame: # DataFrame com os dados atualizados
     # sourcery skip: use-fstring-for-concatenation

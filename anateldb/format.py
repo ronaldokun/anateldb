@@ -184,15 +184,6 @@ def format_types(df: pd.DataFrame, # DataFrame a ser formatado
 ) -> pd.DataFrame:    # DataFrame formatado 
 
     """Convert the columns of a dataframe to optimized types"""
-    df["Frequência"] = df["Frequência"].astype("float64")
-    df["Latitude"] = df["Latitude"].astype("float64")
-    df["Longitude"] = df["Longitude"].astype("float64")
-    df["Entidade"] = df["Entidade"].astype("string")
-    df["Fistel"] = df["Fistel"].astype("string")
-    df["Município"] = df["Município"].astype("category")
-    df["UF"] = df["UF"].astype("category")
-    df["CNPJ"] = df["CNPJ"].astype("string")
-    df["Número_Estação"] = df["Número_Estação"].astype("string")
     if stem != 'radcom':
         df["Num_Serviço"] = df["Num_Serviço"].astype("category")
     if stem == "stel":
@@ -222,4 +213,14 @@ def format_types(df: pd.DataFrame, # DataFrame a ser formatado
         df['Classe_Emissão'] = df['Classe_Emissão'].astype('category')
         df['Largura_Emissão'] = df['Largura_Emissão'].astype('category')
 
-    return optimize_objects(df)
+    df["Frequência"] = df["Frequência"].astype("string")
+    df["Latitude"] = df["Latitude"].astype("float32")
+    df["Longitude"] = df["Longitude"].astype("float32")
+    df["Entidade"] = df["Entidade"].astype("string")
+    df["Fistel"] = df["Fistel"].astype("string")
+    df["Município"] = df["Município"].astype("category")
+    df["UF"] = df["UF"].astype("category")
+    df["CNPJ"] = df["CNPJ"].astype("string")
+    df["Número_Estação"] = df["Número_Estação"].astype("string")
+
+    return df
