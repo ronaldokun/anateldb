@@ -134,6 +134,7 @@ def add_aero(base, # Base Consolidada Anatel
     return base
 
 # %% ..\nbs\main.ipynb 7
+@call_parse
 def get_db(
     path: Union[str, Path], # Pasta onde salvar os arquivos",
     update: bool=False, # Atualizar as bases da Anatel e da Aeronáutica?",
@@ -190,7 +191,7 @@ def get_db(
     for c in ['Latitude', 'Longitude']:
         rd.loc[:, c] = rd.loc[:, c].fillna(-1).astype('float32')
 
-    rd['Frequency'] = rd['Frequency'].astype('category')
+    rd['Frequency'] = rd['Frequency'].astype('float64')
     rd['Description'] = rd['Description'].astype('string').fillna('NI')
     rd['Service'] = rd.Service.astype('float').fillna(-1).astype('int16')
     rd['Station'] = rd.Station.astype('float').fillna(-1).astype('int32') # Fix this
