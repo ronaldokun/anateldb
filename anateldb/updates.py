@@ -267,7 +267,7 @@ def update_mosaico(folder: Union[str, Path], # Pasta onde salvar os arquivos
 
 
 
-# %% ../nbs/updates.ipynb 18
+# %% ../nbs/updates.ipynb 19
 def update_base(
     conn: pyodbc.Connection, # Objeto de conexão de banco
     folder: Union[str, Path] # Pasta onde salvar os arquivos    
