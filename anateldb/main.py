@@ -135,7 +135,6 @@ def add_aero(base, # Base Consolidada Anatel
     return base
 
 # %% ../nbs/main.ipynb 7
-@call_parse
 def get_db(    
     conn: pyodbc.Connection, # Objeto de conexão de banco
     path: Union[str, Path], # Pasta onde salvar os arquivos",
@@ -205,8 +204,8 @@ def get_db(
     rd['Id'] = rd.Id.astype('string')
     rd = rd.loc[:, ['Id', 'Frequency', 'Latitude', 'Longitude', 'Description', 'Service', 'Station', 'Class', 'BW']]
     rd.to_parquet(f"{dest}/AnatelDB.parquet.gzip", compression='gzip', index=False)
-    d["anateldb"]["Version"] = bump_version(versiondb["anateldb"]["Version"])
-    d['anateldb'].update(mod_times)
+    versiondb["anateldb"]["Version"] = bump_version(versiondb["anateldb"]["Version"])
+    versiondb['anateldb'].update(mod_times)
     json.dump(versiondb, (dest.parent / "VersionFile.json").open("w"))
     print("Sucesso :zap:")
     return rd
