@@ -188,7 +188,7 @@ def get_db(
     aero = read_aero(path, update=False) #NotImplemented update
     rd = add_aero(rd, aero, dist)
     print(":card_file_box:[green]Salvando os arquivos...")
-    d = json.loads((dest.parent / "VersionFile.json").read_text())
+    versiondb = json.loads((dest.parent / "VersionFile.json").read_text())
     mod_times = get_modtimes(path)
     mod_times['ReleaseDate'] = datetime.today().strftime("%d/%m/%Y %H:%M:%S")
     for c in ['Latitude', 'Longitude']:
@@ -205,8 +205,8 @@ def get_db(
     rd['Id'] = rd.Id.astype('string')
     rd = rd.loc[:, ['Id', 'Frequency', 'Latitude', 'Longitude', 'Description', 'Service', 'Station', 'Class', 'BW']]
     rd.to_parquet(f"{dest}/AnatelDB.parquet.gzip", compression='gzip', index=False)
-    d["anateldb"]["Version"] = bump_version(d["anateldb"]["Version"])
+    d["anateldb"]["Version"] = bump_version(versiondb["anateldb"]["Version"])
     d['anateldb'].update(mod_times)
-    json.dump(d, (dest.parent / "VersionFile.json").open("w"))
+    json.dump(versiondb, (dest.parent / "VersionFile.json").open("w"))
     print("Sucesso :zap:")
     return rd
