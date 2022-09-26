@@ -23,7 +23,7 @@ import pyodbc
 
 
 from .constants import *
-from .format import parse_bw, format_types, input_coordenates
+from .format import parse_bw, format_types, input_coordenates, scrape_dataframe
 
 getcontext().prec = 5
 
