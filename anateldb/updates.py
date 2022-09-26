@@ -153,22 +153,25 @@ def clean_mosaico(df: pd.DataFrame, # DataFrame com os dados de Estações e Pla
     )
 
     df = input_coordenates(df, pasta)
-    df.loc[:, "Frequência"] = df.Frequência.str.replace(",", ".")
-    if freq_nans := df[df.Frequência.isna()].Id.tolist():
-        complement_df = scrape_dataframe(freq_nans)
-        df.loc[
-            df.Frequência.isna(),
-            [
-                "Status",
-                "Entidade",
-                "Fistel",
-                "Frequência",
-                "Classe",
-                "Num_Serviço",
-                "Município",
-                "UF",
-            ],
-        ] = complement_df.values
+    df.loc[:, "Frequência"] = df.Frequência.str.replace(",", ".")    
+    df = df[df.Frequência.notna()].reset_index(drop=True)
+
+    # Removido o código abaixo devido a inconsistência no Mosaico
+    # if freq_nans := df[df.Frequência.isna()].Id.tolist():
+    #     complement_df = scrape_dataframe(freq_nans)
+    #     df.loc[
+    #         df.Frequência.isna(),
+    #         [
+    #             "Status",
+    #             "Entidade",
+    #             "Fistel",
+    #             "Frequência",
+    #             "Classe",
+    #             "Num_Serviço",
+    #             "Município",
+    #             "UF",
+    #         ],
+    #     ] = complement_df.values
 
     df.loc[:, "Frequência"] = df.Frequência.astype("float")
     df.loc[df.Serviço == "OM", "Frequência"] = df.loc[
