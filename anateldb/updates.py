@@ -10,7 +10,6 @@ from urllib.request import urlretrieve, URLError
 import xmltodict
 from zipfile import ZipFile
 
-
 import pandas as pd
 import pyodbc
 from rich.console import Console
@@ -20,10 +19,11 @@ from fastcore.xtras import Path
 from fastcore.foundation import L
 from fastcore.test import test_eq
 import pyodbc
-
+from pymongo import MongoClient
 
 from .constants import *
 from .format import parse_bw, format_types, input_coordenates, scrape_dataframe
+from .functionsdb import ConsultaSRD
 
 getcontext().prec = 5
 
@@ -80,12 +80,12 @@ def _read_estações(path: Union[str, Path]) -> pd.DataFrame:
         df.loc[df[c] == "", c] = pd.NA
     return df
 
-# %% ../nbs/updates.ipynb 8
+# %% ../nbs/updates.ipynb 9
 def _parse_pb(row: dict)->dict:
     """Given a row in the MongoDB file canais.zip ( a dict of dicts ), it travels some keys and return a subset dict"""
     return {unidecode(k).lower().replace("@", ""): v  for k,v in row.items()}
 
-# %% ../nbs/updates.ipynb 9
+# %% ../nbs/updates.ipynb 10
 def _read_plano_basico(path: Union[str, Path]) -> pd.DataFrame:
     """Read the zipped xml file `Plano_Básico.zip` from MOSAICO and returns a dataframe"""    
     df = L()
@@ -113,7 +113,7 @@ def _read_plano_basico(path: Union[str, Path]) -> pd.DataFrame:
         df.loc[df[c] == '', c] = pd.NA
     return df    
 
-# %% ../nbs/updates.ipynb 10
+# %% ../nbs/updates.ipynb 12
 def clean_mosaico(df: pd.DataFrame, # DataFrame com os dados de Estações e Plano_Básico mesclados 
                 pasta: Union[str, Path], # Pasta com os dados de municípios para imputar coordenadas ausentes
 ) -> pd.DataFrame: # DataFrame com os dados mesclados e limpos
@@ -180,7 +180,7 @@ def clean_mosaico(df: pd.DataFrame, # DataFrame com os dados de Estações e Pla
     df.loc[:, "Validade_RF"] = df.Validade_RF.astype("string").str.slice(0, 10)
     return df.drop_duplicates(keep="first").reset_index(drop=True)
 
-# %% ../nbs/updates.ipynb 12
+# %% ../nbs/updates.ipynb 15
 def _save_df(df: pd.DataFrame, folder: Union[str, Path], stem: str) -> pd.DataFrame:
     """Format, Save and return a dataframe"""
     df = format_types(df, stem)
@@ -208,7 +208,7 @@ def _save_df(df: pd.DataFrame, folder: Union[str, Path], stem: str) -> pd.DataFr
 
 
 
-# %% ../nbs/updates.ipynb 13
+# %% ../nbs/updates.ipynb 16
 def update_radcom(
         conn: pyodbc.Connection, # Objeto de conexão de banco
         folder: Union[str, Path] # Pasta onde salvar os arquivos
@@ -228,7 +228,7 @@ def update_radcom(
             )
             raise ConnectionError from e
 
-# %% ../nbs/updates.ipynb 14
+# %% ../nbs/updates.ipynb 17
 def update_stel(
         conn: pyodbc.Connection, # Objeto de conexão de banco
         folder:Union[str, Path] # Pasta onde salvar os arquivos        
@@ -248,50 +248,39 @@ def update_stel(
             )
             raise ConnectionError from e
 
-# %% ../nbs/updates.ipynb 17
-def update_mosaico(folder: Union[str, Path], # Pasta onde salvar os arquivos
+# %% ../nbs/updates.ipynb 20
+def update_mosaico(
+        folder: Union[str, Path], # Pasta onde salvar os arquivos
+        clientMongoDB: MongoClient # Ojeto de conexão com o MongoDB
 ) -> pd.DataFrame: # DataFrame com os dados atualizados
     """Atualiza a tabela local do Mosaico. É baixado e processado arquivos xml zipados da página pública do Spectrum E"""
     console = Console()
     with console.status(
-        "[blue]Baixando e consolidando os dados do Mosaico...", spinner="clock"
+        "Consolidando os dados do Mosaico...", spinner="clock"
     ) as status:  
-        try:
-            stations, _ = urlretrieve(ESTACOES, f"{folder}/estações.zip")
-            pb, _ = urlretrieve(PLANO_BASICO, f"{folder}/canais.zip")
-            estações = _read_estações(stations)
-            plano_basico = _read_plano_basico(pb)
-            df = estações.merge(plano_basico, on="Id", how="left")
-            df = clean_mosaico(df, folder)
-            return _save_df(df, folder, "mosaico")
-        except URLError as e:
-            status.console.log("[red]Não foi possível baixar os dados do Mosaico")
-            raise ConnectionError from e
+        
+        # stations, _ = urlretrieve(ESTACOES, f"{folder}/estações.zip")
+        # pb, _ = urlretrieve(PLANO_BASICO, f"{folder}/canais.zip")
+        # estações = _read_estações(stations)
+        # plano_basico = _read_plano_basico(pb)
+        df = ConsultaSRD(clientMongoDB)
+        df = clean_mosaico(df, folder)
+    return _save_df(df, folder, "mosaico")
+        
 
 
 
-# %% ../nbs/updates.ipynb 19
+# %% ../nbs/updates.ipynb 22
 def update_base(
     conn: pyodbc.Connection, # Objeto de conexão de banco
+    clientMongoDB: MongoClient, # Ojeto de conexão com o MongoDB
     folder: Union[str, Path] # Pasta onde salvar os arquivos    
 ) -> pd.DataFrame: # DataFrame com os dados atualizados
     # sourcery skip: use-fstring-for-concatenation
     """Wrapper que atualiza opcionalmente lê e atualiza as três bases indicadas anteriormente, as combina e salva o arquivo consolidado na folder `folder`"""
-    try:
-        stel = update_stel(conn, folder, ).loc[:, TELECOM]
-    except ConnectionError:
-        from anateldb.reading import read_stel
-        stel = read_stel(folder).loc[:, TELECOM]
-    try:
-        radcom = update_radcom(conn, folder).loc[:, SRD]
-    except ConnectionError:
-        from anateldb.reading import read_radcom
-        radcom = read_radcom(folder).loc[:, SRD]
-    try:
-        mosaico = update_mosaico(folder).loc[:, RADIODIFUSAO]
-    except ConnectionError:
-        from anateldb.reading import read_mosaico
-        mosaico = read_mosaico(folder).loc[:, RADIODIFUSAO]
+    stel = update_stel(conn, folder, ).loc[:, TELECOM]
+    radcom = update_radcom(conn, folder).loc[:, SRD]
+    mosaico = update_mosaico(clientMongoDB, folder).loc[:, RADIODIFUSAO]    
     radcom["Num_Serviço"] = "231"
     radcom["Status"] = "RADCOM"
     radcom["Classe_Emissão"] = pd.NA

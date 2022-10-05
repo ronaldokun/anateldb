@@ -10,6 +10,7 @@ from pathlib import Path
 import pandas as pd
 from pyarrow import ArrowInvalid
 import pyodbc
+from pymongo import MongoClient
 
 from anateldb.updates import (
 update_mosaico, update_stel, update_radcom, update_base
@@ -122,8 +123,9 @@ update: bool = False, # Atualiza os dados caso `True`
 # %% ../nbs/reading.ipynb 24
 def read_base(
     conn: pyodbc.Connection, # Objeto de conexão de banco
+    clientMongoDB: MongoClient, # Ojeto de conexão com o MongoDB
     folder: Union[str, Path], 
-    update: bool = False 
+    update: bool = False
 ) -> pd.DataFrame:
     """Lê a base de dados e opcionalmente a atualiza antes da leitura"""
-    return update_base(conn, folder) if update else _read_df(folder, "base")
+    return update_base(conn, clientMongoDB, folder) if update else _read_df(folder, "base")

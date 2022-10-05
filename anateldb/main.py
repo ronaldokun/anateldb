@@ -17,6 +17,7 @@ from pyarrow import ArrowInvalid
 from geopy.distance import geodesic
 from rich import print
 import pyodbc
+from pymongo import MongoClient
 
 from .constants import APP_ANALISE
 from .reading import read_base, read_aero
@@ -137,6 +138,7 @@ def add_aero(base, # Base Consolidada Anatel
 # %% ../nbs/main.ipynb 7
 def get_db(    
     conn: pyodbc.Connection, # Objeto de conexão de banco
+    clientMongoDB: MongoClient, # Ojeto de conexão com o MongoDB
     path: Union[str, Path], # Pasta onde salvar os arquivos",
     update: bool=False, # Atualizar as bases da Anatel e da Aeronáutica?",
     dist: float=MAX_DIST # Distância máxima entre as coordenadas consideradas iguais    
@@ -150,7 +152,7 @@ def get_db(
         cached_file = dest / 'AnatelDB.parquet.gzip'
         if cached_file.exists():
             return pd.read_parquet(cached_file)
-    rd = read_base(conn, path, update)
+    rd = read_base(conn, clientMongoDB, path, update)
     rd["Descrição"] = (
         "["
         + rd.Fonte.astype("string").fillna("NI")
