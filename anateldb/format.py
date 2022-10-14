@@ -96,12 +96,14 @@ def input_coordenates(df: pd.DataFrame, # DataFrame a imputar coordenadas invál
                 .values.flatten()
                 .tolist()
             )
-            df.loc[row.Index, "Latitude"] = m_coord[0]
-            df.loc[row.Index, "Longitude"] = m_coord[1]
-            df.loc[row.Index, "Coordenadas_do_Município"] = True
+            if m_coord:
+                df.loc[row.Index, "Latitude"] = m_coord[0]
+                df.loc[row.Index, "Longitude"] = m_coord[1]
+                df.loc[row.Index, "Coordenadas_do_Município"] = True
+            else:
+                print(left, row.UF, m_coord)
         except ValueError:
             print(left, row.UF, m_coord)
-            continue
     return df
 
 # %% ../nbs/format.ipynb 6

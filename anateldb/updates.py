@@ -131,26 +131,27 @@ def clean_mosaico(df: pd.DataFrame, # DataFrame com os dados de Estações e Pla
         df.drop(b, axis=1, inplace=True)
         df.rename({a: a[:-2]}, axis=1, inplace=True)
 
-    df.loc[df.Latitude_Transmissor == "", "Latitude_Transmissor"] = df.loc[
-        df.Latitude_Transmissor == "", "Latitude_Estação"
-    ]
-    df.loc[df.Longitude_Transmissor == "", "Longitude_Transmissor"] = df.loc[
-        df.Longitude_Transmissor == "", "Longitude_Estação"
-    ]
-    df.loc[df.Latitude_Transmissor.isna(), "Latitude_Transmissor"] = df.loc[
-        df.Latitude_Transmissor.isna(), "Latitude_Estação"
-    ]
-    df.loc[df.Longitude_Transmissor.isna(), "Longitude_Transmissor"] = df.loc[
-        df.Longitude_Transmissor.isna(), "Longitude_Estação"
-    ]
-    df.drop(["Latitude_Estação", "Longitude_Estação"], axis=1, inplace=True)
-    df.rename(
-        columns={
-            "Latitude_Transmissor": "Latitude",
-            "Longitude_Transmissor": "Longitude",
-        },
-        inplace=True,
-    )
+    # df.loc[df.Latitude_Transmissor == "", "Latitude_Transmissor"] = df.loc[
+    #     df.Latitude_Transmissor == "", "Latitude_Estação"
+    # ]
+    # df.loc[df.Longitude_Transmissor == "", "Longitude_Transmissor"] = df.loc[
+    #     df.Longitude_Transmissor == "", "Longitude_Estação"
+    # ]
+    
+    # df.loc[df.Latitude_Transmissor.isna(), "Latitude_Transmissor"] = df.loc[
+    #     df.Latitude_Transmissor.isna(), "Latitude_Estação"
+    # ]
+    # df.loc[df.Longitude_Transmissor.isna(), "Longitude_Transmissor"] = df.loc[
+    #     df.Longitude_Transmissor.isna(), "Longitude_Estação"
+    # ]
+    # df.drop(["Latitude_Estação", "Longitude_Estação"], axis=1, inplace=True)
+    # df.rename(
+    #     columns={
+    #         "Latitude_Transmissor": "Latitude",
+    #         "Longitude_Transmissor": "Longitude",
+    #     },
+    #     inplace=True,
+    # )
 
     df = input_coordenates(df, pasta)
     df.loc[:, "Frequência"] = df.Frequência.str.replace(",", ".")    
@@ -249,9 +250,9 @@ def update_stel(
             raise ConnectionError from e
 
 # %% ../nbs/updates.ipynb 20
-def update_mosaico(
-        folder: Union[str, Path], # Pasta onde salvar os arquivos
-        clientMongoDB: MongoClient # Ojeto de conexão com o MongoDB
+def update_mosaico(        
+        clientMongoDB: MongoClient, # Ojeto de conexão com o MongoDB
+        folder: Union[str, Path] # Pasta onde salvar os arquivos
 ) -> pd.DataFrame: # DataFrame com os dados atualizados
     """Atualiza a tabela local do Mosaico. É baixado e processado arquivos xml zipados da página pública do Spectrum E"""
     console = Console()

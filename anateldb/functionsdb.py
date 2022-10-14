@@ -8,8 +8,6 @@ from pymongo import MongoClient
 import pandas as pd
 from decimal import Decimal, getcontext
 
-from .updates import input_coordenates
-
 # %% ../nbs/functionsdb.ipynb 3
 def ConsultaSRD(
         mongo_client: MongoClient, # Objeto com o cliente para acesso aos dados do MongoDB                
@@ -35,7 +33,7 @@ def ConsultaSRD(
         "Fistel"
     )
         
-    database = mongo_client ["sms"]
+    database = mongo_client["sms"]
     # Database com as informações de Radio e difusão
     collection = database["srd"]
 
