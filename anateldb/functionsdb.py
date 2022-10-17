@@ -12,7 +12,7 @@ from decimal import Decimal, getcontext
 def ConsultaSRD(
         mongo_client: MongoClient, # Objeto com o cliente para acesso aos dados do MongoDB                
 ) -> pd.DataFrame: # DataFrame com os dados atualizados
-    """Atualiza a tabela local retornada pela query `RADCOM`"""
+    """Atualiza a tabela local dos dados de Radiodifusão do Mosaico"""
 
     # Colunas retornadas no mosaico
     MOSAICO_COLUMNS = (

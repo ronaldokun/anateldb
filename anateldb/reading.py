@@ -35,11 +35,12 @@ def _read_df(folder: Union[str, Path], stem: str) -> pd.DataFrame:
     return df
 
 # %% ..\nbs\reading.ipynb 5
-def read_mosaico(folder: Union[str, Path], # Pasta onde ler/salvar os dados
+def read_mosaico(conn: MongoClient, # Objeto de Conexão com o banco MongoDB
+                 folder: Union[str, Path], # Pasta onde ler/salvar os dados
                  update: bool = False, # Atualiza os dados caso `True`
 ) -> pd.DataFrame: # Dataframe com os dados do mosaico
     """Lê o banco de dados salvo localmente do MOSAICO e opcionalmente o atualiza."""
-    return update_mosaico(folder) if update else _read_df(folder, "mosaico")
+    return update_mosaico(conn, folder) if update else _read_df(folder, "mosaico")
 
 # %% ..\nbs\reading.ipynb 9
 def read_radcom(
@@ -49,7 +50,7 @@ def read_radcom(
                 
 ) -> pd.DataFrame: # Dataframe com os dados de RADCOM
     """Lê o banco de dados salvo localmente de RADCOM. Opcionalmente o atualiza pelo Banco de Dados ANATELBDRO05 caso `update = True` ou não exista o arquivo local"""
-    return update_radcom(folder) if update else _read_df(folder, "radcom")
+    return update_radcom(conn, folder) if update else _read_df(folder, "radcom")
 
 # %% ..\nbs\reading.ipynb 12
 def read_stel(
@@ -61,7 +62,7 @@ def read_stel(
     """Lê o banco de dados salvo localmente do STEL. 
        Opcionalmente o atualiza pelo Banco de Dados ANATELBDRO05
       caso `update = True` ou não exista o arquivo local"""
-    return update_stel(folder) if update else _read_df(folder, "stel")
+    return update_stel(conn, folder) if update else _read_df(folder, "stel")
 
 # %% ..\nbs\reading.ipynb 15
 def read_icao(folder: Union[str, Path], # Pasta onde ler/salvar os dados
