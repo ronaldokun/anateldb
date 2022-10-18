@@ -1,11 +1,11 @@
 {
     "appAnalise": {
-        "Version": "1.24",
-        "ReleaseDate": "12/08/2022"
+        "Version": "1.30",
+        "ReleaseDate": "14/10/2022"
     },
     "appColeta": {
-        "Version": "1.0",
-        "ReleaseDate": "28/12/2021"
+        "Version": "1.10",
+        "ReleaseDate": "14/10/2022"
     },
     "anateldb": {
         "Version": "0.1.103",
