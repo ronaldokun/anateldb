@@ -42,7 +42,7 @@ def read_mosaico(conn: MongoClient, # Objeto de Conexão com o banco MongoDB
     """Lê o banco de dados salvo localmente do MOSAICO e opcionalmente o atualiza."""
     return update_mosaico(conn, folder) if update else _read_df(folder, "mosaico")
 
-# %% ..\nbs\reading.ipynb 9
+# %% ..\nbs\reading.ipynb 10
 def read_radcom(
     conn: pyodbc.Connection, # Objeto de conexão de banco
     folder: Union[str, Path], # Pasta onde ler/salvar os dados
@@ -52,7 +52,7 @@ def read_radcom(
     """Lê o banco de dados salvo localmente de RADCOM. Opcionalmente o atualiza pelo Banco de Dados ANATELBDRO05 caso `update = True` ou não exista o arquivo local"""
     return update_radcom(conn, folder) if update else _read_df(folder, "radcom")
 
-# %% ..\nbs\reading.ipynb 12
+# %% ..\nbs\reading.ipynb 13
 def read_stel(
   conn: pyodbc.Connection, # Objeto de conexão de banco
   folder: Union[str, Path], # Pasta onde ler/salvar os dados
@@ -64,7 +64,7 @@ def read_stel(
       caso `update = True` ou não exista o arquivo local"""
     return update_stel(conn, folder) if update else _read_df(folder, "stel")
 
-# %% ..\nbs\reading.ipynb 15
+# %% ..\nbs\reading.ipynb 16
 def read_icao(folder: Union[str, Path], # Pasta onde ler/salvar os dados
               update: bool = False, # Atualiza os dados caso `True`
 ) -> pd.DataFrame: # Dataframe com os dados do ICAO
@@ -78,7 +78,7 @@ def read_icao(folder: Union[str, Path], # Pasta onde ler/salvar os dados
     return _read_df(folder, "icao")
 
 
-# %% ..\nbs\reading.ipynb 17
+# %% ..\nbs\reading.ipynb 18
 def read_aisw(folder: Union[str, Path], # Pasta onde ler/salvar os dados
               update: bool = False, # Atualiza os dados caso `True`
 ) -> pd.DataFrame: # Dataframe com os dados do AISWEB
@@ -93,7 +93,7 @@ def read_aisw(folder: Union[str, Path], # Pasta onde ler/salvar os dados
 
 
 
-# %% ..\nbs\reading.ipynb 19
+# %% ..\nbs\reading.ipynb 20
 def read_aisg(folder: Union[str, Path], # Pasta onde ler/salvar os dados
 update: bool = False, # Atualiza os dados caso `True`
 ) -> pd.DataFrame: # Dataframe com os dados do GEOAISWEB
@@ -106,7 +106,7 @@ update: bool = False, # Atualiza os dados caso `True`
         )
     return _read_df(folder, "aisg")
 
-# %% ..\nbs\reading.ipynb 21
+# %% ..\nbs\reading.ipynb 22
 def read_aero(
     folder: Union[str, Path], # Pasta onde ler/salvar os dados
 update: bool = False, # Atualiza os dados caso `True`
@@ -121,7 +121,7 @@ update: bool = False, # Atualiza os dados caso `True`
     
     return _read_df(folder, "aero")
 
-# %% ..\nbs\reading.ipynb 24
+# %% ..\nbs\reading.ipynb 25
 def read_base(
     conn: pyodbc.Connection, # Objeto de conexão de banco
     clientMongoDB: MongoClient, # Ojeto de conexão com o MongoDB
