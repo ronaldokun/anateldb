@@ -181,7 +181,7 @@ def format_types(df: pd.DataFrame, # DataFrame a ser formatado
         df.drop(["Fase", "Situação"], axis=1, inplace=True)
     elif stem == 'base':
         df['Status'] = df['Status'].astype('category')
-        df["BW(kHz)"] = df["BW(kHz)"].astype("float32")
+        df["BW(kHz)"] = df["BW(kHz)"].astype("float32")        
     if stem in {'stel', 'base'}:
         df['Classe'] = df['Classe'].astype('category')
         df['Classe_Emissão'] = df['Classe_Emissão'].astype('category')

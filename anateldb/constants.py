@@ -3,7 +3,7 @@
 # %% auto 0
 __all__ = ['TIMEOUT', 'RELATORIO', 'ESTACOES', 'ESTACAO', 'PLANO_BASICO', 'HISTORICO', 'REJECT_ESTACOES', 'COL_ESTACOES',
            'NEW_ESTACOES', 'COL_PB', 'NEW_PB', 'SRD', 'TELECOM', 'RADIODIFUSAO', 'APP_ANALISE', 'ESTADOS', 'ENTIDADES',
-           'SIGLAS', 'BW', 'BW_MAP', 'RADCOM', 'STEL', 'BW_pattern', 'REGEX_ESTADOS']
+           'SIGLAS', 'BW', 'BW_MAP', 'LICENCIAMENTO', 'RADCOM', 'STEL', 'MONGO_LIC', 'BW_pattern', 'REGEX_ESTADOS']
 
 # %% ..\nbs\constants.ipynb 2
 import re
@@ -185,6 +185,20 @@ SIGLAS = {
 BW = {'H': 0.001, 'K': 1, 'M': 1000, 'G': 1000000}
 BW_MAP = {'167': '6M00', '205': '10K0', '230': '256K', '231': '256K', '247': '5M70', '248': '6M00', '800': '6M00', '801': '5M70', '805': '256K'}
 
+LICENCIAMENTO = {'NumFistel': 'Fistel',
+ 'NumServico': 'Num_Serviço',
+ 'NomeEntidade': 'Entidade',
+ 'SiglaUf': 'UF',
+ 'NumEstacao': 'Número_Estação',
+ 'CodTipoClasseEstacao': 'Classe',
+ 'NomeMunicipio': 'Município',
+ 'CodMunicipio': 'Cod_Município',
+ 'DataValidade': 'Data_de_Validade',
+ 'FreqTxMHz': 'Frequência', 
+ 'DesignacaoEmissao': 'Designacao_Emissão',
+ 'Status.state': 'Status',
+}
+
 # %% ..\nbs\constants.ipynb 10
 RADCOM = """
 select 
@@ -261,6 +275,72 @@ where
   and c.DataValidadeRadiofrequencia is not null 
 """
 
-# %% ..\nbs\constants.ipynb 13
+# %% ..\nbs\constants.ipynb 12
+MONGO_LIC = {"$and" : [
+        {u"DataExclusao" : None
+        },
+        {u"DataValidade": {
+                u"$nin": [
+                    u"",
+                    None
+                ]
+            }
+        },
+        {
+            u"NumServico": {
+                u"$nin": [
+                    u"010",
+                    u"045",
+                    u"171",
+                    u"450",
+                    u"750",
+                    u"",
+                    None
+                ]
+            }
+        },
+        {
+            u"FreqTxMHz": {
+                u"$nin": [
+                    None,
+                    u""
+                ]
+            }
+        },
+        {
+            u"Latitude": {
+                u"$nin": [
+                    None,
+                    u""
+                ]
+            }
+        },
+        {
+            u"Longitude": {
+                u"$nin": [
+                    None,
+                    u""
+                ]
+            }
+        },
+        {
+            u"FreqTxMHz": {
+                u"$type": 1.0
+            }
+        },
+        {
+            u"Latitude": {
+                u"$type": 1.0
+            }
+        },
+        {
+            u"Longitude": {
+                u"$type": 1.0
+            }
+        }
+    ]
+    }
+
+# %% ..\nbs\constants.ipynb 14
 BW_pattern = re.compile("^(\d{1,3})([HKMG])(\d{0,2})$")
 REGEX_ESTADOS = f'({"|".join(ESTADOS)})'
