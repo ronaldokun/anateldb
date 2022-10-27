@@ -91,7 +91,6 @@ SRD = (
 "UF",
 "Latitude",
 "Longitude",
-"CNPJ",
 "Classe",
 )
 

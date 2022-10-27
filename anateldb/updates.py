@@ -262,8 +262,37 @@ def update_mosaico(
         "Consolidando os dados do Mosaico...", spinner="clock"
     ) as status:  
         
-        df = ConsultaSRD(mongo_client)
-        df = clean_mosaico(df, folder)
+        database = mongo_client["sms"]
+        # Database com as informações de Radio e difusão
+        collection = database["srd"]
+
+        query = {}
+        projection = {"SiglaServico": 1.0, "Status.state": 1.0, "licensee": 1.0, "NumFistel": 1.0, "frequency": 1.0, "stnClass": 1.0, "srd_planobasico.NomeMunicipio": 1.0, "srd_planobasico.SiglaUF": 1.0, "NumServico": 1.0, "estacao.NumEstacao": 1.0, "estacao.MedLatitudeDecimal": 1.0, "estacao.MedLongitudeDecimal": 1.0, "habilitacao.DataValFreq": 1.0}
+
+        list_data = list(collection.find(query, projection = projection))
+        mosaico_df = pd.json_normalize(list_data)
+        mosaico_df = mosaico_df.drop(columns=['estacao'])
+        mosaico_df = mosaico_df[["frequency",
+                                "licensee",
+                                "NumFistel",
+                                "estacao.NumEstacao",
+                                "srd_planobasico.NomeMunicipio",
+                                "srd_planobasico.SiglaUF",
+                                "estacao.MedLatitudeDecimal",
+                                "estacao.MedLongitudeDecimal",
+                                "stnClass",
+                                "NumServico",
+                                "habilitacao.DataValFreq",
+                                "Status.state"]]
+
+        mosaico_df.columns = RADIODIFUSAO
+        mosaico_df = mosaico_df[mosaico_df.Status.str.contains("-C1$|-C2$|-C3$|-C4$|-C7|-C98$", na=False)].reset_index(drop=True)
+        for c in mosaico_df.columns:
+            mosaico_df.loc[mosaico_df[c] == "", c] = pd.NA
+        mosaico_df = mosaico_df.dropna(subset=['UF'])
+        mosaico_df = mosaico_df[mosaico_df.Frequência.notna()].reset_index(drop=True)
+
+        df = clean_mosaico(mosaico_df, folder)
     return _save_df(df, folder, "mosaico")
 
 # %% ..\nbs\updates.ipynb 18
