@@ -3,7 +3,7 @@
 # %% auto 0
 __all__ = ['connect_db', 'clean_mosaico', 'update_radcom', 'update_stel', 'update_mosaico', 'update_licenciamento', 'update_base']
 
-# %% ..\nbs\updates.ipynb 2
+# %% ..\nbs\updates.ipynb 3
 from decimal import Decimal, getcontext
 from typing import Union
 from urllib.request import urlretrieve, URLError
@@ -29,7 +29,7 @@ from .functionsdb import ConsultaSRD
 
 getcontext().prec = 5
 
-# %% ..\nbs\updates.ipynb 4
+# %% ..\nbs\updates.ipynb 5
 def connect_db(server: str = 'ANATELBDRO05', # Servidor do Banco de Dados
                database: str = 'SITARWEB', # Nome do Banco de Dados
                trusted_conn: str = 'yes', # Conexão Segura: yes | no
@@ -45,7 +45,7 @@ def connect_db(server: str = 'ANATELBDRO05', # Servidor do Banco de Dados
         timeout=TIMEOUT,
     )
 
-# %% ..\nbs\updates.ipynb 6
+# %% ..\nbs\updates.ipynb 7
 def _parse_estações(row: dict)->dict:
     """Given a row in a MongoDB ( a dict of dicts ), it travels some keys and return a subset dict"""
     
@@ -63,7 +63,7 @@ def _parse_estações(row: dict)->dict:
     d.update({k.replace('@', '').lower():estacao[k] for k in ('@latitude', '@longitude')})
     return d
 
-# %% ..\nbs\updates.ipynb 7
+# %% ..\nbs\updates.ipynb 8
 def _read_estações(path: Union[str, Path]) -> pd.DataFrame:
     """Read the zipped xml file `Estações.zip` from MOSAICO and returns a dataframe"""
     
@@ -82,12 +82,12 @@ def _read_estações(path: Union[str, Path]) -> pd.DataFrame:
         df.loc[df[c] == "", c] = pd.NA
     return df
 
-# %% ..\nbs\updates.ipynb 8
+# %% ..\nbs\updates.ipynb 9
 def _parse_pb(row: dict)->dict:
     """Given a row in the MongoDB file canais.zip ( a dict of dicts ), it travels some keys and return a subset dict"""
     return {unidecode(k).lower().replace("@", ""): v  for k,v in row.items()}
 
-# %% ..\nbs\updates.ipynb 9
+# %% ..\nbs\updates.ipynb 10
 def _read_plano_basico(path: Union[str, Path]) -> pd.DataFrame:
     """Read the zipped xml file `Plano_Básico.zip` from MOSAICO and returns a dataframe"""    
     df = L()
@@ -115,7 +115,7 @@ def _read_plano_basico(path: Union[str, Path]) -> pd.DataFrame:
         df.loc[df[c] == '', c] = pd.NA
     return df    
 
-# %% ..\nbs\updates.ipynb 10
+# %% ..\nbs\updates.ipynb 11
 def clean_mosaico(df: pd.DataFrame, # DataFrame com os dados de Estações e Plano_Básico mesclados 
                 pasta: Union[str, Path], # Pasta com os dados de municípios para imputar coordenadas ausentes
 ) -> pd.DataFrame: # DataFrame com os dados mesclados e limpos
@@ -183,7 +183,7 @@ def clean_mosaico(df: pd.DataFrame, # DataFrame com os dados de Estações e Pla
     df.loc[:, "Validade_RF"] = df.Validade_RF.astype("string").str.slice(0, 10)
     return df.drop_duplicates(keep="first").reset_index(drop=True)
 
-# %% ..\nbs\updates.ipynb 12
+# %% ..\nbs\updates.ipynb 13
 def _save_df(df: pd.DataFrame, folder: Union[str, Path], stem: str) -> pd.DataFrame:
     """Format, Save and return a dataframe"""
     df = format_types(df, stem)
@@ -211,7 +211,7 @@ def _save_df(df: pd.DataFrame, folder: Union[str, Path], stem: str) -> pd.DataFr
 
 
 
-# %% ..\nbs\updates.ipynb 13
+# %% ..\nbs\updates.ipynb 14
 def update_radcom(
         conn: pyodbc.Connection, # Objeto de conexão de banco
         folder: Union[str, Path] # Pasta onde salvar os arquivos
@@ -231,7 +231,7 @@ def update_radcom(
             )
             raise ConnectionError from e
 
-# %% ..\nbs\updates.ipynb 14
+# %% ..\nbs\updates.ipynb 15
 def update_stel(
         conn: pyodbc.Connection, # Objeto de conexão de banco
         folder:Union[str, Path] # Pasta onde salvar os arquivos        
@@ -251,7 +251,7 @@ def update_stel(
             )
             raise ConnectionError from e
 
-# %% ..\nbs\updates.ipynb 16
+# %% ..\nbs\updates.ipynb 17
 def update_mosaico(        
         mongo_client: MongoClient, # Objeto de conexão com o MongoDB
         folder: Union[str, Path] # Pasta onde salvar os arquivos
@@ -266,7 +266,7 @@ def update_mosaico(
         df = clean_mosaico(df, folder)
     return _save_df(df, folder, "mosaico")
 
-# %% ..\nbs\updates.ipynb 17
+# %% ..\nbs\updates.ipynb 18
 def update_licenciamento(mongo_client: MongoClient, # Objeto de conexão com o MongoDB
                          folder: Union[str, Path] # Pasta onde salvar os arquivos
 )-> pd.DataFrame: # DataFrame com os dados atualizados
@@ -280,8 +280,8 @@ def update_licenciamento(mongo_client: MongoClient, # Objeto de conexão com o M
     df = pd.json_normalize(result)
     df.drop('_id', axis=1, inplace=True)
     df.rename(LICENCIAMENTO, axis=1, inplace=True)
+    df['Designacao_Emissão'] = df.Designacao_Emissão.str.replace(',', ' ')
     df['Designacao_Emissão'] = df.Designacao_Emissão.str.strip().str.lstrip().str.rstrip().str.upper()
-    df['Designacao_Emissão'] = df.Designacao_Emissão.str.replace(',', '')
     df['Designacao_Emissão'] = df.Designacao_Emissão.str.split(' ')
     df = df.explode('Designacao_Emissão')
     df.loc[df.Designacao_Emissão == '/', 'Designacao_Emissão'] = ''
@@ -295,7 +295,7 @@ def update_licenciamento(mongo_client: MongoClient, # Objeto de conexão com o M
     df_sub = df_sub.reset_index()
     return _save_df(df_sub, folder, 'licenciamento')
 
-# %% ..\nbs\updates.ipynb 21
+# %% ..\nbs\updates.ipynb 23
 def update_base(
     conn: pyodbc.Connection, # Objeto de conexão de banco
     clientMongoDB: MongoClient, # Ojeto de conexão com o MongoDB
