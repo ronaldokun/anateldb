@@ -141,7 +141,7 @@ def update_stel(
             )
             raise ConnectionError from e
 
-# %% ..\nbs\updates.ipynb 13
+# %% ..\nbs\updates.ipynb 12
 def update_mosaico(        
         mongo_client: MongoClient, # Objeto de conexão com o MongoDB
         folder: Union[str, Path] # Pasta onde salvar os arquivos
@@ -185,7 +185,7 @@ def update_mosaico(
         df = clean_mosaico(mosaico_df, folder)
     return _save_df(df, folder, "mosaico")
 
-# %% ..\nbs\updates.ipynb 14
+# %% ..\nbs\updates.ipynb 13
 def update_licenciamento(mongo_client: MongoClient, # Objeto de conexão com o MongoDB
                          folder: Union[str, Path] # Pasta onde salvar os arquivos
 )-> pd.DataFrame: # DataFrame com os dados atualizados
@@ -214,7 +214,7 @@ def update_licenciamento(mongo_client: MongoClient, # Objeto de conexão com o M
     df_sub = df_sub.reset_index()
     return _save_df(df_sub, folder, 'licenciamento')
 
-# %% ..\nbs\updates.ipynb 19
+# %% ..\nbs\updates.ipynb 17
 def update_base(
     conn: pyodbc.Connection, # Objeto de conexão de banco
     clientMongoDB: MongoClient, # Ojeto de conexão com o MongoDB
