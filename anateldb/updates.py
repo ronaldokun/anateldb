@@ -46,76 +46,6 @@ def connect_db(server: str = 'ANATELBDRO05', # Servidor do Banco de Dados
     )
 
 # %% ..\nbs\updates.ipynb 7
-def _parse_estações(row: dict)->dict:
-    """Given a row in a MongoDB ( a dict of dicts ), it travels some keys and return a subset dict"""
-    
-    d = {k.replace('@', '').lower():row[k] for k in ("@SiglaServico", "@id", "@state",
-        "@entidade",
-        "@fistel",
-        "@cnpj",
-        "@municipio",
-        "@uf")}
-    entidade = row.get('entidade', {})
-    d.update({k.replace('@', '').lower():entidade[k] for k in ('@num_servico', '@habilitacao_DataValFreq')})
-    administrativo = row.get('administrativo', {})
-    d['numero_estacao'] = administrativo.get('@numero_estacao')
-    estacao = row.get('estacao_principal', {})
-    d.update({k.replace('@', '').lower():estacao[k] for k in ('@latitude', '@longitude')})
-    return d
-
-# %% ..\nbs\updates.ipynb 8
-def _read_estações(path: Union[str, Path]) -> pd.DataFrame:
-    """Read the zipped xml file `Estações.zip` from MOSAICO and returns a dataframe"""
-    
-    with ZipFile(path) as myzip:
-        with myzip.open('estacao_rd.xml') as myfile:
-            estacoes = xmltodict.parse(myfile.read())
-            
-    assert 'estacao_rd' in estacoes, "The xml file inside estacoes.zip is not in the expected format"
-    assert 'row' in estacoes['estacao_rd'], "The xml file inside estacoes.zip is not in the expected format"
-    
-    df = pd.DataFrame(L(estacoes['estacao_rd']['row']).map(_parse_estações))
-    df = df[df.state.str.contains("-C1$|-C2$|-C3$|-C4$|-C7|-C98$")].reset_index(drop=True)
-    df = df.loc[:, COL_ESTACOES]
-    df.columns = NEW_ESTACOES    
-    for c in df.columns:
-        df.loc[df[c] == "", c] = pd.NA
-    return df
-
-# %% ..\nbs\updates.ipynb 9
-def _parse_pb(row: dict)->dict:
-    """Given a row in the MongoDB file canais.zip ( a dict of dicts ), it travels some keys and return a subset dict"""
-    return {unidecode(k).lower().replace("@", ""): v  for k,v in row.items()}
-
-# %% ..\nbs\updates.ipynb 10
-def _read_plano_basico(path: Union[str, Path]) -> pd.DataFrame:
-    """Read the zipped xml file `Plano_Básico.zip` from MOSAICO and returns a dataframe"""    
-    df = L()
-    with ZipFile(path) as myzip:
-        with myzip.open('plano_basicoTVFM.xml') as myfile:
-            pbtvfm = xmltodict.parse(myfile.read())
-        with myzip.open('plano_basicoAM.xml') as myfile:
-            pbam = xmltodict.parse(myfile.read())
-        with myzip.open('secundariosTVFM.xml') as myfile:
-            stvfm = xmltodict.parse(myfile.read())
-        with myzip.open('secundariosAM.xml') as myfile:
-            sam = xmltodict.parse(myfile.read())    
-            
-    for base in (pbtvfm, stvfm, pbam, sam):
-        assert 'plano_basico' in base, "The xml files inside canais.zip is not in the expected format"
-        assert 'row' in base['plano_basico'], "The xml file inside canais.zip is not in the expected format"
-        df.extend(L(base['plano_basico']['row']).map(_parse_pb))
-        
-    df = pd.DataFrame(df)
-    df = df.loc[df.pais == "BRA", COL_PB].reset_index(drop=True)    
-    df.columns = NEW_PB
-    df = df[df.Status.str.contains("-C1$|-C2$|-C3$|-C4$|-C7|-C98$")].reset_index(drop=True)
-    df.loc[:, 'Frequência'] = df.Frequência.str.replace(',', '.')
-    for c in df.columns:
-        df.loc[df[c] == '', c] = pd.NA
-    return df    
-
-# %% ..\nbs\updates.ipynb 11
 def clean_mosaico(df: pd.DataFrame, # DataFrame com os dados de Estações e Plano_Básico mesclados 
                 pasta: Union[str, Path], # Pasta com os dados de municípios para imputar coordenadas ausentes
 ) -> pd.DataFrame: # DataFrame com os dados mesclados e limpos
@@ -133,49 +63,9 @@ def clean_mosaico(df: pd.DataFrame, # DataFrame com os dados de Estações e Pla
         df.drop(b, axis=1, inplace=True)
         df.rename({a: a[:-2]}, axis=1, inplace=True)
 
-    # df.loc[df.Latitude_Transmissor == "", "Latitude_Transmissor"] = df.loc[
-    #     df.Latitude_Transmissor == "", "Latitude_Estação"
-    # ]
-    # df.loc[df.Longitude_Transmissor == "", "Longitude_Transmissor"] = df.loc[
-    #     df.Longitude_Transmissor == "", "Longitude_Estação"
-    # ]
-    
-    # df.loc[df.Latitude_Transmissor.isna(), "Latitude_Transmissor"] = df.loc[
-    #     df.Latitude_Transmissor.isna(), "Latitude_Estação"
-    # ]
-    # df.loc[df.Longitude_Transmissor.isna(), "Longitude_Transmissor"] = df.loc[
-    #     df.Longitude_Transmissor.isna(), "Longitude_Estação"
-    # ]
-    # df.drop(["Latitude_Estação", "Longitude_Estação"], axis=1, inplace=True)
-    # df.rename(
-    #     columns={
-    #         "Latitude_Transmissor": "Latitude",
-    #         "Longitude_Transmissor": "Longitude",
-    #     },
-    #     inplace=True,
-    # )
-
     df = input_coordenates(df, pasta)
     df.loc[:, "Frequência"] = df.Frequência.str.replace(",", ".")    
     df = df[df.Frequência.notna()].reset_index(drop=True)
-
-    # Removido o código abaixo devido a inconsistência no Mosaico
-    # if freq_nans := df[df.Frequência.isna()].Id.tolist():
-    #     complement_df = scrape_dataframe(freq_nans)
-    #     df.loc[
-    #         df.Frequência.isna(),
-    #         [
-    #             "Status",
-    #             "Entidade",
-    #             "Fistel",
-    #             "Frequência",
-    #             "Classe",
-    #             "Num_Serviço",
-    #             "Município",
-    #             "UF",
-    #         ],
-    #     ] = complement_df.values
-
     df.loc[:, "Frequência"] = df.Frequência.astype("float")
     df.loc[df.Serviço == "OM", "Frequência"] = df.loc[
         df.Serviço == "OM", "Frequência"
@@ -183,7 +73,7 @@ def clean_mosaico(df: pd.DataFrame, # DataFrame com os dados de Estações e Pla
     df.loc[:, "Validade_RF"] = df.Validade_RF.astype("string").str.slice(0, 10)
     return df.drop_duplicates(keep="first").reset_index(drop=True)
 
-# %% ..\nbs\updates.ipynb 13
+# %% ..\nbs\updates.ipynb 9
 def _save_df(df: pd.DataFrame, folder: Union[str, Path], stem: str) -> pd.DataFrame:
     """Format, Save and return a dataframe"""
     df = format_types(df, stem)
@@ -211,7 +101,7 @@ def _save_df(df: pd.DataFrame, folder: Union[str, Path], stem: str) -> pd.DataFr
 
 
 
-# %% ..\nbs\updates.ipynb 14
+# %% ..\nbs\updates.ipynb 10
 def update_radcom(
         conn: pyodbc.Connection, # Objeto de conexão de banco
         folder: Union[str, Path] # Pasta onde salvar os arquivos
@@ -231,7 +121,7 @@ def update_radcom(
             )
             raise ConnectionError from e
 
-# %% ..\nbs\updates.ipynb 15
+# %% ..\nbs\updates.ipynb 11
 def update_stel(
         conn: pyodbc.Connection, # Objeto de conexão de banco
         folder:Union[str, Path] # Pasta onde salvar os arquivos        
@@ -251,7 +141,7 @@ def update_stel(
             )
             raise ConnectionError from e
 
-# %% ..\nbs\updates.ipynb 17
+# %% ..\nbs\updates.ipynb 13
 def update_mosaico(        
         mongo_client: MongoClient, # Objeto de conexão com o MongoDB
         folder: Union[str, Path] # Pasta onde salvar os arquivos
@@ -295,7 +185,7 @@ def update_mosaico(
         df = clean_mosaico(mosaico_df, folder)
     return _save_df(df, folder, "mosaico")
 
-# %% ..\nbs\updates.ipynb 18
+# %% ..\nbs\updates.ipynb 14
 def update_licenciamento(mongo_client: MongoClient, # Objeto de conexão com o MongoDB
                          folder: Union[str, Path] # Pasta onde salvar os arquivos
 )-> pd.DataFrame: # DataFrame com os dados atualizados
@@ -324,7 +214,7 @@ def update_licenciamento(mongo_client: MongoClient, # Objeto de conexão com o M
     df_sub = df_sub.reset_index()
     return _save_df(df_sub, folder, 'licenciamento')
 
-# %% ..\nbs\updates.ipynb 23
+# %% ..\nbs\updates.ipynb 19
 def update_base(
     conn: pyodbc.Connection, # Objeto de conexão de banco
     clientMongoDB: MongoClient, # Ojeto de conexão com o MongoDB
