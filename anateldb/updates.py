@@ -9,6 +9,7 @@ from typing import Union
 from urllib.request import urlretrieve, URLError
 import xmltodict
 from zipfile import ZipFile
+import gc
 
 import pandas as pd
 import pyodbc
@@ -286,11 +287,15 @@ def update_licenciamento(mongo_client: MongoClient, # Objeto de conexão com o M
     df.loc[df.Designacao_Emissão == '/', 'Designacao_Emissão'] = ''
     df.loc[:, ['Largura_Emissão', 'Classe_Emissão']]  = df.Designacao_Emissão.apply(parse_bw).tolist()
     df.drop('Designacao_Emissão', axis=1, inplace=True)
-    df = df[df.Frequência > 0].reset_index(drop=True)
+    subset = ['Entidade', 'Longitude', 'Latitude', 'Classe', 'Frequência', 'Num_Serviço', 'Largura_Emissão', 'Classe_Emissão']
+    df_sub = df[~df.duplicated(subset=subset, keep='first')].reset_index(drop=True).copy()
+    df_sub = df_sub.set_index(subset).sort_index()
+    df_sub['Count'] = (df.groupby(subset).count()['Número_Estação']).tolist()
+    del df ; gc.collect()
+    df_sub = df_sub.reset_index()
+    return _save_df(df_sub, folder, 'licenciamento')
 
-    return _save_df(df, folder, 'licenciamento')
-
-# %% ..\nbs\updates.ipynb 32
+# %% ..\nbs\updates.ipynb 21
 def update_base(
     conn: pyodbc.Connection, # Objeto de conexão de banco
     clientMongoDB: MongoClient, # Ojeto de conexão com o MongoDB
