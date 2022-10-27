@@ -5,7 +5,7 @@ __all__ = ['input_coordenates', 'parse_bw', 'optimize_floats', 'optimize_ints', 
 
 # %% ..\nbs\format.ipynb 2
 import re
-from typing import List, Iterable, Union
+from typing import List, Iterable, Union, Tuple
 from pathlib import Path
 from collections import OrderedDict
 from decimal import Decimal
@@ -79,8 +79,8 @@ def input_coordenates(df: pd.DataFrame, # DataFrame a imputar coordenadas invál
     return df
 
 # %% ..\nbs\format.ipynb 5
-def parse_bw(bw: str, #Largura de Banda codificada como string
-) -> float: #Largura de Banda codificada como float
+def parse_bw(bw: str, #Designação de Emissão (Largura + Classe) codificada como string
+) -> Tuple[float, str]: #Largura e Classe de Emissão
     """Parse the bandwidth string"""
     if match := re.match(BW_pattern, bw):
         multiplier = BW[match.group(2)]
@@ -88,8 +88,9 @@ def parse_bw(bw: str, #Largura de Banda codificada como string
             number = float(f"{match.group(1)}.{mantissa}")
         else:
             number = float(match.group(1))
-        return multiplier * number
-    return -1
+        classe = match.group(4)
+        return multiplier * number, classe
+    return -1, -1
 
 # %% ..\nbs\format.ipynb 8
 def optimize_floats(df: pd.DataFrame, # DataFrame a ser otimizado
@@ -157,9 +158,7 @@ def format_types(df: pd.DataFrame, # DataFrame a ser formatado
                  stem: str = None, # Identificador do arquivo para otimização específica
 ) -> pd.DataFrame:    # DataFrame formatado 
 
-    """Convert the columns of a dataframe to optimized types"""
-    if stem != 'radcom':
-        df["Num_Serviço"] = df["Num_Serviço"].astype("category")
+    """Format the columns of a dataframe to string. Optimized when saving to parquet"""
     if stem == "stel":
         df.loc[:, "Validade_RF"] = df.Validade_RF.astype("string").str.slice(0, 10)
         df.loc[df.Unidade == "kHz", "Frequência"] = df.loc[
@@ -177,24 +176,8 @@ def format_types(df: pd.DataFrame, # DataFrame a ser formatado
             + "-"
             + df.loc[~a, "Situação"].astype("string")
         )
-        df.loc[:, "Classe"] = df["Classe"].astype("category")
         df.drop(["Fase", "Situação"], axis=1, inplace=True)
-    elif stem == 'base':
-        df['Status'] = df['Status'].astype('category')
-        df["BW(kHz)"] = df["BW(kHz)"].astype("float32")        
-    if stem in {'stel', 'base'}:
-        df['Classe'] = df['Classe'].astype('category')
-        df['Classe_Emissão'] = df['Classe_Emissão'].astype('category')
-        df['Largura_Emissão'] = df['Largura_Emissão'].astype('category')
 
-    df["Frequência"] = df["Frequência"].astype("string")
-    df["Latitude"] = df["Latitude"].astype("float32")
-    df["Longitude"] = df["Longitude"].astype("float32")
-    df["Entidade"] = df["Entidade"].astype("string")
-    df["Fistel"] = df["Fistel"].astype("string")
-    df["Município"] = df["Município"].astype("category")
-    df["UF"] = df["UF"].astype("category")
-    df["CNPJ"] = df["CNPJ"].astype("string")
-    df["Número_Estação"] = df["Número_Estação"].astype("string")
-
+    for c in df.columns:
+        df[c] = df[c].astype("string")
     return df

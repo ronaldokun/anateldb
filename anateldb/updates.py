@@ -271,94 +271,26 @@ def update_licenciamento(mongo_client: MongoClient, # Objeto de conexão com o M
 )-> pd.DataFrame: # DataFrame com os dados atualizados
     """Efetua a query na tabela `licenciamento` no banco mongoDB `mongo_client` e atualiza o arquivo local"""
     database = mongo_client["sms"]
-    collection = database["licenciamento"]
-
-    query = {"$and" : [
-        {u"DataExclusao" : None
-        },
-        {u"DataValidade": {
-                u"$nin": [
-                    u"",
-                    None
-                ]
-            }
-        },
-        {
-            u"NumServico": {
-                u"$nin": [
-                    u"010",
-                    u"045",
-                    u"171",
-                    u"450",
-                    u"750",
-                    u"",
-                    None
-                ]
-            }
-        },
-        {
-            u"FreqTxMHz": {
-                u"$nin": [
-                    None,
-                    u""
-                ]
-            }
-        },
-        {
-            u"Latitude": {
-                u"$nin": [
-                    None,
-                    u""
-                ]
-            }
-        },
-        {
-            u"Longitude": {
-                u"$nin": [
-                    None,
-                    u""
-                ]
-            }
-        },
-        {
-            u"FreqTxMHz": {
-                u"$type": 1.0
-            }
-        },
-        {
-            u"Latitude": {
-                u"$type": 1.0
-            }
-        },
-        {
-            u"Longitude": {
-                u"$type": 1.0
-            }
-        }
-    ]
-    }
-
-    c = collection.find(query, projection={k:1.0 for k in LICENCIAMENTO.keys()})
-
+    collection = database["licenciamento"]    
+    c = collection.find(MONGO_LIC, projection={k:1.0 for k in LICENCIAMENTO.keys()})
     result = L()
-    for doc in tqdm(c.batch_size(1000000000)):
+    for doc in tqdm(c):
         result.append(doc)
-
     df = pd.json_normalize(result)
-
     df.drop('_id', axis=1, inplace=True)
-
     df.rename(LICENCIAMENTO, axis=1, inplace=True)
+    df['Designacao_Emissão'] = df.Designacao_Emissão.str.strip().str.lstrip().str.rstrip().str.upper()
+    df['Designacao_Emissão'] = df.Designacao_Emissão.str.replace(',', '')
+    df['Designacao_Emissão'] = df.Designacao_Emissão.str.split(' ')
+    df = df.explode('Designacao_Emissão')
+    df.loc[df.Designacao_Emissão == '/', 'Designacao_Emissão'] = ''
+    df.loc[:, ['Largura_Emissão', 'Classe_Emissão']]  = df.Designacao_Emissão.apply(parse_bw).tolist()
+    df.drop('Designacao_Emissão', axis=1, inplace=True)
+    df = df[df.Frequência > 0].reset_index(drop=True)
 
-    return df
+    return _save_df(df, folder, 'licenciamento')
 
-    # for c in df.columns:
-    #     if c not in ('Frequência', 'Latitude', 'Longitude'):
-    #         df[c] = df[c].astype('string')
-
-
-
-# %% ..\nbs\updates.ipynb 19
+# %% ..\nbs\updates.ipynb 32
 def update_base(
     conn: pyodbc.Connection, # Objeto de conexão de banco
     clientMongoDB: MongoClient, # Ojeto de conexão com o MongoDB

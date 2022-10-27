@@ -194,7 +194,9 @@ LICENCIAMENTO = {'NumFistel': 'Fistel',
  'NomeMunicipio': 'Município',
  'CodMunicipio': 'Cod_Município',
  'DataValidade': 'Data_de_Validade',
- 'FreqTxMHz': 'Frequência', 
+ 'FreqTxMHz': 'Frequência',
+ 'Latitude': 'Latitude',
+ 'Longitude': 'Longitude',
  'DesignacaoEmissao': 'Designacao_Emissão',
  'Status.state': 'Status',
 }
@@ -277,70 +279,73 @@ where
 
 # %% ..\nbs\constants.ipynb 12
 MONGO_LIC = {"$and" : [
-        {u"DataExclusao" : None
+        {"DataExclusao" : None
         },
-        {u"DataValidade": {
-                u"$nin": [
-                    u"",
+        {"DataValidade": {
+                "$nin": [
+                    "",
+                    None
+                ]
+            }
+        },
+        {"Status.state": "LIC-LIC-01"                
+        },
+        {
+            "NumServico": {
+                "$nin": [
+                    "010",
+                    "045",
+                    "171",
+                    "450",
+                    "750",
+                    "",
                     None
                 ]
             }
         },
         {
-            u"NumServico": {
-                u"$nin": [
-                    u"010",
-                    u"045",
-                    u"171",
-                    u"450",
-                    u"750",
-                    u"",
-                    None
-                ]
-            }
-        },
-        {
-            u"FreqTxMHz": {
-                u"$nin": [
+            "FreqTxMHz": {
+                "$nin": [
                     None,
-                    u""
+                    "",
+                    0
                 ]
             }
         },
         {
-            u"Latitude": {
-                u"$nin": [
+            "Latitude": {
+                "$nin": [
                     None,
-                    u""
+                    ""
                 ]
             }
         },
         {
-            u"Longitude": {
-                u"$nin": [
+            "Longitude": {
+                "$nin": [
                     None,
-                    u""
+                    ""
                 ]
             }
         },
         {
-            u"FreqTxMHz": {
-                u"$type": 1.0
+            "FreqTxMHz": {
+                "$type": 1.0
             }
         },
         {
-            u"Latitude": {
-                u"$type": 1.0
+            "Latitude": {
+                "$type": 1.0
             }
         },
         {
-            u"Longitude": {
-                u"$type": 1.0
+            "Longitude": {
+                "$type": 1.0
             }
         }
     ]
     }
 
 # %% ..\nbs\constants.ipynb 14
-BW_pattern = re.compile("^(\d{1,3})([HKMG])(\d{0,2})$")
+BW_pattern = re.compile("^(\d{1,3})([HKMG])(\d{0,2})(\w{0,3}$)")
 REGEX_ESTADOS = f'({"|".join(ESTADOS)})'
