@@ -197,10 +197,12 @@ def get_db(
 
     rd['Frequency'] = rd['Frequency'].astype('float64')
     rd['Description'] = rd['Description'].astype('string').fillna('NI')
-    rd['Service'] = rd.Service.astype('float').fillna(-1).astype('int16')
-    rd['Station'] = rd.Station.astype('float').fillna(-1).astype('int32') # Fix this
+    rd['Service'] = rd.Service.astype('string').fillna('-1')
+    rd['Station'] = rd.Station.astype('string').fillna('-1')
+    rd.loc[rd.Station == '', 'Station'] = '-1'
+    rd.loc[rd.BW == '', 'BW'] = '-1'
     rd['BW'] = rd['BW'].astype('float32').fillna(-1)
-    rd['Class'] = rd.Class.astype('string').fillna('NI').astype('category')
+    rd['Class'] = rd.Class.astype('string').fillna('NI')
     rd = rd.drop_duplicates(keep="first").sort_values(by=['Frequency', 'Latitude', 'Longitude']).reset_index(drop=True)
     rd['Id'] = [f'#{i+1}' for i in rd.index]
     rd['Id'] = rd.Id.astype('string')

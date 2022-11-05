@@ -2,8 +2,8 @@
 
 # %% auto 0
 __all__ = ['TIMEOUT', 'RELATORIO', 'ESTACOES', 'ESTACAO', 'PLANO_BASICO', 'HISTORICO', 'SRD', 'TELECOM', 'RADIODIFUSAO',
-           'APP_ANALISE', 'ESTADOS', 'ENTIDADES', 'SIGLAS', 'BW', 'BW_MAP', 'LICENCIAMENTO', 'RADCOM', 'STEL',
-           'MONGO_LIC', 'BW_pattern', 'REGEX_ESTADOS']
+           'APP_ANALISE', 'ESTADOS', 'SIGLAS', 'BW', 'BW_MAP', 'LICENCIAMENTO', 'RADCOM', 'STEL', 'MONGO_LIC',
+           'BW_pattern', 'REGEX_ESTADOS']
 
 # %% ..\nbs\constants.ipynb 2
 import re
@@ -84,8 +84,6 @@ ESTADOS = (
 )
 
 # %% ..\nbs\constants.ipynb 8
-ENTIDADES = {}
-
 SIGLAS = {
     "Acre": "AC",
     "Alagoas": "AL",
@@ -147,7 +145,7 @@ select
   M.NomeMunicipio as 'Município', 
   PB.SiglaUF as 'UF', 
   SRD.MedLatitudeDecimal as 'Latitude', 
-  SRD.MedLongitudeDecimal as 'Longitude', 
+  SRD.MedLongitudeDecimal as 'Longitude' 
 from 
   SRD_PEDIDORADCOM SRD 
   left join ESTACAO E on E.IdtHabilitacao = SRD.IdtHabilitacao 

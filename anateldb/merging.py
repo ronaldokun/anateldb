@@ -5,14 +5,11 @@ __all__ = ['MAX_DIST', 'COLS', 'check_add_row', 'get_subsets', 'merge_closer', '
            'get_frequencies_set', 'merge_aero']
 
 # %% ..\nbs\merging.ipynb 2
-from decimal import Decimal
 from itertools import product
 import pandas as pd
 from geopy.distance import geodesic
 
-from .constants import ENTIDADES
-from .format import input_coordenates, df_optimize
-from .reading import read_icao, read_aisw, read_aisg, read_aero, read_base
+from .reading import read_icao, read_aisw, read_aisg
 MAX_DIST = 10 #Km
 COLS = ['Frequency', 'Latitude', 'Longitude', 'Description']
 

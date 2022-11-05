@@ -6,26 +6,21 @@ __all__ = ['connect_db', 'clean_mosaico', 'update_radcom', 'update_stel', 'updat
 # %% ..\nbs\updates.ipynb 3
 from decimal import Decimal, getcontext
 from typing import Union
-from urllib.request import urlretrieve, URLError
-import xmltodict
-from zipfile import ZipFile
 import gc
 
 import pandas as pd
 import pyodbc
 from rich.console import Console
 from pyarrow import ArrowInvalid, ArrowTypeError
-from unidecode import unidecode
 from fastcore.xtras import Path
-from fastcore.foundation import L
 from fastcore.test import test_eq
+from fastcore.foundation import L
 from tqdm.auto import tqdm
 import pyodbc
 from pymongo import MongoClient
 
 from .constants import *
 from .format import parse_bw, format_types, input_coordenates
-from .functionsdb import ConsultaSRD
 
 getcontext().prec = 5
 
@@ -190,28 +185,35 @@ def update_licenciamento(mongo_client: MongoClient, # Objeto de conexão com o M
                          folder: Union[str, Path] # Pasta onde salvar os arquivos
 )-> pd.DataFrame: # DataFrame com os dados atualizados
     """Efetua a query na tabela `licenciamento` no banco mongoDB `mongo_client` e atualiza o arquivo local"""
-    database = mongo_client["sms"]
-    collection = database["licenciamento"]    
-    c = collection.find(MONGO_LIC, projection={k:1.0 for k in LICENCIAMENTO.keys()})
-    result = L()
-    for doc in tqdm(c):
-        result.append(doc)
-    df = pd.json_normalize(result)
-    df.drop('_id', axis=1, inplace=True)
-    df.rename(LICENCIAMENTO, axis=1, inplace=True)
-    df['Designacao_Emissão'] = df.Designacao_Emissão.str.replace(',', ' ')
-    df['Designacao_Emissão'] = df.Designacao_Emissão.str.strip().str.lstrip().str.rstrip().str.upper()
-    df['Designacao_Emissão'] = df.Designacao_Emissão.str.split(' ')
-    df = df.explode('Designacao_Emissão')
-    df.loc[df.Designacao_Emissão == '/', 'Designacao_Emissão'] = ''
-    df.loc[:, ['Largura_Emissão', 'Classe_Emissão']]  = df.Designacao_Emissão.apply(parse_bw).tolist()
-    df.drop('Designacao_Emissão', axis=1, inplace=True)
-    subset = ['Entidade', 'Longitude', 'Latitude', 'Classe', 'Frequência', 'Num_Serviço', 'Largura_Emissão', 'Classe_Emissão']
-    df_sub = df[~df.duplicated(subset=subset, keep='first')].reset_index(drop=True).copy()
-    df_sub = df_sub.set_index(subset).sort_index()
-    df_sub['Count'] = (df.groupby(subset).count()['Número_Estação']).tolist()
-    del df ; gc.collect()
-    df_sub = df_sub.reset_index()
+
+
+    console = Console()
+    with console.status(
+        "Consolidando os dados do Licenciamento...", spinner="clock"
+    ) as status:
+
+        database = mongo_client["sms"]
+        collection = database["licenciamento"]    
+        c = collection.find(MONGO_LIC, projection={k:1.0 for k in LICENCIAMENTO.keys()})
+        result = L()
+        for doc in tqdm(c):
+            result.append(doc)
+        df = pd.json_normalize(result)
+        df.drop('_id', axis=1, inplace=True)
+        df.rename(LICENCIAMENTO, axis=1, inplace=True)
+        df['Designacao_Emissão'] = df.Designacao_Emissão.str.replace(',', ' ')
+        df['Designacao_Emissão'] = df.Designacao_Emissão.str.strip().str.lstrip().str.rstrip().str.upper()
+        df['Designacao_Emissão'] = df.Designacao_Emissão.str.split(' ')
+        df = df.explode('Designacao_Emissão')
+        df.loc[df.Designacao_Emissão == '/', 'Designacao_Emissão'] = ''
+        df.loc[:, ['Largura_Emissão', 'Classe_Emissão']]  = df.Designacao_Emissão.apply(parse_bw).tolist()
+        df.drop('Designacao_Emissão', axis=1, inplace=True)
+        subset = ['Entidade', 'Longitude', 'Latitude', 'Classe', 'Frequência', 'Num_Serviço', 'Largura_Emissão', 'Classe_Emissão']
+        df_sub = df[~df.duplicated(subset=subset, keep='first')].reset_index(drop=True).copy()
+        df_sub = df_sub.set_index(subset).sort_index()
+        df_sub['Count'] = (df.groupby(subset).count()['Número_Estação']).tolist()
+        del df ; gc.collect()
+        df_sub = df_sub.reset_index()
     return _save_df(df_sub, folder, 'licenciamento')
 
 # %% ..\nbs\updates.ipynb 17
@@ -221,10 +223,12 @@ def update_base(
     folder: Union[str, Path] # Pasta onde salvar os arquivos    
 ) -> pd.DataFrame: # DataFrame com os dados atualizados
     # sourcery skip: use-fstring-for-concatenation
-    """Wrapper que atualiza opcionalmente lê e atualiza as três bases indicadas anteriormente, as combina e salva o arquivo consolidado na folder `folder`"""
+    """Wrapper que atualiza opcionalmente lê e atualiza as 4 bases indicadas anteriormente, as combina e salva o arquivo consolidado na folder `folder`"""
     stel = update_stel(conn, folder, ).loc[:, TELECOM]
     radcom = update_radcom(conn, folder).loc[:, SRD]
     mosaico = update_mosaico(clientMongoDB, folder).loc[:, RADIODIFUSAO]    
+    licenciamento = update_licenciamento(clientMongoDB, folder) # .loc[:, LICENCIAMENTO]
+    # Filtrando RADCOM
     radcom["Num_Serviço"] = "231"
     radcom["Status"] = "RADCOM"
     radcom["Classe_Emissão"] = pd.NA
@@ -232,14 +236,20 @@ def update_base(
     radcom["Entidade"] = radcom.Entidade.str.rstrip().str.lstrip()
     radcom["Validade_RF"] = pd.NA
     radcom["Fonte"] = "SRD"
+    # Filtrando STEL
     stel["Status"] = "L"
     stel["Entidade"] = stel.Entidade.str.rstrip().str.lstrip()
     stel["Fonte"] = "STEL"
+    # Filtrando MOSAICO
     mosaico["Fonte"] = "MOS"
     mosaico["Classe_Emissão"] = pd.NA
     mosaico["Largura_Emissão"] = mosaico.Num_Serviço.map(BW_MAP)
+    # Filtrando LICENCIAMENTO
+    licenciamento.drop('Count', axis=1, inplace=True)
+    licenciamento["Fonte"] = 'LIC'
+
     rd = (
-        pd.concat([mosaico, radcom, stel])
+        pd.concat([mosaico, radcom, stel, licenciamento])
         .sort_values(["Frequência", "Latitude", "Longitude"])
         .reset_index(drop=True)
     )

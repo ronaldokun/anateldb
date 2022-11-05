@@ -5,18 +5,15 @@ __all__ = ['input_coordenates', 'parse_bw', 'optimize_floats', 'optimize_ints', 
 
 # %% ..\nbs\format.ipynb 2
 import re
-from typing import List, Iterable, Union, Tuple
+from typing import Iterable, Union, Tuple
 from pathlib import Path
-from collections import OrderedDict
 from decimal import Decimal
 
 import pandas as pd
 from unidecode import unidecode
-from gazpacho import get, Soup
 from fastcore.utils import listify
-from rich.progress import track
 
-from .constants import ENTIDADES, COL_PB, ESTACAO, BW, BW_pattern
+from .constants import BW, BW_pattern
 
 # %% ..\nbs\format.ipynb 4
 def input_coordenates(df: pd.DataFrame, # DataFrame a imputar coordenadas inválidas
@@ -60,22 +57,12 @@ def input_coordenates(df: pd.DataFrame, # DataFrame a imputar coordenadas invál
     ].itertuples():
         try:
             left = unidecode(row.Município).lower()
-            m_coord = (
-                m.loc[
-                    (m.Município == left) & (m.UF == row.UF.lower()),
-                    ["Latitude", "Longitude"],
-                ]
-                .values.flatten()
-                .tolist()
-            )
-            if m_coord:
+            if m_coord := (m.loc[(m.Município == left) & (m.UF == row.UF.lower()), ["Latitude", "Longitude"],].values.flatten().tolist()):
                 df.loc[row.Index, "Latitude"] = m_coord[0]
                 df.loc[row.Index, "Longitude"] = m_coord[1]
                 df.loc[row.Index, "Coordenadas_do_Município"] = True
-            else:
-                print(left, row.UF, m_coord)
         except ValueError:
-            print(left, row.UF, m_coord)
+            continue
     return df
 
 # %% ..\nbs\format.ipynb 5
