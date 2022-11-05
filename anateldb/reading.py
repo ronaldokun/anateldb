@@ -36,44 +36,37 @@ def _read_df(folder: Union[str, Path], stem: str) -> pd.DataFrame:
     return df
 
 # %% ..\nbs\reading.ipynb 5
-def read_mosaico(conn: MongoClient, # Objeto de Conexão com o banco MongoDB
-                 folder: Union[str, Path], # Pasta onde ler/salvar os dados
-                 update: bool = False, # Atualiza os dados caso `True`
+def read_mosaico(folder: Union[str, Path], # Pasta onde ler/salvar os dados
+                 conn: MongoClient = None, # Objeto de Conexão com o banco MongoDB, atualiza os dados caso válido
 ) -> pd.DataFrame: # Dataframe com os dados do mosaico
     """Lê o banco de dados salvo localmente do MOSAICO e opcionalmente o atualiza."""
-    return update_mosaico(conn, folder) if update else _read_df(folder, "mosaico")
+    return update_mosaico(conn, folder) if conn else _read_df(folder, "mosaico")
 
 # %% ..\nbs\reading.ipynb 10
-def read_licenciamento(conn: MongoClient, # Objeto de Conexão com o banco MongoDB
-                 folder: Union[str, Path], # Pasta onde ler/salvar os dados
-                 update: bool = False, # Atualiza os dados caso `True`
+def read_licenciamento(folder: Union[str, Path], # Pasta onde ler/salvar os dados
+                       conn: MongoClient = None, # Objeto de Conexão com o banco MongoDB, atualiza os dados caso válido
 ) -> pd.DataFrame: # Dataframe com os dados do mosaico
     """Lê o banco de dados salvo localmente do LICENCIAMENTO e opcionalmente o atualiza."""
-    return update_licenciamento(conn, folder) if update else _read_df(folder, "licenciamento")
+    return update_licenciamento(conn, folder) if conn else _read_df(folder, "licenciamento")
 
-# %% ..\nbs\reading.ipynb 12
+# %% ..\nbs\reading.ipynb 13
 def read_radcom(
-    conn: pyodbc.Connection, # Objeto de conexão de banco
     folder: Union[str, Path], # Pasta onde ler/salvar os dados
-    update: bool = False # Atualiza os dados caso `True`
-                
+    conn: pyodbc.Connection = None, # Objeto de conexão de banco, atualiza os dados caso válido
 ) -> pd.DataFrame: # Dataframe com os dados de RADCOM
     """Lê o banco de dados salvo localmente de RADCOM. Opcionalmente o atualiza pelo Banco de Dados ANATELBDRO05 caso `update = True` ou não exista o arquivo local"""
-    return update_radcom(conn, folder) if update else _read_df(folder, "radcom")
+    return update_radcom(conn, folder) if conn else _read_df(folder, "radcom")
 
-# %% ..\nbs\reading.ipynb 15
-def read_stel(
-  conn: pyodbc.Connection, # Objeto de conexão de banco
-  folder: Union[str, Path], # Pasta onde ler/salvar os dados
-  update: bool = False # Atualiza os dados caso `True`
-              
+# %% ..\nbs\reading.ipynb 16
+def read_stel(folder: Union[str, Path], # Pasta onde ler/salvar os dados
+              conn: pyodbc.Connection = None, # Objeto de conexão de banco. Atualiza os dados caso válido
 ) -> pd.DataFrame: # Dataframe com os dados do STEL
     """Lê o banco de dados salvo localmente do STEL. 
        Opcionalmente o atualiza pelo Banco de Dados ANATELBDRO05
       caso `update = True` ou não exista o arquivo local"""
-    return update_stel(conn, folder) if update else _read_df(folder, "stel")
+    return update_stel(conn, folder) if conn else _read_df(folder, "stel")
 
-# %% ..\nbs\reading.ipynb 18
+# %% ..\nbs\reading.ipynb 19
 def read_icao(folder: Union[str, Path], # Pasta onde ler/salvar os dados
               update: bool = False, # Atualiza os dados caso `True`
 ) -> pd.DataFrame: # Dataframe com os dados do ICAO
@@ -87,7 +80,7 @@ def read_icao(folder: Union[str, Path], # Pasta onde ler/salvar os dados
     return _read_df(folder, "icao")
 
 
-# %% ..\nbs\reading.ipynb 20
+# %% ..\nbs\reading.ipynb 21
 def read_aisw(folder: Union[str, Path], # Pasta onde ler/salvar os dados
               update: bool = False, # Atualiza os dados caso `True`
 ) -> pd.DataFrame: # Dataframe com os dados do AISWEB
@@ -102,7 +95,7 @@ def read_aisw(folder: Union[str, Path], # Pasta onde ler/salvar os dados
 
 
 
-# %% ..\nbs\reading.ipynb 22
+# %% ..\nbs\reading.ipynb 23
 def read_aisg(folder: Union[str, Path], # Pasta onde ler/salvar os dados
 update: bool = False, # Atualiza os dados caso `True`
 ) -> pd.DataFrame: # Dataframe com os dados do GEOAISWEB
@@ -115,7 +108,7 @@ update: bool = False, # Atualiza os dados caso `True`
         )
     return _read_df(folder, "aisg")
 
-# %% ..\nbs\reading.ipynb 24
+# %% ..\nbs\reading.ipynb 25
 def read_aero(
     folder: Union[str, Path], # Pasta onde ler/salvar os dados
 update: bool = False, # Atualiza os dados caso `True`
@@ -130,12 +123,11 @@ update: bool = False, # Atualiza os dados caso `True`
     
     return _read_df(folder, "aero")
 
-# %% ..\nbs\reading.ipynb 27
+# %% ..\nbs\reading.ipynb 28
 def read_base(
-    conn: pyodbc.Connection, # Objeto de conexão de banco
-    clientMongoDB: MongoClient, # Ojeto de conexão com o MongoDB
     folder: Union[str, Path], 
-    update: bool = False
+    conn: pyodbc.Connection = None, # Objeto de conexão do banco SQL Server
+    clientMongoDB: MongoClient = None, # Ojeto de conexão do banco MongoDB
 ) -> pd.DataFrame:
-    """Lê a base de dados e opcionalmente a atualiza antes da leitura"""
-    return update_base(conn, clientMongoDB, folder) if update else _read_df(folder, "base")
+    """Lê a base de dados e opcionalmente a atualiza antes da leitura casos as conexões de banco sejam válidas"""
+    return update_base(conn, clientMongoDB, folder) if all([conn, clientMongoDB]) else _read_df(folder, "base")
