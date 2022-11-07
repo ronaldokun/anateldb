@@ -3,7 +3,7 @@
 # %% auto 0
 __all__ = ['connect_db', 'clean_mosaico', 'update_radcom', 'update_stel', 'update_mosaico', 'update_licenciamento', 'update_base']
 
-# %% ..\nbs\updates.ipynb 3
+# %% ..\nbs\updates.ipynb 2
 from decimal import Decimal, getcontext
 from typing import Union
 import gc
@@ -24,7 +24,7 @@ from .format import parse_bw, format_types, input_coordenates
 
 getcontext().prec = 5
 
-# %% ..\nbs\updates.ipynb 5
+# %% ..\nbs\updates.ipynb 4
 def connect_db(
     server: str = "ANATELBDRO05",  # Servidor do Banco de Dados
     database: str = "SITARWEB",  # Nome do Banco de Dados
@@ -41,7 +41,7 @@ def connect_db(
         timeout=TIMEOUT,
     )
 
-# %% ..\nbs\updates.ipynb 7
+# %% ..\nbs\updates.ipynb 6
 def clean_mosaico(
     df: pd.DataFrame,  # DataFrame com os dados de Estações e Plano_Básico mesclados
     pasta: Union[
@@ -72,7 +72,7 @@ def clean_mosaico(
     df.loc[:, "Validade_RF"] = df.Validade_RF.astype("string").str.slice(0, 10)
     return df.drop_duplicates(keep="first").reset_index(drop=True)
 
-# %% ..\nbs\updates.ipynb 9
+# %% ..\nbs\updates.ipynb 8
 def _save_df(df: pd.DataFrame, folder: Union[str, Path], stem: str) -> pd.DataFrame:
     """Format, Save and return a dataframe"""
     df = format_types(df, stem)
@@ -98,7 +98,7 @@ def _save_df(df: pd.DataFrame, folder: Union[str, Path], stem: str) -> pd.DataFr
                 raise ValueError(f"Could not save {stem} to {file}") from e
     return df
 
-# %% ..\nbs\updates.ipynb 10
+# %% ..\nbs\updates.ipynb 9
 def update_radcom(
     conn: pyodbc.Connection,  # Objeto de conexão de banco
     folder: Union[str, Path],  # Pasta onde salvar os arquivos
@@ -117,7 +117,7 @@ def update_radcom(
             )
             raise ConnectionError from e
 
-# %% ..\nbs\updates.ipynb 11
+# %% ..\nbs\updates.ipynb 10
 def update_stel(
     conn: pyodbc.Connection,  # Objeto de conexão de banco
     folder: Union[str, Path],  # Pasta onde salvar os arquivos
@@ -137,7 +137,7 @@ def update_stel(
             )
             raise ConnectionError from e
 
-# %% ..\nbs\updates.ipynb 12
+# %% ..\nbs\updates.ipynb 11
 def update_mosaico(
     mongo_client: MongoClient,  # Objeto de conexão com o MongoDB
     folder: Union[str, Path],  # Pasta onde salvar os arquivos
@@ -201,7 +201,7 @@ def update_mosaico(
         df = clean_mosaico(mosaico_df, folder)
     return _save_df(df, folder, "mosaico")
 
-# %% ..\nbs\updates.ipynb 13
+# %% ..\nbs\updates.ipynb 12
 def update_licenciamento(
     mongo_client: MongoClient,  # Objeto de conexão com o MongoDB
     folder: Union[str, Path],  # Pasta onde salvar os arquivos
@@ -252,12 +252,15 @@ def update_licenciamento(
         )
         df_sub = df_sub.set_index(subset).sort_index()
         df_sub["Count"] = (df.groupby(subset).count()["Número_Estação"]).tolist()
+        df_sub["Número_Estação"] = (
+            df_sub.Número_Estação.astype("string") + "+" + df_sub.Count.astype("string")
+        )
         del df
         gc.collect()
         df_sub = df_sub.reset_index()
     return _save_df(df_sub, folder, "licenciamento")
 
-# %% ..\nbs\updates.ipynb 17
+# %% ..\nbs\updates.ipynb 16
 def update_base(
     conn: pyodbc.Connection,  # Objeto de conexão de banco
     clientMongoDB: MongoClient,  # Ojeto de conexão com o MongoDB
