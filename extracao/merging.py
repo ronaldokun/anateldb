@@ -9,7 +9,7 @@ from itertools import product
 import pandas as pd
 from geopy.distance import geodesic
 
-from anateldb.reading import read_icao, read_aisw, read_aisg
+from .reading import read_icao, read_aisw, read_aisg
 
 MAX_DIST = 10  # Km
 COLS = ["Frequency", "Latitude", "Longitude", "Description"]

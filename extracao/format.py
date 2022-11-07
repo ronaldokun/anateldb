@@ -13,7 +13,7 @@ import pandas as pd
 from unidecode import unidecode
 from fastcore.utils import listify
 
-from anateldb.constants import BW, BW_pattern
+from .constants import BW, BW_pattern
 
 # %% ..\nbs\format.ipynb 4
 def input_coordenates(

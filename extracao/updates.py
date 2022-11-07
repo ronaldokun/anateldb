@@ -19,8 +19,8 @@ from tqdm.auto import tqdm
 import pyodbc
 from pymongo import MongoClient
 
-from anateldb.constants import *
-from anateldb.format import parse_bw, format_types, input_coordenates
+from .constants import *
+from .format import parse_bw, format_types, input_coordenates
 
 getcontext().prec = 5
 
@@ -63,9 +63,9 @@ def clean_mosaico(
         df.rename({a: a[:-2]}, axis=1, inplace=True)
 
     df = input_coordenates(df, pasta)
-    df.loc[:, "Frequência"] = df.Frequência.str.replace(",", ".")
+    df.loc["Frequência"] = df.Frequência.str.replace(",", ".")
     df = df[df.Frequência.notna()].reset_index(drop=True)
-    df.loc[:, "Frequência"] = df.Frequência.astype("float")
+    df.loc["Frequência"] = df.Frequência.astype("float")
     df.loc[df.Serviço == "OM", "Frequência"] = df.loc[
         df.Serviço == "OM", "Frequência"
     ].apply(lambda x: Decimal(x) / Decimal(1000))

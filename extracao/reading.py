@@ -13,7 +13,7 @@ from pyarrow import ArrowInvalid
 import pyodbc
 from pymongo import MongoClient
 
-from anateldb.updates import (
+from extracao.updates import (
     update_mosaico,
     update_stel,
     update_radcom,

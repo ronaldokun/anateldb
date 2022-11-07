@@ -19,11 +19,11 @@ from rich import print
 import pyodbc
 from pymongo import MongoClient
 
-from anateldb.constants import APP_ANALISE
-from anateldb.reading import read_base, read_aero
-from anateldb.merging import merge_aero
-from anateldb.format import df_optimize, optimize_objects
-from anateldb.merging import get_subsets, check_add_row, product, MAX_DIST
+from .constants import APP_ANALISE
+from .reading import read_base, read_aero
+from .merging import merge_aero
+from .format import df_optimize, optimize_objects
+from .merging import get_subsets, check_add_row, product, MAX_DIST
 
 # %% ..\nbs\main.ipynb 3
 def bump_version(
