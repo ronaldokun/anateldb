@@ -19,17 +19,18 @@ from tqdm.auto import tqdm
 import pyodbc
 from pymongo import MongoClient
 
-from .constants import *
-from .format import parse_bw, format_types, input_coordenates
+from anateldb.constants import *
+from anateldb.format import parse_bw, format_types, input_coordenates
 
 getcontext().prec = 5
 
 # %% ..\nbs\updates.ipynb 5
-def connect_db(server: str = 'ANATELBDRO05', # Servidor do Banco de Dados
-               database: str = 'SITARWEB', # Nome do Banco de Dados
-               trusted_conn: str = 'yes', # Conexão Segura: yes | no
-               mult_results: bool = True, # Múltiplos Resultados
-              )->pyodbc.Connection:
+def connect_db(
+    server: str = "ANATELBDRO05",  # Servidor do Banco de Dados
+    database: str = "SITARWEB",  # Nome do Banco de Dados
+    trusted_conn: str = "yes",  # Conexão Segura: yes | no
+    mult_results: bool = True,  # Múltiplos Resultados
+) -> pyodbc.Connection:
     """Conecta ao Banco `server` e retorna o 'cursor' (iterador) do Banco"""
     return pyodbc.connect(
         "Driver={ODBC Driver 17 for SQL Server};"
@@ -41,9 +42,12 @@ def connect_db(server: str = 'ANATELBDRO05', # Servidor do Banco de Dados
     )
 
 # %% ..\nbs\updates.ipynb 7
-def clean_mosaico(df: pd.DataFrame, # DataFrame com os dados de Estações e Plano_Básico mesclados 
-                pasta: Union[str, Path], # Pasta com os dados de municípios para imputar coordenadas ausentes
-) -> pd.DataFrame: # DataFrame com os dados mesclados e limpos
+def clean_mosaico(
+    df: pd.DataFrame,  # DataFrame com os dados de Estações e Plano_Básico mesclados
+    pasta: Union[
+        str, Path
+    ],  # Pasta com os dados de municípios para imputar coordenadas ausentes
+) -> pd.DataFrame:  # DataFrame com os dados mesclados e limpos
     """Clean the merged dataframe with the data from the MOSAICO page"""
     COLS = [c for c in df.columns if "_x" in c]
     for col in COLS:
@@ -59,7 +63,7 @@ def clean_mosaico(df: pd.DataFrame, # DataFrame com os dados de Estações e Pla
         df.rename({a: a[:-2]}, axis=1, inplace=True)
 
     df = input_coordenates(df, pasta)
-    df.loc[:, "Frequência"] = df.Frequência.str.replace(",", ".")    
+    df.loc[:, "Frequência"] = df.Frequência.str.replace(",", ".")
     df = df[df.Frequência.notna()].reset_index(drop=True)
     df.loc[:, "Frequência"] = df.Frequência.astype("float")
     df.loc[df.Serviço == "OM", "Frequência"] = df.loc[
@@ -72,8 +76,8 @@ def clean_mosaico(df: pd.DataFrame, # DataFrame com os dados de Estações e Pla
 def _save_df(df: pd.DataFrame, folder: Union[str, Path], stem: str) -> pd.DataFrame:
     """Format, Save and return a dataframe"""
     df = format_types(df, stem)
-    df = df.drop_duplicates(keep='first').reset_index(drop=True)
-    df = df.dropna(subset=['Latitude', 'Longitude']).reset_index(drop=True)
+    df = df.drop_duplicates(keep="first").reset_index(drop=True)
+    df = df.dropna(subset=["Latitude", "Longitude"]).reset_index(drop=True)
     try:
         file = Path(f"{folder}/{stem}.parquet.gzip")
         df.to_parquet(file, compression="gzip", index=False)
@@ -94,20 +98,17 @@ def _save_df(df: pd.DataFrame, folder: Union[str, Path], stem: str) -> pd.DataFr
                 raise ValueError(f"Could not save {stem} to {file}") from e
     return df
 
-
-
 # %% ..\nbs\updates.ipynb 10
 def update_radcom(
-        conn: pyodbc.Connection, # Objeto de conexão de banco
-        folder: Union[str, Path] # Pasta onde salvar os arquivos
-        
-) -> pd.DataFrame: # DataFrame com os dados atualizados
+    conn: pyodbc.Connection,  # Objeto de conexão de banco
+    folder: Union[str, Path],  # Pasta onde salvar os arquivos
+) -> pd.DataFrame:  # DataFrame com os dados atualizados
     """Atualiza a tabela local retornada pela query `RADCOM`"""
     console = Console()
     with console.status(
         "[cyan]Lendo o Banco de Dados de Radcom...", spinner="earth"
     ) as status:
-        try:            
+        try:
             df = pd.read_sql_query(RADCOM, conn)
             return _save_df(df, folder, "radcom")
         except pyodbc.OperationalError as e:
@@ -118,16 +119,16 @@ def update_radcom(
 
 # %% ..\nbs\updates.ipynb 11
 def update_stel(
-        conn: pyodbc.Connection, # Objeto de conexão de banco
-        folder:Union[str, Path] # Pasta onde salvar os arquivos        
-) -> pd.DataFrame: # DataFrame com os dados atualizados
+    conn: pyodbc.Connection,  # Objeto de conexão de banco
+    folder: Union[str, Path],  # Pasta onde salvar os arquivos
+) -> pd.DataFrame:  # DataFrame com os dados atualizados
     """Atualiza a tabela local retornada pela query `STEL`"""
     console = Console()
     with console.status(
         "[red]Lendo o Banco de Dados do STEL. Processo Lento, aguarde...",
         spinner="bouncingBall",
     ) as status:
-        try:            
+        try:
             df = pd.read_sql_query(STEL, conn)
             return _save_df(df, folder, "stel")
         except pyodbc.OperationalError as e:
@@ -137,55 +138,75 @@ def update_stel(
             raise ConnectionError from e
 
 # %% ..\nbs\updates.ipynb 12
-def update_mosaico(        
-        mongo_client: MongoClient, # Objeto de conexão com o MongoDB
-        folder: Union[str, Path] # Pasta onde salvar os arquivos
-) -> pd.DataFrame: # DataFrame com os dados atualizados
+def update_mosaico(
+    mongo_client: MongoClient,  # Objeto de conexão com o MongoDB
+    folder: Union[str, Path],  # Pasta onde salvar os arquivos
+) -> pd.DataFrame:  # DataFrame com os dados atualizados
     """Efetua a query na tabela de Radiodifusão no banco mongoDB `mongo_client` e atualiza o arquivo local"""
     console = Console()
     with console.status(
         "Consolidando os dados do Mosaico...", spinner="clock"
-    ) as status:  
-        
+    ) as status:
+
         database = mongo_client["sms"]
         # Database com as informações de Radio e difusão
         collection = database["srd"]
 
         query = {}
-        projection = {"SiglaServico": 1.0, "Status.state": 1.0, "licensee": 1.0, "NumFistel": 1.0, "frequency": 1.0, "stnClass": 1.0, "srd_planobasico.NomeMunicipio": 1.0, "srd_planobasico.SiglaUF": 1.0, "NumServico": 1.0, "estacao.NumEstacao": 1.0, "estacao.MedLatitudeDecimal": 1.0, "estacao.MedLongitudeDecimal": 1.0, "habilitacao.DataValFreq": 1.0}
+        projection = {
+            "SiglaServico": 1.0,
+            "Status.state": 1.0,
+            "licensee": 1.0,
+            "NumFistel": 1.0,
+            "frequency": 1.0,
+            "stnClass": 1.0,
+            "srd_planobasico.NomeMunicipio": 1.0,
+            "srd_planobasico.SiglaUF": 1.0,
+            "NumServico": 1.0,
+            "estacao.NumEstacao": 1.0,
+            "estacao.MedLatitudeDecimal": 1.0,
+            "estacao.MedLongitudeDecimal": 1.0,
+            "habilitacao.DataValFreq": 1.0,
+        }
 
-        list_data = list(collection.find(query, projection = projection))
+        list_data = list(collection.find(query, projection=projection))
         mosaico_df = pd.json_normalize(list_data)
-        mosaico_df = mosaico_df.drop(columns=['estacao'])
-        mosaico_df = mosaico_df[["frequency",
-                                "licensee",
-                                "NumFistel",
-                                "estacao.NumEstacao",
-                                "srd_planobasico.NomeMunicipio",
-                                "srd_planobasico.SiglaUF",
-                                "estacao.MedLatitudeDecimal",
-                                "estacao.MedLongitudeDecimal",
-                                "stnClass",
-                                "NumServico",
-                                "habilitacao.DataValFreq",
-                                "Status.state"]]
+        mosaico_df = mosaico_df.drop(columns=["estacao"])
+        mosaico_df = mosaico_df[
+            [
+                "frequency",
+                "licensee",
+                "NumFistel",
+                "estacao.NumEstacao",
+                "srd_planobasico.NomeMunicipio",
+                "srd_planobasico.SiglaUF",
+                "estacao.MedLatitudeDecimal",
+                "estacao.MedLongitudeDecimal",
+                "stnClass",
+                "NumServico",
+                "habilitacao.DataValFreq",
+                "Status.state",
+            ]
+        ]
 
         mosaico_df.columns = RADIODIFUSAO
-        mosaico_df = mosaico_df[mosaico_df.Status.str.contains("-C1$|-C2$|-C3$|-C4$|-C7|-C98$", na=False)].reset_index(drop=True)
+        mosaico_df = mosaico_df[
+            mosaico_df.Status.str.contains("-C1$|-C2$|-C3$|-C4$|-C7|-C98$", na=False)
+        ].reset_index(drop=True)
         for c in mosaico_df.columns:
             mosaico_df.loc[mosaico_df[c] == "", c] = pd.NA
-        mosaico_df = mosaico_df.dropna(subset=['UF'])
+        mosaico_df = mosaico_df.dropna(subset=["UF"])
         mosaico_df = mosaico_df[mosaico_df.Frequência.notna()].reset_index(drop=True)
 
         df = clean_mosaico(mosaico_df, folder)
     return _save_df(df, folder, "mosaico")
 
 # %% ..\nbs\updates.ipynb 13
-def update_licenciamento(mongo_client: MongoClient, # Objeto de conexão com o MongoDB
-                         folder: Union[str, Path] # Pasta onde salvar os arquivos
-)-> pd.DataFrame: # DataFrame com os dados atualizados
+def update_licenciamento(
+    mongo_client: MongoClient,  # Objeto de conexão com o MongoDB
+    folder: Union[str, Path],  # Pasta onde salvar os arquivos
+) -> pd.DataFrame:  # DataFrame com os dados atualizados
     """Efetua a query na tabela `licenciamento` no banco mongoDB `mongo_client` e atualiza o arquivo local"""
-
 
     console = Console()
     with console.status(
@@ -193,41 +214,66 @@ def update_licenciamento(mongo_client: MongoClient, # Objeto de conexão com o M
     ) as status:
 
         database = mongo_client["sms"]
-        collection = database["licenciamento"]    
-        c = collection.find(MONGO_LIC, projection={k:1.0 for k in LICENCIAMENTO.keys()})
+        collection = database["licenciamento"]
+        c = collection.find(
+            MONGO_LIC, projection={k: 1.0 for k in LICENCIAMENTO.keys()}
+        )
         result = L()
         for doc in tqdm(c):
             result.append(doc)
         df = pd.json_normalize(result)
-        df.drop('_id', axis=1, inplace=True)
+        df.drop("_id", axis=1, inplace=True)
         df.rename(LICENCIAMENTO, axis=1, inplace=True)
-        df['Designacao_Emissão'] = df.Designacao_Emissão.str.replace(',', ' ')
-        df['Designacao_Emissão'] = df.Designacao_Emissão.str.strip().str.lstrip().str.rstrip().str.upper()
-        df['Designacao_Emissão'] = df.Designacao_Emissão.str.split(' ')
-        df = df.explode('Designacao_Emissão')
-        df.loc[df.Designacao_Emissão == '/', 'Designacao_Emissão'] = ''
-        df.loc[:, ['Largura_Emissão', 'Classe_Emissão']]  = df.Designacao_Emissão.apply(parse_bw).tolist()
-        df.drop('Designacao_Emissão', axis=1, inplace=True)
-        subset = ['Entidade', 'Longitude', 'Latitude', 'Classe', 'Frequência', 'Num_Serviço', 'Largura_Emissão', 'Classe_Emissão']
-        df_sub = df[~df.duplicated(subset=subset, keep='first')].reset_index(drop=True).copy()
+        df["Designacao_Emissão"] = df.Designacao_Emissão.str.replace(",", " ")
+        df["Designacao_Emissão"] = (
+            df.Designacao_Emissão.str.strip().str.lstrip().str.rstrip().str.upper()
+        )
+        df["Designacao_Emissão"] = df.Designacao_Emissão.str.split(" ")
+        df = df.explode("Designacao_Emissão")
+        df.loc[df.Designacao_Emissão == "/", "Designacao_Emissão"] = ""
+        df.loc[:, ["Largura_Emissão", "Classe_Emissão"]] = df.Designacao_Emissão.apply(
+            parse_bw
+        ).tolist()
+        df.drop("Designacao_Emissão", axis=1, inplace=True)
+        subset = [
+            "Entidade",
+            "Longitude",
+            "Latitude",
+            "Classe",
+            "Frequência",
+            "Num_Serviço",
+            "Largura_Emissão",
+            "Classe_Emissão",
+        ]
+        df_sub = (
+            df[~df.duplicated(subset=subset, keep="first")]
+            .reset_index(drop=True)
+            .copy()
+        )
         df_sub = df_sub.set_index(subset).sort_index()
-        df_sub['Count'] = (df.groupby(subset).count()['Número_Estação']).tolist()
-        del df ; gc.collect()
+        df_sub["Count"] = (df.groupby(subset).count()["Número_Estação"]).tolist()
+        del df
+        gc.collect()
         df_sub = df_sub.reset_index()
-    return _save_df(df_sub, folder, 'licenciamento')
+    return _save_df(df_sub, folder, "licenciamento")
 
 # %% ..\nbs\updates.ipynb 17
 def update_base(
-    conn: pyodbc.Connection, # Objeto de conexão de banco
-    clientMongoDB: MongoClient, # Ojeto de conexão com o MongoDB
-    folder: Union[str, Path] # Pasta onde salvar os arquivos    
-) -> pd.DataFrame: # DataFrame com os dados atualizados
+    conn: pyodbc.Connection,  # Objeto de conexão de banco
+    clientMongoDB: MongoClient,  # Ojeto de conexão com o MongoDB
+    folder: Union[str, Path],  # Pasta onde salvar os arquivos
+) -> pd.DataFrame:  # DataFrame com os dados atualizados
     # sourcery skip: use-fstring-for-concatenation
     """Wrapper que atualiza opcionalmente lê e atualiza as 4 bases indicadas anteriormente, as combina e salva o arquivo consolidado na folder `folder`"""
-    stel = update_stel(conn, folder, ).loc[:, TELECOM]
+    stel = update_stel(
+        conn,
+        folder,
+    ).loc[:, TELECOM]
     radcom = update_radcom(conn, folder).loc[:, SRD]
-    mosaico = update_mosaico(clientMongoDB, folder).loc[:, RADIODIFUSAO]    
-    licenciamento = update_licenciamento(clientMongoDB, folder) # .loc[:, LICENCIAMENTO]
+    mosaico = update_mosaico(clientMongoDB, folder).loc[:, RADIODIFUSAO]
+    licenciamento = update_licenciamento(
+        clientMongoDB, folder
+    )  # .loc[:, LICENCIAMENTO]
     # Filtrando RADCOM
     radcom["Num_Serviço"] = "231"
     radcom["Status"] = "RADCOM"
@@ -245,8 +291,8 @@ def update_base(
     mosaico["Classe_Emissão"] = pd.NA
     mosaico["Largura_Emissão"] = mosaico.Num_Serviço.map(BW_MAP)
     # Filtrando LICENCIAMENTO
-    licenciamento.drop('Count', axis=1, inplace=True)
-    licenciamento["Fonte"] = 'LIC'
+    licenciamento.drop("Count", axis=1, inplace=True)
+    licenciamento["Fonte"] = "LIC"
 
     rd = (
         pd.concat([mosaico, radcom, stel, licenciamento])
@@ -254,5 +300,5 @@ def update_base(
         .reset_index(drop=True)
     )
     rd = rd.drop_duplicates(keep="first").reset_index(drop=True)
-    rd["BW(kHz)"] = rd.Largura_Emissão.astype('string').fillna('-1').apply(parse_bw)
+    rd["BW(kHz)"] = rd.Largura_Emissão.astype("string").fillna("-1").apply(parse_bw)
     return _save_df(rd, folder, "base")

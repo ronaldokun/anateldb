@@ -14,19 +14,21 @@ RELATORIO = "http://sistemas.anatel.gov.br/se/eApp/reports/b/srd/resumo_sistema.
 ESTACOES = "http://sistemas.anatel.gov.br/se/public/file/b/srd/estacao_rd.zip"
 ESTACAO = "http://sistemas.anatel.gov.br/se/public/view/b/srd.php?wfid=estacoes&id={}"
 PLANO_BASICO = "http://sistemas.anatel.gov.br/se/public/file/b/srd/Canais.zip"
-HISTORICO = "http://sistemas.anatel.gov.br/se/public/file/b/srd/documento_historicos.zip"
+HISTORICO = (
+    "http://sistemas.anatel.gov.br/se/public/file/b/srd/documento_historicos.zip"
+)
 
 # %% ..\nbs\constants.ipynb 6
 SRD = (
-"Frequência",
-"Entidade",
-"Fistel",
-"Número_Estação",
-"Município",
-"UF",
-"Latitude",
-"Longitude",
-"Classe",
+    "Frequência",
+    "Entidade",
+    "Fistel",
+    "Número_Estação",
+    "Município",
+    "UF",
+    "Latitude",
+    "Longitude",
+    "Classe",
 )
 
 TELECOM = SRD + (
@@ -114,23 +116,34 @@ SIGLAS = {
     "Distrito Federal": "DF",
 }
 
-BW = {'H': 0.001, 'K': 1, 'M': 1000, 'G': 1000000}
-BW_MAP = {'167': '6M00', '205': '10K0', '230': '256K', '231': '256K', '247': '5M70', '248': '6M00', '800': '6M00', '801': '5M70', '805': '256K'}
+BW = {"H": 0.001, "K": 1, "M": 1000, "G": 1000000}
+BW_MAP = {
+    "167": "6M00",
+    "205": "10K0",
+    "230": "256K",
+    "231": "256K",
+    "247": "5M70",
+    "248": "6M00",
+    "800": "6M00",
+    "801": "5M70",
+    "805": "256K",
+}
 
-LICENCIAMENTO = {'NumFistel': 'Fistel',
- 'NumServico': 'Num_Serviço',
- 'NomeEntidade': 'Entidade',
- 'SiglaUf': 'UF',
- 'NumEstacao': 'Número_Estação',
- 'CodTipoClasseEstacao': 'Classe',
- 'NomeMunicipio': 'Município',
- 'CodMunicipio': 'Cod_Município',
- 'DataValidade': 'Data_de_Validade',
- 'FreqTxMHz': 'Frequência',
- 'Latitude': 'Latitude',
- 'Longitude': 'Longitude',
- 'DesignacaoEmissao': 'Designacao_Emissão',
- 'Status.state': 'Status',
+LICENCIAMENTO = {
+    "NumFistel": "Fistel",
+    "NumServico": "Num_Serviço",
+    "NomeEntidade": "Entidade",
+    "SiglaUf": "UF",
+    "NumEstacao": "Número_Estação",
+    "CodTipoClasseEstacao": "Classe",
+    "NomeMunicipio": "Município",
+    "CodMunicipio": "Cod_Município",
+    "DataValidade": "Data_de_Validade",
+    "FreqTxMHz": "Frequência",
+    "Latitude": "Latitude",
+    "Longitude": "Longitude",
+    "DesignacaoEmissao": "Designacao_Emissão",
+    "Status.state": "Status",
 }
 
 # %% ..\nbs\constants.ipynb 10
@@ -208,73 +221,20 @@ where
 """
 
 # %% ..\nbs\constants.ipynb 12
-MONGO_LIC = {"$and" : [
-        {"DataExclusao" : None
-        },
-        {"DataValidade": {
-                "$nin": [
-                    "",
-                    None
-                ]
-            }
-        },
-        {"Status.state": "LIC-LIC-01"                
-        },
-        {
-            "NumServico": {
-                "$nin": [
-                    "010",
-                    "045",
-                    "171",
-                    "450",
-                    "750",
-                    "",
-                    None
-                ]
-            }
-        },
-        {
-            "FreqTxMHz": {
-                "$nin": [
-                    None,
-                    "",
-                    0
-                ]
-            }
-        },
-        {
-            "Latitude": {
-                "$nin": [
-                    None,
-                    ""
-                ]
-            }
-        },
-        {
-            "Longitude": {
-                "$nin": [
-                    None,
-                    ""
-                ]
-            }
-        },
-        {
-            "FreqTxMHz": {
-                "$type": 1.0
-            }
-        },
-        {
-            "Latitude": {
-                "$type": 1.0
-            }
-        },
-        {
-            "Longitude": {
-                "$type": 1.0
-            }
-        }
+MONGO_LIC = {
+    "$and": [
+        {"DataExclusao": None},
+        {"DataValidade": {"$nin": ["", None]}},
+        {"Status.state": "LIC-LIC-01"},
+        {"NumServico": {"$nin": ["010", "045", "171", "450", "750", "", None]}},
+        {"FreqTxMHz": {"$nin": [None, "", 0]}},
+        {"Latitude": {"$nin": [None, ""]}},
+        {"Longitude": {"$nin": [None, ""]}},
+        {"FreqTxMHz": {"$type": 1.0}},
+        {"Latitude": {"$type": 1.0}},
+        {"Longitude": {"$type": 1.0}},
     ]
-    }
+}
 
 # %% ..\nbs\constants.ipynb 14
 BW_pattern = re.compile("^(\d{1,3})([HKMG])(\d{0,2})(\w{0,3}$)")

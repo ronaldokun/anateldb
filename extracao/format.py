@@ -13,11 +13,13 @@ import pandas as pd
 from unidecode import unidecode
 from fastcore.utils import listify
 
-from .constants import BW, BW_pattern
+from anateldb.constants import BW, BW_pattern
 
 # %% ..\nbs\format.ipynb 4
-def input_coordenates(df: pd.DataFrame, # DataFrame a imputar coordenadas inválidas
-                      pasta: Union[str, Path]) -> pd.DataFrame:
+def input_coordenates(
+    df: pd.DataFrame,  # DataFrame a imputar coordenadas inválidas
+    pasta: Union[str, Path],
+) -> pd.DataFrame:
     """Imputa os registros com coordenadas ausentes (NA's) com as coordenadas do município"""
     municipios = Path(f"{pasta}/municípios.fth")
     if not municipios.exists():
@@ -57,7 +59,14 @@ def input_coordenates(df: pd.DataFrame, # DataFrame a imputar coordenadas invál
     ].itertuples():
         try:
             left = unidecode(row.Município).lower()
-            if m_coord := (m.loc[(m.Município == left) & (m.UF == row.UF.lower()), ["Latitude", "Longitude"],].values.flatten().tolist()):
+            if m_coord := (
+                m.loc[
+                    (m.Município == left) & (m.UF == row.UF.lower()),
+                    ["Latitude", "Longitude"],
+                ]
+                .values.flatten()
+                .tolist()
+            ):
                 df.loc[row.Index, "Latitude"] = m_coord[0]
                 df.loc[row.Index, "Longitude"] = m_coord[1]
                 df.loc[row.Index, "Coordenadas_do_Município"] = True
@@ -66,8 +75,9 @@ def input_coordenates(df: pd.DataFrame, # DataFrame a imputar coordenadas invál
     return df
 
 # %% ..\nbs\format.ipynb 5
-def parse_bw(bw: str, #Designação de Emissão (Largura + Classe) codificada como string
-) -> Tuple[float, str]: #Largura e Classe de Emissão
+def parse_bw(
+    bw: str,  # Designação de Emissão (Largura + Classe) codificada como string
+) -> Tuple[float, str]:  # Largura e Classe de Emissão
     """Parse the bandwidth string"""
     if match := re.match(BW_pattern, bw):
         multiplier = BW[match.group(2)]
@@ -80,9 +90,10 @@ def parse_bw(bw: str, #Designação de Emissão (Largura + Classe) codificada co
     return -1, -1
 
 # %% ..\nbs\format.ipynb 8
-def optimize_floats(df: pd.DataFrame, # DataFrame a ser otimizado
-exclude: Iterable[str] = None, # Colunas a serem excluidas da otimização
-)->pd.DataFrame: # DataFrame com as colunas do tipo `float` otimizadas
+def optimize_floats(
+    df: pd.DataFrame,  # DataFrame a ser otimizado
+    exclude: Iterable[str] = None,  # Colunas a serem excluidas da otimização
+) -> pd.DataFrame:  # DataFrame com as colunas do tipo `float` otimizadas
     """Otimiza os floats do dataframe para reduzir o uso de memória"""
     floats = df.select_dtypes(include=["float64"]).columns.tolist()
     floats = [c for c in floats if c not in listify(exclude)]
@@ -90,9 +101,10 @@ exclude: Iterable[str] = None, # Colunas a serem excluidas da otimização
     return df
 
 # %% ..\nbs\format.ipynb 9
-def optimize_ints(df: pd.DataFrame, # Dataframe a ser otimizado
-exclude: Iterable[str] = None, # Colunas a serem excluidas da otimização
-)->pd.DataFrame: # DataFrame com as colunas do tipo `int` otimizadas
+def optimize_ints(
+    df: pd.DataFrame,  # Dataframe a ser otimizado
+    exclude: Iterable[str] = None,  # Colunas a serem excluidas da otimização
+) -> pd.DataFrame:  # DataFrame com as colunas do tipo `int` otimizadas
     """Otimiza os ints do dataframe para reduzir o uso de memória"""
     ints = df.select_dtypes(include=["int64"]).columns.tolist()
     ints = [c for c in ints if c not in listify(exclude)]
@@ -101,10 +113,12 @@ exclude: Iterable[str] = None, # Colunas a serem excluidas da otimização
 
 # %% ..\nbs\format.ipynb 10
 def optimize_objects(
-    df: pd.DataFrame, # DataFrame a ser otimizado
-    datetime_features: Iterable[str] = None, # Colunas que serão convertidas para datetime
-    exclude: Iterable[str] = None, # Colunas que não serão convertidas
-) -> pd.DataFrame: # DataFrame com as colunas do tipo `object` otimizadas
+    df: pd.DataFrame,  # DataFrame a ser otimizado
+    datetime_features: Iterable[
+        str
+    ] = None,  # Colunas que serão convertidas para datetime
+    exclude: Iterable[str] = None,  # Colunas que não serão convertidas
+) -> pd.DataFrame:  # DataFrame com as colunas do tipo `object` otimizadas
     """Otimiza as colunas do tipo `object` no DataFrame para `category` ou `string` para reduzir a memória e tamanho de arquivo"""
     exclude = listify(exclude)
     datetime_features = listify(datetime_features)
@@ -125,13 +139,14 @@ def optimize_objects(
             df[col] = pd.to_datetime(df[col]).dt.date
     return df
 
-
 # %% ..\nbs\format.ipynb 11
 def df_optimize(
-    df: pd.DataFrame, # DataFrame a ser otimizado
-    datetime_features: Iterable[str] = None, # Colunas que serão convertidas para datetime
-    exclude: Iterable[str] = None, # Colunas que não serão convertidas
-) -> pd.DataFrame: # DataFrame com as colunas com tipos de dados otimizados
+    df: pd.DataFrame,  # DataFrame a ser otimizado
+    datetime_features: Iterable[
+        str
+    ] = None,  # Colunas que serão convertidas para datetime
+    exclude: Iterable[str] = None,  # Colunas que não serão convertidas
+) -> pd.DataFrame:  # DataFrame com as colunas com tipos de dados otimizados
     """Função que encapsula as anteriores para otimizar os tipos de dados e reduzir o tamanho do arquivo e uso de memória"""
     if datetime_features is None:
         datetime_features = []
@@ -141,9 +156,10 @@ def df_optimize(
     )
 
 # %% ..\nbs\format.ipynb 12
-def format_types(df: pd.DataFrame, # DataFrame a ser formatado
-                 stem: str = None, # Identificador do arquivo para otimização específica
-) -> pd.DataFrame:    # DataFrame formatado 
+def format_types(
+    df: pd.DataFrame,  # DataFrame a ser formatado
+    stem: str = None,  # Identificador do arquivo para otimização específica
+) -> pd.DataFrame:  # DataFrame formatado
 
     """Format the columns of a dataframe to string. Optimized when saving to parquet"""
     if stem == "stel":

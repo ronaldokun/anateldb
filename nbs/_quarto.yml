@@ -12,26 +12,24 @@ format:
     theme: cosmo
     css: styles.css
     toc: true
-    toc-depth: 4
 
 website:
-  title: "anateldb"
-  site-url: "https://ronaldokun.github.io/anateldb/"
-  description: "This repository hold automation scripts to fetch useful data from the ANATEL Database Systems and Redmine Instance Fiscaliza."
+  title: "Estações Licenciadas de Telecomunicações e Radiodifusão"
+  description: "This repository hold automation scripts to fetch, clean and merge data from licensed telecomunications entities available at ANATEL Database Systems."
   execute: 
     enabled: false
   twitter-card: true
   open-graph: true
   reader-mode: true
   repo-branch: master
-  repo-url: "https://github.com/ronaldokun/anateldb"
+  repo-url: https://github.com/ronaldokun/anateldb
   repo-actions: [issue]
   navbar:
     background: primary
     search: true
     right:
       - icon: github
-        href: "https://github.com/ronaldokun/anateldb"
+        href: https://github.com/ronaldokun/anateldb
   sidebar:
     style: "floating"
 
