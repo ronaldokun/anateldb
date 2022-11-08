@@ -109,7 +109,7 @@ def update_radcom(
             )
             raise ConnectionError from e
 
-# %% ..\nbs\updates.ipynb 11
+# %% ..\nbs\updates.ipynb 12
 def update_stel(
     conn: pyodbc.Connection,  # Objeto de conexão de banco
     folder: Union[str, Path],  # Pasta onde salvar os arquivos
@@ -129,7 +129,7 @@ def update_stel(
             )
             raise ConnectionError from e
 
-# %% ..\nbs\updates.ipynb 13
+# %% ..\nbs\updates.ipynb 14
 def update_mosaico(
     mongo_client: MongoClient,  # Objeto de conexão com o MongoDB
     folder: Union[str, Path],  # Pasta onde salvar os arquivos
@@ -152,7 +152,7 @@ def update_mosaico(
         df = clean_mosaico(mosaico_df, folder)
     return _save_df(mosaico_df, folder, "mosaico")
 
-# %% ..\nbs\updates.ipynb 16
+# %% ..\nbs\updates.ipynb 17
 def update_telecom(
     mongo_client: MongoClient,  # Objeto de conexão com o MongoDB
     folder: Union[str, Path],  # Pasta onde salvar os arquivos
