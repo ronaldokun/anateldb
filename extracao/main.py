@@ -168,21 +168,20 @@ def add_aero(
 
 # %% ..\nbs\main.ipynb 7
 def get_db(
-    conn: pyodbc.Connection,  # Objeto de conexão de banco
-    clientMongoDB: MongoClient,  # Ojeto de conexão com o MongoDB
     path: Union[str, Path],  # Pasta onde salvar os arquivos",
-    update: bool = False,  # Atualizar as bases da Anatel e da Aeronáutica?",
+    conn: pyodbc.Connection = None,  # Objeto de conexão do banco SQL Server
+    clientMongoDB: MongoClient = None,  # Objeto de conexão do banco MongoDB
     dist: float = MAX_DIST,  # Distância máxima entre as coordenadas consideradas iguais
 ) -> pd.DataFrame:  # Retorna o DataFrame com as bases da Anatel e da Aeronáutica
     """Lê e opcionalmente atualiza as bases da Anatel, mescla as bases da Aeronáutica, salva e retorna o arquivo"""
     dest = Path(path)
     dest.mkdir(parents=True, exist_ok=True)
     print(":scroll:[green]Lendo as bases de dados da Anatel...")
-    if not update:
-        cached_file = dest / "AnatelDB.parquet.gzip"
-        if cached_file.exists():
-            return pd.read_parquet(cached_file)
-    rd = read_base(conn, clientMongoDB, path, update)
+    # if not all([conn, clientMongoDB]):
+    #     cached_file = dest / 'AnatelDB.parquet.gzip'
+    #     if cached_file.exists():
+    #         return pd.read_parquet(cached_file)
+    rd = read_base(path, conn, clientMongoDB)
     rd["Descrição"] = (
         "["
         + rd.Fonte.astype("string").fillna("NI")
