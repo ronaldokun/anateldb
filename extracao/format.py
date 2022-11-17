@@ -77,15 +77,15 @@ def input_coordenates(
 # %% ../nbs/format.ipynb 5
 def parse_bw(
     bw: str,  # Designação de Emissão (Largura + Classe) codificada como string
-) -> Tuple[float, str]:  # Largura e Classe de Emissão
+) -> Tuple[float, str]:    # Largura e Classe de Emissão
     """Parse the bandwidth string"""
     if match := re.match(BW_pattern, bw):
-        multiplier = BW[match.group(2)]
-        if mantissa := match.group(3):
-            number = float(f"{match.group(1)}.{mantissa}")
+        multiplier = BW[match[2]]
+        if mantissa := match[3]:
+            number = float(f"{match[1]}.{mantissa}")
         else:
-            number = float(match.group(1))
-        classe = match.group(4)
+            number = float(match[1])
+        classe = match[4]
         return multiplier * number, classe
     return -1, -1
 

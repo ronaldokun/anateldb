@@ -223,32 +223,30 @@ def valida_coord(
 
     # sql_params = (row['cod_municipio'], row['latitude'], row['longitude'])
     # df = pd.read_sql(SQL_VALIDA_COORD, conn, params = sql_params)
-    if row["Código_Município"].strip():
-
-        row["Longitude"] = row["Longitude"] if row["Longitude"] else "0"
-        row["Latitude"] = row["Latitude"] if row["Latitude"] else "0"
-
-        sql = SQL_VALIDA_COORD.format(
-            row["Longitude"], row["Latitude"], row["Código_Município"]
-        )
-        # print(sql)
-        crsr = conn.cursor()
-        crsr.execute(sql)
-        result = crsr.fetchone()
-        # print(result)
-        if result == None:
-            return (row["Município"], row["Longitude"], row["Latitude"], 9)
-        elif result.COORD_VALIDA == 1:
-            return result
-        else:
-            return (
-                result.NO_MUNICIPIO,
-                result.NU_LONGITUDE,
-                result.NU_LATITUDE,
-                result.COORD_VALIDA,
-            )
-    else:
+    if not row["Código_Município"].strip():
         return (row["Município"], row["Longitude"], row["Latitude"], 9)
+    row["Longitude"] = row["Longitude"] or "0"
+    row["Latitude"] = row["Latitude"] or "0"
+
+    sql = SQL_VALIDA_COORD.format(
+        row["Longitude"], row["Latitude"], row["Código_Município"]
+    )
+    # print(sql)
+    crsr = conn.cursor()
+    crsr.execute(sql)
+    result = crsr.fetchone()
+        # print(result)
+    if result is None:
+        return (row["Município"], row["Longitude"], row["Latitude"], 9)
+    elif result.COORD_VALIDA == 1:
+        return result
+    else:
+        return (
+            result.NO_MUNICIPIO,
+            result.NU_LONGITUDE,
+            result.NU_LATITUDE,
+            result.COORD_VALIDA,
+        )
 
 # %% ../nbs/updates.ipynb 20
 def update_base(

@@ -172,7 +172,7 @@ def get_db(
     connSQL: pyodbc.Connection = None,  # Objeto de conexão do banco SQL Server
     clientMongoDB: MongoClient = None,  # Objeto de conexão do banco MongoDB
     dist: float = MAX_DIST,  # Distância máxima entre as coordenadas consideradas iguais
-) -> pd.DataFrame:  # Retorna o DataFrame com as bases da Anatel e da Aeronáutica
+) -> pd.DataFrame:    # Retorna o DataFrame com as bases da Anatel e da Aeronáutica
     """Lê e opcionalmente atualiza as bases da Anatel, mescla as bases da Aeronáutica, salva e retorna o arquivo
     A atualização junto às bases de dados da Anatel é efetuada caso ambos objetos de banco `connSQL` e `clientMongoDB` forem válidos`
     """
@@ -221,7 +221,7 @@ def get_db(
     print(":card_file_box:[green]Salvando os arquivos...")
     versiondb = json.loads((dest.parent / "VersionFile.json").read_text())
     mod_times = get_modtimes(path)
-    mod_times["ReleaseDate"] = datetime.today().strftime("%d/%m/%Y %H:%M:%S")
+    mod_times["ReleaseDate"] = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     for c in ["Latitude", "Longitude"]:
         rd.loc[:, c] = rd.loc[:, c].fillna(-1).astype("float32")
 
