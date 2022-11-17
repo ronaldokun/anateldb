@@ -14,8 +14,8 @@ format:
     toc: true
 
 website:
-  title: "anateldb"
-  description: "This repository hold automation scripts to fetch useful data from the ANATEL Database Systems and Redmine Instance Fiscaliza."
+  title: "Estações Licenciadas de Telecomunicações e Radiodifusão"
+  description: "This repository hold automation scripts to fetch, clean and merge data from licensed telecomunications entities available at ANATEL Database Systems."
   execute: 
     enabled: false
   twitter-card: true
