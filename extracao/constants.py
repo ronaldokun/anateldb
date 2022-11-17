@@ -2,7 +2,8 @@
 
 # %% auto 0
 __all__ = ['TIMEOUT', 'RELATORIO', 'ESTACAO', 'COLUNAS', 'APP_ANALISE', 'ESTADOS', 'SIGLAS', 'BW', 'BW_MAP', 'COLS_TELECOM',
-           'COLS_SRD', 'SQL_RADCOM', 'SQL_STEL', 'MONGO_TELECOM', 'MONGO_SRD', 'BW_pattern', 'REGEX_ESTADOS']
+           'COLS_SRD', 'SQL_RADCOM', 'SQL_STEL', 'SQL_VALIDA_COORD', 'MONGO_TELECOM', 'MONGO_SRD', 'BW_pattern',
+           'REGEX_ESTADOS']
 
 # %% ..\nbs\constants.ipynb 2
 import re
@@ -32,7 +33,6 @@ COLUNAS = (
     "Fonte",
     "Multiplicidade",
 )
-
 
 APP_ANALISE = (
     "Frequency",
@@ -229,6 +229,24 @@ where
 """
 
 # %% ..\nbs\constants.ipynb 12
+SQL_VALIDA_COORD = """
+    SELECT 
+        mun.NO_MUNICIPIO 
+        , mun.NU_LONGITUDE 
+        , mun.NU_LATITUDE         
+        , CONVERT(int, 
+            (mun.GE_POLIGONO.STIntersects(geometry::STGeomFromText(
+                'POINT({} {})', 
+                mun.GE_POLIGONO.STSrid)
+            )) 
+        )AS COORD_VALIDA
+    from 
+        CORPORATIVO.dbo.TB_IBGE_MUNICIPIO mun
+    WHERE
+        MUN.CO_MUNICIPIO = {}
+"""
+
+# %% ..\nbs\constants.ipynb 13
 MONGO_TELECOM = {
     "$and": [
         {"DataExclusao": None},
@@ -260,6 +278,6 @@ MONGO_SRD = {
     "habilitacao.DataValFreq": 1.0,
 }
 
-# %% ..\nbs\constants.ipynb 14
+# %% ..\nbs\constants.ipynb 15
 BW_pattern = re.compile("^(\d{1,3})([HKMG])(\d{0,2})(\w{0,3}$)")
 REGEX_ESTADOS = f'({"|".join(ESTADOS)})'
