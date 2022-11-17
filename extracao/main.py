@@ -184,6 +184,10 @@ def get_db(
         if cached_file.exists():
             return pd.read_parquet(cached_file)
     rd = read_base(path, connSQL, clientMongoDB)
+    rd["#Estação"] = ""
+    rd.loc[rd.Count != "1", "#Estação"] = (
+        rd.loc[rd.Count != "1", "#Estação"] + "+" + rd.loc[rd.Count != "1", "#Estação"]
+    )
     rd["Descrição"] = (
         "["
         + rd.Fonte.astype("string").fillna("NI")
@@ -196,7 +200,7 @@ def get_db(
         + " ("
         + rd.Fistel.astype("string").fillna("NI")
         + ", "
-        + rd["Número_Estação"].astype("string").fillna("NI")
+        + rd["#Estação"].astype("string").fillna("NI")
         + "), "
         + rd.Município.astype("string").fillna("NI")
         + "/"

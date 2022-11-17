@@ -68,7 +68,6 @@ def clean_mosaico(
 def _save_df(df: pd.DataFrame, folder: Union[str, Path], stem: str) -> pd.DataFrame:
     """Format, Save and return a dataframe"""
     df = format_types(df, stem)
-    df = df.dropna(subset=["Latitude", "Longitude"]).reset_index(drop=True)
     df = df.drop_duplicates(keep="first").reset_index(drop=True)
     try:
         file = Path(f"{folder}/{stem}.parquet.gzip")
@@ -102,6 +101,15 @@ def update_radcom(
     ) as status:
         try:
             df = pd.read_sql_query(SQL_RADCOM, conn)
+            df["Entidade"] = df.Entidade.str.rstrip().str.lstrip()
+            df["Num_Serviço"] = "231"
+            df["Classe_Emissão"] = pd.NA
+            df["Largura_Emissão(kHz)"] = "256"
+            df["Validade_RF"] = pd.NA
+            df["Status"] = "RADCOM"
+            df["Fonte"] = "SRD"
+            df["Multiplicidade"] = "1"
+            df = df.loc[COLUNAS]
             return _save_df(df, folder, "radcom")
         except pyodbc.OperationalError as e:
             status.console.log(
@@ -203,13 +211,11 @@ def update_telecom(
         )
         df_sub = df_sub.set_index(subset).sort_index()
         df_sub["Count"] = (df.groupby(subset).count()["Número_Estação"]).tolist()
-        df_sub["Count"] = df_sub["Count"].astype("string")
-        df_sub.loc[df_sub.Count != "1", "Número_Estação"] = (
-            df_sub.loc[df_sub.Count != "1", "Número_Estação"]
-            + "+"
-            + df_sub.loc[df_sub.Count != "1", "Count"]
-        )
-        df_sub.drop("Count", axis=1, inplace=True)
+        df["Status"] = "L"
+        df["Fonte"] = "MOS"
+        # df_sub['Count'] = df_sub['Count'].astype('string')
+        # df_sub.loc[df_sub.Count != '1', 'Número_Estação'] = df_sub.loc[df_sub.Count != '1', 'Número_Estação'] + '+' + df_sub.loc[df_sub.Count != '1', 'Count']
+        # df_sub.drop('Count', axis=1, inplace=True)
         del df
         gc.collect()
         df_sub = df_sub.reset_index()
@@ -234,10 +240,10 @@ def update_base(
     radcom["Status"] = "RADCOM"
     radcom["Classe_Emissão"] = pd.NA
     radcom["BW(kHz)"] = "256"
-
     radcom["Entidade"] = radcom.Entidade.str.rstrip().str.lstrip()
     radcom["Validade_RF"] = pd.NA
     radcom["Fonte"] = "SRD"
+    radcom["Count"] = "1"
     # Filtrando STEL
     stel["Status"] = "L"
     stel["Entidade"] = stel.Entidade.str.rstrip().str.lstrip()
@@ -247,14 +253,17 @@ def update_base(
     )
     stel.loc[stel.Classe_Emissão == "", "Classe_Emissão"] = pd.NA
     stel.drop("Largura_Emissão", axis=1, inplace=True)
+    stel["Count"] = "1"
     # Filtrando MOSAICO
     mosaico["Fonte"] = "MOS"
     mosaico.loc[:, ["BW(kHz)", "Classe_Emissão"]] = (
         mosaico.Num_Serviço.map(BW_MAP).apply(parse_bw).tolist()
     )
     mosaico.loc[mosaico.Classe_Emissão == "", "Classe_Emissão"] = pd.NA
+    mosaico["Count"] = "1"
     # Filtrando LICENCIAMENTO
-    telecom["Fonte"] = "LIC"
+    telecom["Fonte"] = "MOS"
+    telecom["Status"] = "L"
 
     rd = (
         pd.concat([mosaico, radcom, stel, telecom])
