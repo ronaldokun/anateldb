@@ -254,28 +254,45 @@ MONGO_TELECOM = {
         {"Status.state": "LIC-LIC-01"},
         {"NumServico": {"$nin": ["010", "045", "171", "450", "750", "", None]}},
         {"FreqTxMHz": {"$nin": [None, "", 0]}},
-        {"Latitude": {"$nin": [None, ""]}},
-        {"Longitude": {"$nin": [None, ""]}},
+        {"CodMunicipio": {"$nin": [None, ""]}},
+        # {
+        #     "Latitude": {
+        #         "$nin": [
+        #             None,
+        #             ""
+        #         ]
+        #     }
+        # },
+        # {
+        #     "Longitude": {
+        #         "$nin": [
+        #             None,
+        #             ""
+        #         ]
+        #     }
+        # },
         {"FreqTxMHz": {"$type": 1.0}},
-        {"Latitude": {"$type": 1.0}},
-        {"Longitude": {"$type": 1.0}},
+        # {
+        #     "Latitude": {
+        #         "$type": 1.0
+        #     }
+        # },
+        # {
+        #     "Longitude": {
+        #         "$type": 1.0
+        #     }
+        # }
     ]
 }
 
 MONGO_SRD = {
-    "Status.state": 1.0,
-    "licensee": 1.0,
-    "NumFistel": 1.0,
-    "frequency": 1.0,
-    "stnClass": 1.0,
-    "srd_planobasico.NomeMunicipio": 1.0,
-    "srd_planobasico.CodMunicipio": 1.0,
-    "srd_planobasico.SiglaUF": 1.0,
-    "NumServico": 1.0,
-    "estacao.NumEstacao": 1.0,
-    "estacao.MedLatitudeDecimal": 1.0,
-    "estacao.MedLongitudeDecimal": 1.0,
-    "habilitacao.DataValFreq": 1.0,
+    "$and": [
+        {
+            "frequency": {"$nin": [None, "", 0], "$type": 1.0},
+            "srd_planobasico.CodMunicipio": {"$nin": [None, ""]},
+            "NumFistel": {"$nin": [None, ""]},
+        }
+    ]
 }
 
 # %% ..\nbs\constants.ipynb 15
