@@ -1,0 +1,35 @@
+website:
+  favicon: Puzzle.ico
+  reader-mode: false
+  navbar:
+    collapse-below: lg
+    left:
+      - text: "Principal"
+        href: main.ipynb
+      - text: "Leitura"
+        href: reading.ipynb
+      - text: "Atualização"
+        href: updates.ipynb
+      - text: "API"
+        menu:
+          - text: "Constantes"
+            href: constants.ipynb
+          - text: "Formatação"
+            href: format.ipynb
+          - text: "Mesclagem"
+            href: merging.ipynb
+      - text: "Ajuda"
+        menu:
+          - text: "Reporte um problema"
+            icon: bug
+            href: https://github.com/ronaldokun/anateldb/issues
+          - text: "Contato"
+            icon: chat-right-text
+            href: ronaldokun@gmail.com
+          # - text: "FAQ"
+          #   icon: question-circle
+          #   href: getting_started.ipynb#faq
+    right:
+      - icon: twitter
+        href: https://twitter.com/ronaldokun
+        aria-label: Twitter Autor
