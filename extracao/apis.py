@@ -5,8 +5,9 @@ __all__ = ['LINK_VOR', 'LINK_DME', 'LINK_NDB', 'COLS_VOR', 'COLS_NDB', 'COLS_DME
            'convert_frequency', 'get_geodf', 'get_aisg_data']
 
 # %% ../nbs/apis.ipynb 2
-from urllib.request import urlopen
 import json
+from datetime import datetime
+from urllib.request import urlopen
 import xml.etree.ElementTree as ET
 from typing import Union, Iterable
 
@@ -47,7 +48,7 @@ COLS_DME = (
     "Channel",
 )
 
-PATH_CHANNELS = r"\\servrepds\dw$\Input\sentinela\extracao\VOR_ILS_DME_Channel.xlsx"
+# PATH_CHANNELS = r"\\servrepds\dw$\Input\sentinela\extracao\VOR_ILS_DME_Channel.xlsx"
 PATH_CHANNELS = Path.cwd().parent.parent / "dados" / "VOR_ILS_DME_Channel.xlsx"
 DF_CHANNELS = pd.read_excel(PATH_CHANNELS, engine="openpyxl", dtype="string")
 
@@ -70,27 +71,11 @@ def convert_frequency(
             result = -1
     return result
 
-# %% ../nbs/apis.ipynb 8
-def get_geodf(
-    link: str,  # Link para a requisição das estações VOR do GEOAISWEB
-    cols: Iterable[str],  # Subconjunto de Colunas para filtro do objeto de retorno
-) -> pd.DataFrame:  # DataFrame com frequências, coordenadas e descrição das estações VOR
-    # sourcery skip: use-fstring-for-concatenation
-    """Faz a requisição do `link`, processa o json e o retorna como Dataframe"""
-    response = urlopen(link)
-    if (
-        response.status != 200
-        or "application/json" not in response.headers["content-type"]
-    ):
-        raise ValueError(
-            f"Resposta a requisição não foi bem sucedida: {response.status=}"
-        )
-    data_json = json.loads(response.read())
-    df = pd.json_normalize(
-        data_json["features"],
-    )
-    df = df.filter(cols, axis=1)
-
+# %% ../nbs/apis.ipynb 7
+def _process_frequency(
+    df: pd.DataFrame,  # Dataframe com os dados
+    cols: Iterable[str],  # Subconjunto de Colunas relevantes do DataFrame
+) -> pd.DataFrame:  # Dataframe com os dados de frequência devidamente processados
     if cols == COLS_DME:
         df.dropna(subset=[cols[0]], inplace=True)
         df["Channel"] = df[cols[0]].astype("int").astype("string") + df[cols[1]]
@@ -109,30 +94,51 @@ def get_geodf(
             .apply(lambda x: convert_frequency(x[0], x[1]), axis=1)
             .astype("float")
         )
+    return df
 
+# %% ../nbs/apis.ipynb 8
+def _filter_df(df, cols):  # sourcery skip: use-fstring-for-concatenation
     df["Description"] = (
         "[AISG] " + df[cols[4]] + " - " + df[cols[5]] + " " + df[cols[6]]
     ).astype("string")
 
     df = df[["frequency", cols[2], cols[3], "Description"]]
 
-    df.rename(
+    return df.rename(
         columns={
             cols[2]: "latitude",
             cols[3]: "longitude",
-        },
-        inplace=True,
+        }
     )
 
-    return df
+# %% ../nbs/apis.ipynb 9
+def get_geodf(
+    link: str,  # Link para a requisição das estações VOR do GEOAISWEB
+    cols: Iterable[str],  # Subconjunto de Colunas relevantes do DataFrame
+) -> pd.DataFrame:  # DataFrame com frequências, coordenadas e descrição das estações VOR
+    # sourcery skip: use-fstring-for-concatenation
+    """Faz a requisição do `link`, processa o json e o retorna como Dataframe"""
+    response = urlopen(link)
+    if (
+        response.status != 200
+        or "application/json" not in response.headers["content-type"]
+    ):
+        raise ValueError(
+            f"Resposta a requisição não foi bem sucedida: {response.status=}"
+        )
+    data_json = json.loads(response.read())
+    df = pd.json_normalize(
+        data_json["features"],
+    ).filter(cols, axis=1)
+    df = _process_frequency(df, cols)
+    return _filter_df(df, cols)
 
-# %% ../nbs/apis.ipynb 12
+# %% ../nbs/apis.ipynb 13
 def get_aisg_data() -> pd.DataFrame:  # DataFrame com todos os dados do GEOAISWEB
     """Lê e processa os dataframes individuais da API GEOAISWEB e retorna o conjunto concatenado"""
-    dfs = [
+    return pd.concat(
         get_geodf(link, cols)
         for link, cols in zip(
-            [LINK_VOR, LINK_NDB, LINK_DME], [COLS_VOR, COLS_NDB, COLS_DME]
+            [LINK_NDB, LINK_VOR, LINK_DME], [COLS_NDB, COLS_VOR, COLS_DME]
         )
-    ]
-    return pd.concat(dfs)
+    )
