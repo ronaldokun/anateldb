@@ -45,7 +45,7 @@ COLS_DME = (
     "Channel",
 )
 
-PATH_CHANNELS = r"\\servrepds\dw$\Input\sentinela\extracao\VOR_ILS_DME_Channel.xlsx"
+PATH_CHANNELS = r"/mnt/extracao/VOR_ILS_DME_Channel.xlsx"
 
 # %% ../nbs/aisgeo.ipynb 6
 def convert_frequency(

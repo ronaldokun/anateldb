@@ -4,6 +4,7 @@
 __all__ = ['URL', 'get_redemet']
 
 # %% ../nbs/redemet.ipynb 2
+import os
 import json
 from datetime import datetime
 from urllib.request import urlopen
@@ -13,13 +14,11 @@ import pandas as pd
 URL = "https://api-redemet.decea.mil.br/produtos/radar/maxcappi?api_key={}&{}"
 
 # %% ../nbs/redemet.ipynb 6
-def get_redemet(
-    apikey: str,  # Chave API para validar a requisição
-) -> pd.DataFrame:  # DataFrame com frequências, coordenadas e descrição das estações VOR
+def get_redemet() -> pd.DataFrame:  # DataFrame com frequências, coordenadas e descrição das estações VOR
     # sourcery skip: use-fstring-for-concatenation
     """Faz a requisição get à API do REDEMET usanda a chave `apikey`, processa o json e o retorna como Dataframe"""
     date = datetime.today().strftime("%Y%m%d")
-    link = URL.format(apikey, date)
+    link = URL.format(os.environ["RMETKEY"], date)
     response = urlopen(link)
     if (
         response.status != 200
