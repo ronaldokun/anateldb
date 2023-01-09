@@ -5,7 +5,6 @@ __all__ = ['SIGLA_AERO', 'URL', 'TYPE', 'COLUMNS', 'convert_latitude', 'convert_
 
 # %% ../nbs/aisweb.ipynb 2
 import os
-import json
 import xml.etree.ElementTree as ET
 from typing import Iterable
 from functools import cached_property
@@ -14,6 +13,11 @@ import requests
 import xmltodict
 import pandas as pd
 from fastcore.utils import store_attr
+from dotenv import load_dotenv
+
+from .icao import map_channels
+
+load_dotenv()
 
 # %% ../nbs/aisweb.ipynb 5
 SIGLA_AERO = ["MIL", "PRIV/PUB", "PUB", "PUB/MIL", "PUB/REST"]
@@ -55,6 +59,7 @@ class AisWeb:
     ):
         store_attr()
         self.url = URL.format(api_key, api_pass)
+        load_dotenv()
 
     def _get_request(self, key, value):
         request_url = f"{self.url}{key}{value}"
@@ -176,10 +181,14 @@ class AisWeb:
         self,
     ) -> pd.DataFrame:  # DataFrame com os dados de estações emissoras
         """Retorna os registros de estações emissoras de RF contidas nos aeroportos"""
-        return pd.concat(self.request_stations(code) for code in self.airports.AeroCode)
+        df = pd.concat(self.request_stations(code) for code in self.airports.AeroCode)
+        for c in df.columns:
+            df[c] = df[c].astype("string")
+        return map_channels(df, "AISW")
 
 # %% ../nbs/aisweb.ipynb 8
 def get_aisw() -> pd.DataFrame:  # DataFrame com todos os dados do GEOAISWEB
     """Lê e processa os dataframes individuais da API AISWEB e retorna o conjunto concatenado"""
+    load_dotenv()
     aisweb = AisWeb(os.environ["AISWKEY"], os.environ["AISWPASS"])
     return aisweb.records
