@@ -237,6 +237,7 @@ def update_telecom(
             :, ["Largura_Emissão(kHz)", "Classe_Emissão"]
         ] = df.Designacao_Emissão.apply(parse_bw).tolist()
         df.drop("Designacao_Emissão", axis=1, inplace=True)
+        _save_df(df_sub, folder, "telecom_raw")
         subset = [
             "Entidade",
             "Longitude",
