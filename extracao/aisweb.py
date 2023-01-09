@@ -5,6 +5,7 @@ __all__ = ['SIGLA_AERO', 'URL', 'TYPE', 'COLUMNS', 'convert_latitude', 'convert_
 
 # %% ../nbs/aisweb.ipynb 2
 import os
+import re
 import xml.etree.ElementTree as ET
 from typing import Iterable
 from functools import cached_property
@@ -164,7 +165,9 @@ class AisWeb:
         df = self._check_ils_dme(df)
         df = self._process_coords(df, airport_data)
         df = df[COLUMNS]
-        return df[~df["Frequency"].isin({"", 0})].reset_index(drop=True)
+        df["Frequency"] = df.Frequency.apply(lambda x: "".join(re.findall("\d|\.", x)))
+        df = df[~df["Frequency"].isin({"", "0"})].reset_index(drop=True)
+        df["Frequency"] = df.Frequency.astype("float")
 
     def request_stations(
         self,
@@ -189,6 +192,5 @@ class AisWeb:
 # %% ../nbs/aisweb.ipynb 8
 def get_aisw() -> pd.DataFrame:  # DataFrame com todos os dados do GEOAISWEB
     """Lê e processa os dataframes individuais da API AISWEB e retorna o conjunto concatenado"""
-    load_dotenv()
     aisweb = AisWeb(os.environ["AISWKEY"], os.environ["AISWPASS"])
     return aisweb.records

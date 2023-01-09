@@ -237,7 +237,7 @@ def update_telecom(
             :, ["Largura_Emissão(kHz)", "Classe_Emissão"]
         ] = df.Designacao_Emissão.apply(parse_bw).tolist()
         df.drop("Designacao_Emissão", axis=1, inplace=True)
-        _save_df(df_sub, folder, "telecom_raw")
+        _save_df(df, folder, "telecom_raw")
         subset = [
             "Entidade",
             "Longitude",
@@ -248,14 +248,15 @@ def update_telecom(
             "Largura_Emissão(kHz)",
             "Classe_Emissão",
         ]
+        df.dropna(subset=subset, axis=0, inplace=True)
         df_sub = (
             df[~df.duplicated(subset=subset, keep="first")]
             .reset_index(drop=True)
             .copy()
         )
-        df_sub = df_sub.set_index(subset).sort_index()
+        # df_sub = df_sub.set_index(subset).sort_index()
         df_sub["Multiplicidade"] = (
-            df.groupby(subset).count()["Número_Estação"]
+            df.groupby(subset, sort=False).count()["Número_Estação"]
         ).tolist()
         df_sub["Status"] = "L"
         df_sub["Fonte"] = "MOS"

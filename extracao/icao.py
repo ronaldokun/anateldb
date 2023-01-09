@@ -61,7 +61,7 @@ def _read_df(
 # %% ../nbs/icao.ipynb 9
 def map_channels(
     df: pd.DataFrame,  # DataFrame dos dados de origem
-    description: str,  # Descrição da emissão a ser substituída
+    origem: str,  # Descrição da emissão a ser substituída
 ) -> pd.DataFrame:
     """Mapeia os canais contidos em `df` e adiciona os registros ILS/DME caso houver"""
     chs = pd.read_excel(os.environ["PATH_CHANNELS"], engine="openpyxl", dtype="string")
@@ -77,7 +77,7 @@ def map_channels(
                         case 2:
                             freq_type = "Ground-based DME"
                     description = (
-                        f"{row.Description.replace(description , 'DOC')} ({freq_type})"
+                        f"{row.Description.replace(origem , 'DOC')} ({freq_type})"
                     )
                     df.loc[len(df)] = [c, row.Latitude, row.Longitude, description]
     return df
@@ -93,5 +93,4 @@ def get_icao(
     )
     for c in df.columns:
         df[c] = df[c].astype("string")
-
     return map_channels(df, "ICAO")
