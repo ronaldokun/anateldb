@@ -168,6 +168,7 @@ class AisWeb:
         df["Frequency"] = df.Frequency.apply(lambda x: "".join(re.findall("\d|\.", x)))
         df = df[~df["Frequency"].isin({"", "0"})].reset_index(drop=True)
         df["Frequency"] = df.Frequency.astype("float")
+        return df
 
     def request_stations(
         self,
