@@ -14,16 +14,17 @@ import pyodbc
 from rich.console import Console
 from pyarrow import ArrowInvalid, ArrowTypeError
 from fastcore.xtras import Path
-from fastcore.test import test_eq
 from fastcore.foundation import L
 from tqdm.auto import tqdm
 import pyodbc
 from pymongo import MongoClient
+from dotenv import load_dotenv
 
 from .constants import *
 from .format import parse_bw
 
 getcontext().prec = 5
+load_dotenv()
 
 # %% ../nbs/updates.ipynb 4
 def connect_db(
@@ -210,60 +211,54 @@ def update_telecom(
     """Efetua a query na tabela `licenciamento` no banco mongoDB `mongo_client` e atualiza o arquivo local"""
 
     console = Console()
-    with console.status(
-        "[red]Lendo o Banco de Dados de Licenciamento do Mosaico. Processo Lento, aguarde...",
-        spinner="bouncingBall",
-    ) as status:
-
-        database = mongo_client["sms"]
-        collection = database["licenciamento"]
-        c = collection.find(
-            MONGO_TELECOM, projection={k: 1.0 for k in COLS_TELECOM.keys()}
-        )
-        result = L()
-        for doc in tqdm(c):
-            result.append(doc)
-        df = pd.json_normalize(result)
-        df.drop("_id", axis=1, inplace=True)
-        df.rename(COLS_TELECOM, axis=1, inplace=True)
-        df["Designacao_Emissão"] = df.Designacao_Emissão.str.replace(",", " ")
-        df["Designacao_Emissão"] = (
-            df.Designacao_Emissão.str.strip().str.lstrip().str.rstrip().str.upper()
-        )
-        df["Designacao_Emissão"] = df.Designacao_Emissão.str.split(" ")
-        df = df.explode("Designacao_Emissão")
-        df.loc[df.Designacao_Emissão == "/", "Designacao_Emissão"] = ""
-        df.loc[
-            :, ["Largura_Emissão(kHz)", "Classe_Emissão"]
-        ] = df.Designacao_Emissão.apply(parse_bw).tolist()
-        df.drop("Designacao_Emissão", axis=1, inplace=True)
-        _save_df(df, folder, "telecom_raw")
-        subset = [
-            "Entidade",
-            "Longitude",
-            "Latitude",
-            "Classe",
-            "Frequência",
-            "Num_Serviço",
-            "Largura_Emissão(kHz)",
-            "Classe_Emissão",
-        ]
-        df.dropna(subset=subset, axis=0, inplace=True)
-        df_sub = (
-            df[~df.duplicated(subset=subset, keep="first")]
-            .reset_index(drop=True)
-            .copy()
-        )
-        # df_sub = df_sub.set_index(subset).sort_index()
-        df_sub["Multiplicidade"] = (
-            df.groupby(subset, sort=False).count()["Número_Estação"]
-        ).tolist()
-        df_sub["Status"] = "L"
-        df_sub["Fonte"] = "MOS"
-        del df
-        gc.collect()
-        df_sub = df_sub.reset_index()
-        df_sub = df_sub.loc[:, COLUNAS]
+    console.print(
+        "[red]Lendo o Banco de Dados de Licenciamento do Mosaico. Processo Lento, aguarde..."
+    )
+    database = mongo_client["sms"]
+    collection = database["licenciamento"]
+    c = collection.find(MONGO_TELECOM, projection={k: 1.0 for k in COLS_TELECOM.keys()})
+    result = L()
+    for doc in tqdm(c):
+        result.append(doc)
+    df = pd.json_normalize(result)
+    df.drop("_id", axis=1, inplace=True)
+    df.rename(COLS_TELECOM, axis=1, inplace=True)
+    df["Designacao_Emissão"] = df.Designacao_Emissão.str.replace(",", " ")
+    df["Designacao_Emissão"] = (
+        df.Designacao_Emissão.str.strip().str.lstrip().str.rstrip().str.upper()
+    )
+    df["Designacao_Emissão"] = df.Designacao_Emissão.str.split(" ")
+    df = df.explode("Designacao_Emissão")
+    df.loc[df.Designacao_Emissão == "/", "Designacao_Emissão"] = ""
+    df.loc[:, ["Largura_Emissão(kHz)", "Classe_Emissão"]] = df.Designacao_Emissão.apply(
+        parse_bw
+    ).tolist()
+    df.drop("Designacao_Emissão", axis=1, inplace=True)
+    _save_df(df, folder, "telecom_raw")
+    subset = [
+        "Entidade",
+        "Longitude",
+        "Latitude",
+        "Classe",
+        "Frequência",
+        "Num_Serviço",
+        "Largura_Emissão(kHz)",
+        "Classe_Emissão",
+    ]
+    df.dropna(subset=subset, axis=0, inplace=True)
+    df_sub = (
+        df[~df.duplicated(subset=subset, keep="first")].reset_index(drop=True).copy()
+    )
+    # df_sub = df_sub.set_index(subset).sort_index()
+    df_sub["Multiplicidade"] = (
+        df.groupby(subset, sort=False).count()["Número_Estação"]
+    ).tolist()
+    df_sub["Status"] = "L"
+    df_sub["Fonte"] = "MOS"
+    del df
+    gc.collect()
+    df_sub = df_sub.reset_index()
+    df_sub = df_sub.loc[:, COLUNAS]
     return _save_df(df_sub, folder, "telecom")
 
 # %% ../nbs/updates.ipynb 20
@@ -306,6 +301,7 @@ def update_base(
     radcom = update_radcom(conn, folder)
     mosaico = update_mosaico(clientMongoDB, folder)
     telecom = update_telecom(clientMongoDB, folder)
+
     rd = (
         pd.concat([mosaico, radcom, stel, telecom])
         .sort_values(["Frequência", "Latitude", "Longitude"])

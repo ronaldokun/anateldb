@@ -25,6 +25,7 @@ from .icao import get_icao
 from .aisgeo import get_aisg
 from .aisweb import get_aisw
 from .redemet import get_redemet
+from .format import merge_close_rows
 
 # %% ../nbs/reading.ipynb 3
 def _read_df(folder: Union[str, Path], stem: str) -> pd.DataFrame:
@@ -112,15 +113,18 @@ def read_aero(
     update: bool = False,  # Atualiza os dados caso `True`
 ) -> pd.DataFrame:  # Dataframe com os dados mesclados das 3 bases da Aeronáutica anteriores
     """Lê os arquivos de dados da aeronáutica e retorna os registros comuns e únicos"""
-    if update:
-        icao = get_icao()
-        aisw = read_aisw(folder, update=False)  # Update from API is poor
-        aisg = get_aisg()
-        redemet = get_redemet()
-        return icao, aisw, aisg, redemet
-    return _read_df(folder, "aero")
+    if not update:
+        return _read_df(folder, "aero")
+    icao = get_icao()
+    aisw = get_aisw()
+    aisg = get_aisg()
+    redemet = get_redemet()
+    radares = pd.read_excel(folder / "radares.xlsx")
+    for df in [aisw, aisg, redemet, radares]:
+        icao = merge_close_rows(icao, df)
+    return icao
 
-# %% ../nbs/reading.ipynb 29
+# %% ../nbs/reading.ipynb 31
 def read_base(
     folder: Union[str, Path],
     conn: pyodbc.Connection = None,  # Objeto de conexão do banco SQL Server
