@@ -15,6 +15,7 @@ from rich.console import Console
 from pyarrow import ArrowInvalid, ArrowTypeError
 from fastcore.xtras import Path
 from fastcore.foundation import L
+from fastcore.test import test_eq
 from tqdm.auto import tqdm
 import pyodbc
 from pymongo import MongoClient
@@ -64,7 +65,7 @@ def clean_mosaico(
         df.Num_Serviço == "205", "Frequência"
     ].apply(lambda x: Decimal(x) / Decimal(1000))
     df.loc[:, "Validade_RF"] = df.Validade_RF.astype("string").str.slice(0, 10)
-    return df[df.Código_Município.notna()].reset_index(drop=True)
+    return df
 
 # %% ../nbs/updates.ipynb 9
 def _save_df(df: pd.DataFrame, folder: Union[str, Path], stem: str) -> pd.DataFrame:
@@ -203,7 +204,7 @@ def update_mosaico(
         mosaico = mosaico.loc[:, COLUNAS]
     return _save_df(mosaico, folder, "mosaico")
 
-# %% ../nbs/updates.ipynb 18
+# %% ../nbs/updates.ipynb 19
 def update_telecom(
     mongo_client: MongoClient,  # Objeto de conexão com o MongoDB
     folder: Union[str, Path],  # Pasta onde salvar os arquivos
@@ -261,7 +262,7 @@ def update_telecom(
     df_sub = df_sub.loc[:, COLUNAS]
     return _save_df(df_sub, folder, "telecom")
 
-# %% ../nbs/updates.ipynb 20
+# %% ../nbs/updates.ipynb 21
 def valida_coords(
     conn: pyodbc.Connection,  # Objeto de conexão de banco
     row: pd.Series,  # Linha de um DataFrame
@@ -286,7 +287,7 @@ def valida_coords(
             result.COORD_VALIDA,
         )
 
-# %% ../nbs/updates.ipynb 21
+# %% ../nbs/updates.ipynb 22
 def update_base(
     conn: pyodbc.Connection,  # Objeto de conexão de banco
     clientMongoDB: MongoClient,  # Ojeto de conexão com o MongoDB

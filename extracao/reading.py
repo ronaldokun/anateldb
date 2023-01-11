@@ -5,6 +5,7 @@ __all__ = ['read_mosaico', 'read_telecom', 'read_radcom', 'read_stel', 'read_ica
            'read_aero', 'read_base']
 
 # %% ../nbs/reading.ipynb 2
+import os
 from typing import Union
 from pathlib import Path
 
@@ -12,6 +13,7 @@ import pandas as pd
 from pyarrow import ArrowInvalid
 import pyodbc
 from pymongo import MongoClient
+from dotenv import load_dotenv
 
 from extracao.updates import (
     update_mosaico,
@@ -26,6 +28,8 @@ from .aisgeo import get_aisg
 from .aisweb import get_aisw
 from .redemet import get_redemet
 from .format import merge_close_rows
+
+load_dotenv()
 
 # %% ../nbs/reading.ipynb 3
 def _read_df(folder: Union[str, Path], stem: str) -> pd.DataFrame:
@@ -83,7 +87,7 @@ def read_icao(
     """Lê a base de dados do Frequency Finder e Canalização VOR/ILS/DME"""
     return get_icao if update else _read_df(folder, "icao")
 
-# %% ../nbs/reading.ipynb 21
+# %% ../nbs/reading.ipynb 20
 def read_aisw(
     folder: Union[str, Path],  # Pasta onde ler/salvar os dados
     update: bool = False,  # Atualiza os dados caso `True`
@@ -91,7 +95,7 @@ def read_aisw(
     """Fontes da informação: AISWEB, REDEMET, Ofício nº 2/SSARP/14410 e Canalização VOR/ILS/DME."""
     return get_aisw() if update else _read_df(folder, "aisw")
 
-# %% ../nbs/reading.ipynb 23
+# %% ../nbs/reading.ipynb 21
 def read_aisg(
     folder: Union[str, Path],  # Pasta onde ler/salvar os dados
     update: bool = False,  # Atualiza os dados caso `True`
@@ -99,7 +103,7 @@ def read_aisg(
     """Fontes da informação: GEOAISWEB, REDEMET, Ofício nº 2/SSARP/14410 e Canalização VOR/ILS/DME."""
     return get_aisg() if update else _read_df(folder, "aisg")
 
-# %% ../nbs/reading.ipynb 25
+# %% ../nbs/reading.ipynb 22
 def read_redemet(
     folder: Union[str, Path],  # Pasta onde ler/salvar os dados
     update: bool = False,  # Atualiza os dados caso `True`
@@ -107,7 +111,7 @@ def read_redemet(
     """Fontes da informação: AISWEB, REDEMET, Ofício nº 2/SSARP/14410 e Canalização VOR/ILS/DME."""
     return get_redemet() if update else _read_df(folder, "redemet")
 
-# %% ../nbs/reading.ipynb 26
+# %% ../nbs/reading.ipynb 23
 def read_aero(
     folder: Union[str, Path],  # Pasta onde ler/salvar os dados
     update: bool = False,  # Atualiza os dados caso `True`
@@ -119,12 +123,12 @@ def read_aero(
     aisw = get_aisw()
     aisg = get_aisg()
     redemet = get_redemet()
-    radares = pd.read_excel(folder / "radares.xlsx")
+    radares = pd.read_excel(os.environ["PATH_RADAR"])
     for df in [aisw, aisg, redemet, radares]:
         icao = merge_close_rows(icao, df)
     return icao
 
-# %% ../nbs/reading.ipynb 31
+# %% ../nbs/reading.ipynb 28
 def read_base(
     folder: Union[str, Path],
     conn: pyodbc.Connection = None,  # Objeto de conexão do banco SQL Server

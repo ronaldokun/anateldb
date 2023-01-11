@@ -145,7 +145,7 @@ def get_db(
     rd = rd.loc[:, export_columns]
     rd.columns = APP_ANALISE
     print(":airplane:[blue]Adicionando os registros da Aeronáutica.")
-    aero = read_aero(path, update=True)
+    aero = read_aero(path, update=False)
     rd = merge_close_rows(rd, aero)
     print(":card_file_box:[green]Salvando os arquivos...")
     versiondb = json.loads((dest.parent / "VersionFile.json").read_text())
