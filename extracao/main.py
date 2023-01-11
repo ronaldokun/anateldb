@@ -46,46 +46,22 @@ def get_modtimes(
     if not pasta.is_dir():
         raise FileNotFoundError(f"Pasta {pasta} não encontrada")
     # Arquivos
-    for suffix in [".parquet.gzip", ".fth", ".xlsx"]:
-        if not (stel := pasta / f"stel{suffix}").is_file():
-            raise FileNotFoundError(f"Arquivo {stel} não encontrado")
-        if not (radcom := pasta / f"radcom{suffix}").is_file():
-            raise FileNotFoundError(f"Arquivo {radcom} não encontrado")
-        if not (mosaico := pasta / f"mosaico{suffix}").is_file():
-            raise FileNotFoundError(f"Arquivo {mosaico} não encontrado")
-        break
-    if not (icao := pasta / "icao.xlsx").is_file():  # ICAO
-        raise FileNotFoundError(f"Arquivo {icao} não encontrado")
-    if not (pmec := pasta / "aisw.xlsx").is_file():  # PMEC
-        raise FileNotFoundError(f"Arquivo {pmec} não encontrado")
-    if not (geo := pasta / "aisg.xlsx").is_file():  # GEO
-        raise FileNotFoundError(f"Arquivo {geo} não encontrado")
+    if not (base := pasta / "base.parquet.gzip").is_file():
+        raise FileNotFoundError(f"Arquivo {base} não encontrado")
+    if not (aero := pasta / "aero.parquet.gzip").is_file():
+        raise FileNotFoundError(f"Arquivo {aero} não encontrado")
+
     # Modificação
-    mod_stel = datetime.fromtimestamp(stel.stat().st_mtime).strftime(
+    mod_base = datetime.fromtimestamp(base.stat().st_mtime).strftime(
         "%d/%m/%Y %H:%M:%S"
     )
-    mod_radcom = datetime.fromtimestamp(radcom.stat().st_mtime).strftime(
+    mod_aero = datetime.fromtimestamp(aero.stat().st_mtime).strftime(
         "%d/%m/%Y %H:%M:%S"
     )
-    mod_mosaico = datetime.fromtimestamp(mosaico.stat().st_mtime).strftime(
-        "%d/%m/%Y %H:%M:%S"
-    )
-    mod_icao = pd.read_excel(icao, engine="openpyxl", sheet_name="ExtractDate").columns[
-        0
-    ]
-    mod_aisw = pd.read_excel(pmec, engine="openpyxl", sheet_name="ExtractDate").columns[
-        0
-    ]
-    mod_aisg = pd.read_excel(geo, engine="openpyxl", sheet_name="ExtractDate").columns[
-        0
-    ]
+
     return {
-        "STEL": mod_stel,
-        "SRD": mod_radcom,
-        "MOSAICO": mod_mosaico,
-        "ICAO": mod_icao,
-        "AISW": mod_aisw,
-        "AISG": mod_aisg,
+        "ANATEL": mod_base,
+        "AERONAUTICA": mod_aero,
     }
 
 # %% ../nbs/main.ipynb 5
@@ -145,7 +121,7 @@ def get_db(
     rd = rd.loc[:, export_columns]
     rd.columns = APP_ANALISE
     print(":airplane:[blue]Adicionando os registros da Aeronáutica.")
-    aero = read_aero(path, update=False)
+    aero = read_aero(path, update=True)
     rd = merge_close_rows(rd, aero)
     print(":card_file_box:[green]Salvando os arquivos...")
     versiondb = json.loads((dest.parent / "VersionFile.json").read_text())
@@ -154,11 +130,13 @@ def get_db(
     for c in ["Latitude", "Longitude"]:
         rd.loc[:, c] = rd.loc[:, c].fillna(-1).astype("float32")
     rd["Frequency"] = rd["Frequency"].astype("float64")
+    rd.loc[rd.Description == "", "Description"] = pd.NA
     rd["Description"] = rd["Description"].astype("string").fillna("NI")
+    rd.loc[rd.Service == "", "Service"] = pd.NA
     rd["Service"] = rd.Service.fillna("-1").astype("int32")
+    rd.loc[rd.Station == "", "Station"] = pd.NA
     rd["Station"] = rd.Station.fillna("-1").astype("int16")
-    rd.loc[rd.Station == "", "Station"] = -1
-    rd.loc[rd.BW == "", "BW"] = "-1"
+    rd.loc[rd.BW == "", "BW"] = pd.NA
     rd["BW"] = rd["BW"].astype("float32").fillna(-1)
     rd["Class"] = rd.Class.fillna("NI").astype("category")
     rd = (
