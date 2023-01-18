@@ -196,8 +196,13 @@ def update_mosaico(
         mosaico.rename(COLS_SRD, axis=1, inplace=True)
         mosaico = clean_mosaico(mosaico, folder)
         mosaico["Fonte"] = "MOS"
+        mosaico["Num_Serviço"].fillna("", inplace=True)
         mosaico.loc[:, ["Largura_Emissão(kHz)", "Classe_Emissão"]] = (
-            mosaico.Num_Serviço.astype("string").map(BW_MAP).apply(parse_bw).tolist()
+            mosaico.Num_Serviço.astype("string")
+            .fillna("")
+            .map(BW_MAP)
+            .apply(parse_bw)
+            .tolist()
         )
         mosaico.loc[mosaico.Classe_Emissão == "", "Classe_Emissão"] = pd.NA
         mosaico["Multiplicidade"] = 1
@@ -250,7 +255,6 @@ def update_telecom(
     df_sub = (
         df[~df.duplicated(subset=subset, keep="first")].reset_index(drop=True).copy()
     )
-    # df_sub = df_sub.set_index(subset).sort_index()
     df_sub["Multiplicidade"] = (
         df.groupby(subset, sort=False).count()["Número_Estação"]
     ).tolist()
