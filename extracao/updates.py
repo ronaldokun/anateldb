@@ -260,7 +260,7 @@ def valida_coords(
     row: pd.Series,  # Linha de um DataFrame
 ) -> tuple:  # DataFrame com dados do município
     """Valida os dados de coordenadas e município em `row` no polígono dos municípios em banco corporativo"""
-
+    
     sql = SQL_VALIDA_COORD.format(
         row["Longitude"], row["Latitude"], row["Código_Município"]
     )
@@ -302,8 +302,9 @@ def update_base(
     )
     rd.loc[:, ["Latitude", "Longitude"]] = rd.loc[:, ["Latitude", "Longitude"]].fillna(
         "-1"
-    )  # Validando Coordenadas
-    rd["Coords_Valida"] = pd.NA
+    )  
+    # Validando Coordenadas
+    rd["Coords_Valida"] = '-1'
     rd[["Município", "Longitude", "Latitude", "Coords_Valida"]] = rd.apply(
         lambda row: pd.Series(list(valida_coords(conn, row))), axis=1
     )

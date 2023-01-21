@@ -37,12 +37,8 @@ def _read_df(folder: Union[str, Path], stem: str) -> pd.DataFrame:
     file = Path(f"{folder}/{stem}.parquet.gzip")
     try:
         df = pd.read_parquet(file)
-    except (ArrowInvalid, FileNotFoundError):
-        file = Path(f"{folder}/{stem}.xlsx")
-        try:
-            df = pd.read_excel(file, engine="openpyxl", sheet_name="DataBase")
-        except Exception as e:
-            raise ValueError(f"Error when reading {file}") from e
+    except (ArrowInvalid, FileNotFoundError) as e:        
+        raise e(f"Error when reading {file}")
     return df
 
 # %% ..\nbs\reading.ipynb 5
@@ -61,7 +57,7 @@ def read_telecom(
     """Lê o banco de dados salvo localmente do LICENCIAMENTO e opcionalmente o atualiza."""
     return update_telecom(conn, folder) if conn else _read_df(folder, "telecom")
 
-# %% ..\nbs\reading.ipynb 17
+# %% ..\nbs\reading.ipynb 13
 def read_radcom(
     folder: Union[str, Path],  # Pasta onde ler/salvar os dados
     conn: pyodbc.Connection = None,  # Objeto de conexão de banco, atualiza os dados caso válido
@@ -69,7 +65,7 @@ def read_radcom(
     """Lê o banco de dados salvo localmente de RADCOM. Opcionalmente o atualiza pelo Banco de Dados ANATELBDRO05 caso `update = True` ou não exista o arquivo local"""
     return update_radcom(conn, folder) if conn else _read_df(folder, "radcom")
 
-# %% ..\nbs\reading.ipynb 20
+# %% ..\nbs\reading.ipynb 16
 def read_stel(
     folder: Union[str, Path],  # Pasta onde ler/salvar os dados
     conn: pyodbc.Connection = None,  # Objeto de conexão de banco. Atualiza os dados caso válido
@@ -79,7 +75,7 @@ def read_stel(
     caso `update = True` ou não exista o arquivo local"""
     return update_stel(conn, folder) if conn else _read_df(folder, "stel")
 
-# %% ..\nbs\reading.ipynb 23
+# %% ..\nbs\reading.ipynb 19
 def read_icao(
     folder: Union[str, Path],  # Pasta onde ler/salvar os dados
     update: bool = False,  # Atualiza os dados caso `True`
@@ -87,7 +83,7 @@ def read_icao(
     """Lê a base de dados do Frequency Finder e Canalização VOR/ILS/DME"""
     return get_icao if update else _read_df(folder, "icao")
 
-# %% ..\nbs\reading.ipynb 24
+# %% ..\nbs\reading.ipynb 20
 def read_aisw(
     folder: Union[str, Path],  # Pasta onde ler/salvar os dados
     update: bool = False,  # Atualiza os dados caso `True`
@@ -95,7 +91,7 @@ def read_aisw(
     """Fontes da informação: AISWEB, REDEMET, Ofício nº 2/SSARP/14410 e Canalização VOR/ILS/DME."""
     return get_aisw() if update else _read_df(folder, "aisw")
 
-# %% ..\nbs\reading.ipynb 25
+# %% ..\nbs\reading.ipynb 21
 def read_aisg(
     folder: Union[str, Path],  # Pasta onde ler/salvar os dados
     update: bool = False,  # Atualiza os dados caso `True`
@@ -103,7 +99,7 @@ def read_aisg(
     """Fontes da informação: GEOAISWEB, REDEMET, Ofício nº 2/SSARP/14410 e Canalização VOR/ILS/DME."""
     return get_aisg() if update else _read_df(folder, "aisg")
 
-# %% ..\nbs\reading.ipynb 26
+# %% ..\nbs\reading.ipynb 22
 def read_redemet(
     folder: Union[str, Path],  # Pasta onde ler/salvar os dados
     update: bool = False,  # Atualiza os dados caso `True`
@@ -111,7 +107,7 @@ def read_redemet(
     """Fontes da informação: AISWEB, REDEMET, Ofício nº 2/SSARP/14410 e Canalização VOR/ILS/DME."""
     return get_redemet() if update else _read_df(folder, "redemet")
 
-# %% ..\nbs\reading.ipynb 27
+# %% ..\nbs\reading.ipynb 23
 def read_aero(
     folder: Union[str, Path],  # Pasta onde ler/salvar os dados
     update: bool = False,  # Atualiza os dados caso `True`
@@ -128,7 +124,7 @@ def read_aero(
         icao = merge_close_rows(icao, df)
     return icao
 
-# %% ..\nbs\reading.ipynb 32
+# %% ..\nbs\reading.ipynb 26
 def read_base(
     folder: Union[str, Path],
     conn: pyodbc.Connection = None,  # Objeto de conexão do banco SQL Server

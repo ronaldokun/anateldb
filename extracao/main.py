@@ -76,8 +76,8 @@ def get_db(
     dest = Path(path)
     dest.mkdir(parents=True, exist_ok=True)
     print(":scroll:[green]Lendo as bases de dados da Anatel...")
-    # if not all([connSQL, clientMongoDB]):
-    #     raise ConnectionError(f"Verifique os conectores de banco de dados: {connSQL} e {clientMongoDB}")
+#     if not all([connSQL, clientMongoDB]):
+#         raise ConnectionError(f"Verifique os conectores de banco de dados: {connSQL} e {clientMongoDB}")
     rd = read_base(path, connSQL, clientMongoDB)
     rd["#Estação"] = rd["Número_Estação"]
     rd.loc[rd.Multiplicidade != "1", "#Estação"] = (
@@ -120,8 +120,9 @@ def get_db(
     ]
     rd = rd.loc[:, export_columns]
     rd.columns = APP_ANALISE
-    print(":airplane:[blue]Adicionando os registros da Aeronáutica.")
+    print(":airplane:[blue]Requisitando os dados da Aeronáutica.")
     aero = read_aero(path, update=True)
+    print(":spoon:[yellow]Mesclando os dados da Aeronáutica.")
     rd = merge_close_rows(rd, aero)
     print(":card_file_box:[green]Salvando os arquivos...")
     versiondb = json.loads((dest.parent / "VersionFile.json").read_text())
@@ -133,9 +134,9 @@ def get_db(
     rd.loc[rd.Description == '', 'Description'] = pd.NA
     rd["Description"] = rd["Description"].astype("string").fillna("NI")
     rd.loc[rd.Service == '', 'Service'] = pd.NA
-    rd["Service"] = rd.Service.fillna("-1").astype("int32")
+    rd["Service"] = rd.Service.fillna("-1").astype("int16")
     rd.loc[rd.Station == "", "Station"] = pd.NA
-    rd["Station"] = rd.Station.fillna("-1").astype("int16")
+    rd["Station"] = rd.Station.fillna("-1").astype("int32")
     rd.loc[rd.BW == "", "BW"] = pd.NA
     rd["BW"] = rd["BW"].astype("float32").fillna(-1)
     rd["Class"] = rd.Class.fillna("NI").astype("category")
@@ -161,7 +162,6 @@ def get_db(
         ],
     ]
     rd.to_parquet(f"{dest}/AnatelDB.parquet.gzip", compression="gzip", index=False)
-    versiondb["anateldb"]["Version"] = bump_version(versiondb["anateldb"]["Version"])
     versiondb["anateldb"].update(mod_times)
     json.dump(versiondb, (dest.parent / "VersionFile.json").open("w"))
     print("Sucesso :zap:")
