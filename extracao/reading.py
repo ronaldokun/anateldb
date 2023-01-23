@@ -21,6 +21,7 @@ from extracao.updates import (
     update_radcom,
     update_base,
     update_telecom,
+    update_aero
 )
 
 from .icao import get_icao
@@ -113,16 +114,7 @@ def read_aero(
     update: bool = False,  # Atualiza os dados caso `True`
 ) -> pd.DataFrame:  # Dataframe com os dados mesclados das 3 bases da Aeronáutica anteriores
     """Lê os arquivos de dados da aeronáutica e retorna os registros comuns e únicos"""
-    if not update:
-        return _read_df(folder, "aero")
-    icao = get_icao()
-    aisw = get_aisw()
-    aisg = get_aisg()
-    redemet = get_redemet()
-    radares = pd.read_excel(os.environ['PATH_RADAR'])
-    for df in [aisw, aisg, redemet, radares]:
-        icao = merge_close_rows(icao, df)
-    return icao
+    return update_aero(folder) if update else _read_df(folder, 'aero')
 
 # %% ..\nbs\reading.ipynb 26
 def read_base(

@@ -2,7 +2,7 @@
 
 # %% auto 0
 __all__ = ['connect_db', 'clean_mosaico', 'update_radcom', 'update_stel', 'update_mosaico', 'update_telecom', 'valida_coords',
-           'update_base']
+           'update_base', 'update_aero']
 
 # %% ..\nbs\updates.ipynb 2
 from decimal import Decimal, getcontext
@@ -22,8 +22,13 @@ import pyodbc
 from pymongo import MongoClient
 from dotenv import load_dotenv
 
+from .icao import get_icao
+from .aisgeo import get_aisg
+from .aisweb import get_aisw
+from .redemet import get_redemet
 from .constants import *
-from .format import parse_bw
+from .format import parse_bw, merge_close_rows
+
 
 getcontext().prec = 5
 load_dotenv()
@@ -304,9 +309,22 @@ def update_base(
         "-1"
     )  
     # Validando Coordenadas
-    rd["Coords_Valida"] = '-1'
+    rd["Coords_Valida"] = -1
     rd[["Município", "Longitude", "Latitude", "Coords_Valida"]] = rd.apply(
         lambda row: pd.Series(list(valida_coords(conn, row))), axis=1
     )
     rd = rd.drop(rd[rd.Coords_Valida == -1].index)
     return _save_df(rd, folder, "base")
+
+# %% ..\nbs\updates.ipynb 24
+def update_aero(folder: Union[str, Path],  # Pasta onde salvar os arquivos
+) -> pd.DataFrame:  # DataFrame com os dados atualizados
+    """Atualiza a base de dados de emissões da aeronáutica"""
+    icao = get_icao()
+    aisw = get_aisw()
+    aisg = get_aisg()
+    redemet = get_redemet()
+    radares = pd.read_excel(os.environ['PATH_RADAR'])
+    for df in [aisw, aisg, redemet, radares]:
+        icao = merge_close_rows(icao, df)
+    return _save_df(icao, folder, 'aero')
