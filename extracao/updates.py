@@ -220,6 +220,22 @@ def update_telecom(
     for doc in tqdm(c):
         result.append(doc)
     df = pd.DataFrame(result, dtype='string')
+    del result 
+    gc.collect()
+    path_cache = Path(f'{folder}/telecom_raw.parquet.gzip')
+    path_out = Path(f'{folder}/telecom.parquet.gzip')
+    if path_cache.is_file():
+        cache_df = pd.read_parquet(path_cache)
+        if df.equals(cache_df) and path_out.is_file():
+            del df
+            gc.collect()
+            return pd.read_parquet(path_out)        
+    _ = _save_df(df, folder, "telecom_raw")
+    return _process_telecom(df)
+
+def _process_telecom(df: pd.DataFrame, # Dataframe não processado de dados do Mosaico
+                    )->pd.DataFrame:
+    """Formata e pós-processa e mescla os dados de Telecomunicações do Mosaico"""
     df.drop("_id", axis=1, inplace=True)
     df.rename(COLS_TELECOM, axis=1, inplace=True)
     df["Designacao_Emissão"] = df.Designacao_Emissão.str.replace(",", " ")
@@ -233,7 +249,6 @@ def update_telecom(
         parse_bw
     ).tolist()
     df.drop("Designacao_Emissão", axis=1, inplace=True)
-    _ = _save_df(df, folder, "telecom_raw")
     subset = [
         "Entidade",
         "Longitude",
@@ -258,6 +273,7 @@ def update_telecom(
     df_sub = df_sub.reset_index()
     df_sub = df_sub.loc[:, COLUNAS]
     return _save_df(df_sub, folder, "telecom")
+
 
 # %% ..\nbs\updates.ipynb 21
 def valida_coords(

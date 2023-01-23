@@ -83,7 +83,7 @@ def get_db(
     aero = read_aero(path, update=True)
     mod_times['AERONAUTICA'] = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     print(":spoon:[yellow]Mesclando os dados da Aeronáutica.")
-    rd = merge_close_rows(rd, aero)
+    rd = merge_close_rows(aero, rd)
     print(":card_file_box:[green]Salvando os arquivos...")
     for c in ["Latitude", "Longitude"]:
         rd.loc[:, c] = rd.loc[:, c].fillna(-1).astype("float32")
