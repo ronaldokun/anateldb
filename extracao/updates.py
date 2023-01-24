@@ -228,14 +228,9 @@ def update_telecom(
 
     database = mongo_client["sms"]
     collection = database["licenciamento"]
-    c = collection.find(MONGO_TELECOM, projection={k: 1.0 for k in COLS_TELECOM.keys()})
+    query = collection.find(MONGO_TELECOM, projection={k: 1.0 for k in COLS_TELECOM.keys()})
     print("[red] :warning: Executando a query na base licenciamento do Mosaico, processo demorado! :warning:")
-    result = L()
-    for doc in tqdm(c):
-        result.append(doc)
-    df = pd.DataFrame(result, dtype='string')
-    del result 
-    gc.collect()
+    df =  pd.DataFrame([c for c in query], columns=COLS_TELECOM.keys(), dtype='string')
     path_cache = Path(f'{folder}/telecom_raw.parquet.gzip')
     path_out = Path(f'{folder}/telecom.parquet.gzip')
     if path_cache.is_file():
@@ -244,13 +239,13 @@ def update_telecom(
             del df
             gc.collect()
             return pd.read_parquet(path_out)
-    _ = _save_df(df, folder, "telecom_raw")
+    df.to_parquet(path_cache, compression='gzip', index=False)
     return _process_telecom(df)
 
 def _process_telecom(df: pd.DataFrame, # Dataframe não processado de dados do Mosaico
                     )->pd.DataFrame:
     """Formata e pós-processa e mescla os dados de Telecomunicações do Mosaico"""
-    df.drop("_id", axis=1, inplace=True)
+    #df.drop("_id", axis=1, inplace=True)
     df.rename(COLS_TELECOM, axis=1, inplace=True)
     df["Designacao_Emissão"] = df.Designacao_Emissão.str.replace(",", " ")
     df["Designacao_Emissão"] = (

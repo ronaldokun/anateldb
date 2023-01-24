@@ -62,7 +62,7 @@ def merge_close_rows(df_left, df_right):
                 break
     return pd.concat([df1, df2], ignore_index=True)
 
-# %% ..\nbs\format.ipynb 9
+# %% ..\nbs\format.ipynb 20
 def optimize_floats(
     df: pd.DataFrame,  # DataFrame a ser otimizado
     exclude: Iterable[str] = None,  # Colunas a serem excluidas da otimização
@@ -73,7 +73,7 @@ def optimize_floats(
     df[floats] = df[floats].apply(pd.to_numeric, downcast="float")
     return df
 
-# %% ..\nbs\format.ipynb 10
+# %% ..\nbs\format.ipynb 21
 def optimize_ints(
     df: pd.DataFrame,  # Dataframe a ser otimizado
     exclude: Iterable[str] = None,  # Colunas a serem excluidas da otimização
@@ -84,7 +84,7 @@ def optimize_ints(
     df[ints] = df[ints].apply(pd.to_numeric, downcast="integer")
     return df
 
-# %% ..\nbs\format.ipynb 11
+# %% ..\nbs\format.ipynb 22
 def optimize_objects(
     df: pd.DataFrame,  # DataFrame a ser otimizado
     datetime_features: Iterable[
@@ -112,7 +112,7 @@ def optimize_objects(
             df[col] = pd.to_datetime(df[col]).dt.date
     return df
 
-# %% ..\nbs\format.ipynb 12
+# %% ..\nbs\format.ipynb 23
 def df_optimize(
     df: pd.DataFrame,  # DataFrame a ser otimizado
     datetime_features: Iterable[

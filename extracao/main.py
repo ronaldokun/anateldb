@@ -80,22 +80,23 @@ def get_db(
     rd = rd.loc[:, export_columns]
     rd.columns = APP_ANALISE
     print(":airplane:[light blue]Requisitando os dados da Aeronáutica.")
-    aero = read_aero(path, update=True)
+    aero = read_aero(path, update=False)
     mod_times['AERONAUTICA'] = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     print(":spoon:[yellow]Mesclando os dados da Aeronáutica.")
-    rd = merge_close_rows(aero, rd)
+    rd = merge_close_rows(rd, aero)
     print(":card_file_box:[green]Salvando os arquivos...")
     for c in ["Latitude", "Longitude"]:
         rd.loc[:, c] = rd.loc[:, c].fillna(-1).astype("float32")
     rd["Frequency"] = rd["Frequency"].astype("float64")
     rd.loc[rd.Description == '', 'Description'] = pd.NA
     rd["Description"] = rd["Description"].astype("string").fillna("NI")
-    rd.loc[rd.Service == '', 'Service'] = pd.NA
+    rd.loc[rd.Service.isin(['', '-1']), 'Service'] = pd.NA
     rd["Service"] = rd.Service.fillna("-1").astype("int16")
-    rd.loc[rd.Station == "", "Station"] = pd.NA
+    rd.loc[rd.Station.isin(['', '-1']), "Station"] = pd.NA
     rd["Station"] = rd.Station.fillna("-1").astype("int32")
-    rd.loc[rd.BW == "", "BW"] = pd.NA
+    rd.loc[rd.BW.isin(['', '-1']), "BW"] = pd.NA
     rd["BW"] = rd["BW"].astype("float32").fillna(-1)
+    rd.loc[rd["Class"].isin(['', '-1']), 'Class'] = pd.NA
     rd["Class"] = rd.Class.fillna("NI").astype("category")
     rd = (
         rd.drop_duplicates(keep="first")
