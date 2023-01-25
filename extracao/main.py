@@ -120,9 +120,9 @@ def get_db(
         ],
     ]
     rd.to_parquet(f"{dest}/AnatelDB.parquet.gzip", compression="gzip", index=False)
-    versiondb = json.loads((dest.parent / "VersionFile.json").read_text())
+    versiondb = json.loads((dest / "VersionFile.json").read_text())
     mod_times["ReleaseDate"] = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     versiondb["anateldb"].update(mod_times)
-    json.dump(versiondb, (dest.parent / "VersionFile.json").open("w"))
+    json.dump(versiondb, (dest / "VersionFile.json").open("w"))
     print("Sucesso :zap:")
     return rd
