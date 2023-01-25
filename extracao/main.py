@@ -80,7 +80,7 @@ def get_db(
     rd = rd.loc[:, export_columns]
     rd.columns = APP_ANALISE
     print(":airplane:[light blue]Requisitando os dados da Aeronáutica.")
-    aero = read_aero(path, update=False)
+    aero = read_aero(path, update=True)
     mod_times["AERONAUTICA"] = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     print(":spoon:[yellow]Mesclando os dados da Aeronáutica.")
     rd = merge_close_rows(rd, aero)
