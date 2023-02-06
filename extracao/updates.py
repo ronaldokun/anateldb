@@ -2,7 +2,7 @@
 
 # %% auto 0
 __all__ = ['connect_db', 'clean_mosaico', 'update_radcom', 'update_stel', 'update_mosaico', 'update_aero', 'update_telecom',
-           'valida_coords', 'update_base']
+           'validar_coords', 'update_base']
 
 # %% ../nbs/updates.ipynb 2
 import os
@@ -16,9 +16,6 @@ from rich.console import Console
 from rich import print
 from pyarrow import ArrowInvalid, ArrowTypeError
 from fastcore.xtras import Path
-from fastcore.foundation import L
-from fastcore.test import test_eq
-from tqdm.auto import tqdm
 import pyodbc
 from pymongo import MongoClient
 from dotenv import load_dotenv
@@ -210,7 +207,7 @@ def update_mosaico(
         mosaico = mosaico.loc[:, COLUNAS]
     return _save_df(mosaico, folder, "mosaico")
 
-# %% ../nbs/updates.ipynb 19
+# %% ../nbs/updates.ipynb 18
 def update_aero(
     folder: Union[str, Path],  # Pasta onde salvar os arquivos
 ) -> pd.DataFrame:  # DataFrame com os dados atualizados
@@ -224,7 +221,7 @@ def update_aero(
         icao = merge_close_rows(icao, df)
     return _save_df(icao, folder, "aero")
 
-# %% ../nbs/updates.ipynb 21
+# %% ../nbs/updates.ipynb 20
 def update_telecom(
     mongo_client: MongoClient,  # Objeto de conexão com o MongoDB
     folder: Union[str, Path],  # Pasta onde salvar os arquivos
@@ -295,35 +292,46 @@ def _process_telecom(
     df_sub = df_sub.loc[:, COLUNAS]
     return _save_df(df_sub, folder, "telecom")
 
-# %% ../nbs/updates.ipynb 24
-def valida_coords(
-    conn: pyodbc.Connection,  # Objeto de conexão de banco
+# %% ../nbs/updates.ipynb 22
+def validar_coords(
     row: pd.Series,  # Linha de um DataFrame
+    connector: pyodbc.Connection = None,  # Conector de Banco de Dados
 ) -> tuple:  # DataFrame com dados do município
-    """Valida os dados de coordenadas e município em `row` no polígono dos municípios em banco corporativo"""
+    """Valida os dados de coordenadas e município em `row` no polígono dos municípios em banco corporativ do IBGE"""
 
-    sql = SQL_VALIDA_COORD.format(
-        row["Longitude"], row["Latitude"], row["Código_Município"]
+    mun, cod, lat, long = (
+        row.Município,
+        row.Código_Município,
+        row.Latitude,
+        row.Longitude,
     )
+    is_valid = pd.NA
+    conn = connect_db() if connector is None else connector
     crsr = conn.cursor()
+    sql = SQL_VALIDA_COORD.format(long, lat, cod)
     crsr.execute(sql)
     result = crsr.fetchone()
-    if result is None:
-        return (row["Município"], row["Longitude"], row["Latitude"], -1)
-    elif result.COORD_VALIDA == 1:
-        return result
-    else:
-        return (
-            result.NO_MUNICIPIO,
-            result.NU_LONGITUDE,
-            result.NU_LATITUDE,
-            result.COORD_VALIDA,
-        )
+    if result is not None:
+        mun = result.NO_MUNICIPIO
+        lat = result.NU_LATITUDE
+        long = result.NU_LONGITUDE
+        is_valid = result.COORD_VALIDA == 0
+    if connector is None:
+        del conn
+    return [mun, lat, long, is_valid]
 
-# %% ../nbs/updates.ipynb 25
+# %% ../nbs/updates.ipynb 23
+def _validar_coords_base(
+    df: pd.DataFrame,  # DataFrame com os dados da Anatel
+    cache_df: pd.DataFrame,  # DataFrame validado anteriormente, usado como cache
+) -> pd.DataFrame:  # DataFrame com as coordenadas validadas na base do IBGE
+    """Valida as coordenadas consultado a Base Corporativa do IBGE, excluindo o que já está no cache na versão anterior"""
+    pass
+
+# %% ../nbs/updates.ipynb 24
 def update_base(
     conn: pyodbc.Connection,  # Objeto de conexão de banco
-    clientMongoDB: MongoClient,  # Ojeto de conexão com o MongoDB
+    clientMongoDB: MongoClient,  # Objeto de conexão com o MongoDB
     folder: Union[str, Path],  # Pasta onde salvar os arquivos
 ) -> pd.DataFrame:  # DataFrame com os dados atualizados
     # sourcery skip: use-fstring-for-concatenation
@@ -333,18 +341,22 @@ def update_base(
     mosaico = update_mosaico(clientMongoDB, folder)
     telecom = update_telecom(clientMongoDB, folder)
 
-    rd = (
+    base = (
         pd.concat([mosaico, radcom, stel, telecom])
         .sort_values(["Frequência", "Latitude", "Longitude"])
         .reset_index(drop=True)
     )
-    rd.loc[:, ["Latitude", "Longitude"]] = rd.loc[:, ["Latitude", "Longitude"]].fillna(
-        "-1"
-    )
-    # Validando Coordenadas
-    rd["Coords_Valida"] = -1
-    rd[["Município", "Longitude", "Latitude", "Coords_Valida"]] = rd.apply(
-        lambda row: pd.Series(list(valida_coords(conn, row))), axis=1
-    )
-    rd = rd.drop(rd[rd.Coords_Valida == -1].index)
-    return _save_df(rd, folder, "base")
+
+    for c in base.columns:
+        base[c] = base[c].astype("string")
+
+    base.loc[:, ["Latitude", "Longitude"]].fillna("0", inplace=True)
+
+    # cache = _read_df(folder, 'base')
+
+    # _validar_coords_base(base, cache)
+
+    base[
+        ["Município_IBGE", "Latitude_IBGE", "Longitude_IBGE", "Coords_Valida_IBGE"]
+    ] = base.apply(lambda row: pd.Series(validar_coords(row, conn)), axis=1)
+    return _save_df(base, folder, "base")
