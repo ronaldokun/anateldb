@@ -16,6 +16,8 @@ from rich.console import Console
 from rich import print
 from pyarrow import ArrowInvalid, ArrowTypeError
 from fastcore.xtras import Path
+from fastcore.test import test_eq
+from fastcore.parallel import parallel
 import pyodbc
 from pymongo import MongoClient
 from dotenv import load_dotenv
@@ -25,7 +27,7 @@ from .aisgeo import get_aisg
 from .aisweb import get_aisw
 from .redemet import get_redemet
 from .constants import *
-from .format import parse_bw, merge_close_rows
+from .format import parse_bw, merge_close_rows, _read_df
 
 
 getcontext().prec = 5
@@ -305,7 +307,7 @@ def validar_coords(
         row.Latitude,
         row.Longitude,
     )
-    is_valid = pd.NA
+    is_valid = "-1"
     conn = connect_db() if connector is None else connector
     crsr = conn.cursor()
     sql = SQL_VALIDA_COORD.format(long, lat, cod)
@@ -315,10 +317,10 @@ def validar_coords(
         mun = result.NO_MUNICIPIO
         lat = result.NU_LATITUDE
         long = result.NU_LONGITUDE
-        is_valid = result.COORD_VALIDA == 0
+        is_valid = result.COORD_VALIDA
     if connector is None:
         del conn
-    return [mun, lat, long, is_valid]
+    return [str(mun), str(lat), str(long), str(is_valid)]
 
 # %% ../nbs/updates.ipynb 23
 def _validar_coords_base(
@@ -352,11 +354,28 @@ def update_base(
 
     base.loc[:, ["Latitude", "Longitude"]].fillna("0", inplace=True)
 
-    # cache = _read_df(folder, 'base')
+    df_cache = _read_df(folder, "base")
 
-    # _validar_coords_base(base, cache)
+    ibge = ["Município_IBGE", "Latitude_IBGE", "Longitude_IBGE", "Coords_Valida_IBGE"]
 
-    base[
-        ["Município_IBGE", "Latitude_IBGE", "Longitude_IBGE", "Coords_Valida_IBGE"]
-    ] = base.apply(lambda row: pd.Series(validar_coords(row, conn)), axis=1)
-    return _save_df(base, folder, "base")
+    df_cache = (
+        pd.concat([df_cache, base])
+        .drop_duplicates(subset=base.columns, keep="first")
+        .reset_index(drop=True)
+    )
+
+    subset = df_cache.Coords_Valida_IBGE.isna()
+
+    df_cache.loc[:, ["Latitude", "Longitude"]].fillna("-1", inplace=True)
+
+    linhas = list(
+        df_cache.loc[
+            subset, ["Município", "Código_Município", "Latitude", "Longitude"]
+        ].itertuples()
+    )
+
+    df_cache.loc[subset, ibge] = parallel(
+        validar_coords, linhas, threadpool=True, n_workers=20, progress=True
+    )
+
+    return _save_df(df_cache, folder, "base")
