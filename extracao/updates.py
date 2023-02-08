@@ -325,42 +325,15 @@ def validar_coords(
 # %% ../nbs/updates.ipynb 23
 def _validar_coords_base(
     df: pd.DataFrame,  # DataFrame com os dados da Anatel
-    cache_df: pd.DataFrame,  # DataFrame validado anteriormente, usado como cache
+    df_cache: pd.DataFrame,  # DataFrame validado anteriormente, usado como cache
 ) -> pd.DataFrame:  # DataFrame com as coordenadas validadas na base do IBGE
     """Valida as coordenadas consultado a Base Corporativa do IBGE, excluindo o que já está no cache na versão anterior"""
-    pass
-
-# %% ../nbs/updates.ipynb 24
-def update_base(
-    conn: pyodbc.Connection,  # Objeto de conexão de banco
-    clientMongoDB: MongoClient,  # Objeto de conexão com o MongoDB
-    folder: Union[str, Path],  # Pasta onde salvar os arquivos
-) -> pd.DataFrame:  # DataFrame com os dados atualizados
-    # sourcery skip: use-fstring-for-concatenation
-    """Wrapper que atualiza opcionalmente lê e atualiza as 4 bases indicadas anteriormente, as combina e salva o arquivo consolidado na folder `folder`"""
-    stel = update_stel(conn, folder)
-    radcom = update_radcom(conn, folder)
-    mosaico = update_mosaico(clientMongoDB, folder)
-    telecom = update_telecom(clientMongoDB, folder)
-
-    base = (
-        pd.concat([mosaico, radcom, stel, telecom])
-        .sort_values(["Frequência", "Latitude", "Longitude"])
-        .reset_index(drop=True)
-    )
-
-    for c in base.columns:
-        base[c] = base[c].astype("string")
-
-    base.loc[:, ["Latitude", "Longitude"]].fillna("0", inplace=True)
-
-    df_cache = _read_df(folder, "base")
 
     ibge = ["Município_IBGE", "Latitude_IBGE", "Longitude_IBGE", "Coords_Valida_IBGE"]
 
     df_cache = (
-        pd.concat([df_cache, base])
-        .drop_duplicates(subset=base.columns, keep="first")
+        pd.concat([df_cache, df])
+        .drop_duplicates(subset=df.columns, keep="first")
         .reset_index(drop=True)
     )
 
@@ -377,5 +350,37 @@ def update_base(
     df_cache.loc[subset, ibge] = parallel(
         validar_coords, linhas, threadpool=True, n_workers=20, progress=True
     )
+
+    df_cache.loc[df_cache.Coords_Valida_IBGE == "-1", "Coords_Valida_IBGE"] = pd.NA
+
+    return df_cache
+
+# %% ../nbs/updates.ipynb 24
+def update_base(
+    conn: pyodbc.Connection,  # Objeto de conexão de banco
+    clientMongoDB: MongoClient,  # Objeto de conexão com o MongoDB
+    folder: Union[str, Path],  # Pasta onde salvar os arquivos
+) -> pd.DataFrame:  # DataFrame com os dados atualizados
+    # sourcery skip: use-fstring-for-concatenation
+    """Wrapper que atualiza opcionalmente lê e atualiza as 4 bases indicadas anteriormente, as combina e salva o arquivo consolidado na folder `folder`"""
+    stel = update_stel(conn, folder)
+    radcom = update_radcom(conn, folder)
+    mosaico = update_mosaico(clientMongoDB, folder)
+    telecom = update_telecom(clientMongoDB, folder)
+
+    df = (
+        pd.concat([mosaico, radcom, stel, telecom])
+        .sort_values(["Frequência", "Latitude", "Longitude"])
+        .reset_index(drop=True)
+    )
+
+    for c in df.columns:
+        df[c] = df[c].astype("string")
+
+    df.loc[:, ["Latitude", "Longitude"]].fillna("0", inplace=True)
+
+    df_cache = _read_df(folder, "base")
+
+    df_cache = _validar_coords_base(df, df_cache)
 
     return _save_df(df_cache, folder, "base")
