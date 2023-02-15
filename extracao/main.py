@@ -3,7 +3,7 @@
 # %% auto 0
 __all__ = ['LIMIT_FREQ', 'get_db']
 
-# %% ../nbs/main.ipynb 2
+# %% ../nbs/main.ipynb 3
 import os
 from pathlib import Path
 import json
@@ -21,11 +21,12 @@ from .constants import APP_ANALISE_PT, APP_ANALISE_EN
 from .reading import read_base, read_aero
 from .format import merge_close_rows
 
-LIMIT_FREQ = 84812.50
 
+# %% ../nbs/main.ipynb 4
+LIMIT_FREQ = 84812.50
 load_dotenv()
 
-# %% ../nbs/main.ipynb 3
+# %% ../nbs/main.ipynb 5
 def _filter_matlab(
     df: pd.DataFrame,  # Arquivo de Dados Base de Entrada
 ) -> pd.DataFrame:  # Arquivo de Dados formatado para leitura no Matlab
@@ -67,7 +68,7 @@ def _filter_matlab(
         + df.UF
     )
 
-    bad_coords = df.Coords_Valida_IBGE == "False"
+    bad_coords = df.Coords_Valida_IBGE == "0"
 
     df.loc[bad_coords == "False", "Descrição"] = (
         df.loc[bad_coords == "False", "Descrição"] + "*"
@@ -109,7 +110,8 @@ def _format_matlab(
     df = df[df.Frequency <= LIMIT_FREQ]
     return df[["Id"] + list(APP_ANALISE_EN)]
 
-# %% ../nbs/main.ipynb 4
+
+# %% ../nbs/main.ipynb 6
 def get_db(
     path: Union[str, Path],  # Pasta onde salvar os arquivos",
     connSQL: pyodbc.Connection = None,  # Objeto de conexão do banco SQL Server

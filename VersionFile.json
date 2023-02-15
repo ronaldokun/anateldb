@@ -1,16 +1,16 @@
 {
     "appAnalise": {
-        "Version": "1.32",
-        "ReleaseDate": "19/12/2022"
+        "Version": "1.33",
+        "ReleaseDate": "09/02/2023"
     },
     "appColeta": {
         "Version": "1.11",
         "ReleaseDate": "01/12/2022"
     },
     "anateldb": {
-        "ReleaseDate": "24/01/2023 15:20:12",
-        "ANATEL": "24/01/2023 14:50:09",
-        "AERONAUTICA": "24/01/2023 14:50:16"
+        "ReleaseDate": "02/02/2023 18:17:32",
+        "ANATEL": "02/02/2023 17:52:33",
+        "AERONAUTICA": "02/02/2023 18:00:00"
     },
     "fiscaliza": {
         "Version": "0.2.18",

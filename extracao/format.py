@@ -32,6 +32,7 @@ def _read_df(folder: Union[str, Path], stem: str) -> pd.DataFrame:
         raise e(f"Error when reading {file}")
     return df
 
+
 # %% ../nbs/format.ipynb 5
 def parse_bw(
     bw: str,  # Designação de Emissão (Largura + Classe) codificada como string
@@ -46,6 +47,7 @@ def parse_bw(
         classe = match.group(4)
         return str(multiplier * number), str(classe)
     return "-1", "-1"
+
 
 # %% ../nbs/format.ipynb 7
 def merge_close_rows(df_left, df_right):
@@ -83,6 +85,7 @@ def merge_close_rows(df_left, df_right):
             )
         return pd.concat([df1, df2], ignore_index=True)
 
+
 # %% ../nbs/format.ipynb 23
 def optimize_floats(
     df: pd.DataFrame,  # DataFrame a ser otimizado
@@ -94,6 +97,7 @@ def optimize_floats(
     df[floats] = df[floats].apply(pd.to_numeric, downcast="float")
     return df
 
+
 # %% ../nbs/format.ipynb 24
 def optimize_ints(
     df: pd.DataFrame,  # Dataframe a ser otimizado
@@ -104,6 +108,7 @@ def optimize_ints(
     ints = [c for c in ints if c not in listify(exclude)]
     df[ints] = df[ints].apply(pd.to_numeric, downcast="integer")
     return df
+
 
 # %% ../nbs/format.ipynb 25
 def optimize_objects(
@@ -132,6 +137,7 @@ def optimize_objects(
         else:
             df[col] = pd.to_datetime(df[col]).dt.date
     return df
+
 
 # %% ../nbs/format.ipynb 26
 def df_optimize(

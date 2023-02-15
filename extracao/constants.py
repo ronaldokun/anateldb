@@ -3,10 +3,10 @@
 # %% auto 0
 __all__ = ['TIMEOUT', 'RELATORIO', 'ESTACAO', 'COLUNAS', 'APP_ANALISE_PT', 'APP_ANALISE_EN', 'ESTADOS', 'SIGLAS', 'BW', 'BW_MAP',
            'COLS_TELECOM', 'COLS_SRD', 'SQL_RADCOM', 'SQL_STEL', 'SQL_VALIDA_COORD', 'MONGO_TELECOM', 'MONGO_SRD',
-           'BW_pattern', 'REGEX_ESTADOS']
+           'BW_pattern', 'REGEX_ESTADOS', 'MIN_LAT', 'MAX_LAT', 'MIN_LONG', 'MAX_LONG']
 
 # %% ../nbs/constants.ipynb 2
-import re
+import re   
 
 # %% ../nbs/constants.ipynb 4
 TIMEOUT = 5
@@ -232,8 +232,7 @@ where
   h.NumServico <> '010' 
   and e.DataExclusao is null 
   and e.IndStatusEstacao = 'L' 
-  and e.MedLatitudeDecimal is not null 
-  and e.MedLongitudeDecimal is not null 
+  and mu.CodMunicipio is not null
   and f.MedTransmissaoInicial is not null 
   and f.CodStatusRegistro = 'L' 
   and c.DataValidadeRadiofrequencia is not null 
@@ -266,8 +265,6 @@ MONGO_TELECOM = {
         {"NumServico": {"$nin": ["010", "045", "171", "450", "750", "", None]}},
         {"FreqTxMHz": {"$nin": [None, "", 0]}},
         {"CodMunicipio": {"$nin": [None, ""]}},
-        # {"Latitude": {"$nin": [None, ""]}},
-        # {"Longitude": {"$nin": [None, ""]}},
         {"FreqTxMHz": {"$type": 1.0}},
         {"Latitude": {"$type": 1.0}},
         {"Longitude": {"$type": 1.0}},
@@ -286,5 +283,11 @@ MONGO_SRD = {
 }
 
 # %% ../nbs/constants.ipynb 15
-BW_pattern = re.compile("^(\d{1,3})([HKMG])(\d{0,2})(\w{0,3}$)")
+BW_pattern = re.compile("^(\d{1,3})([HKMG])(\d{0,2})(\w{0,3})")
 REGEX_ESTADOS = f'({"|".join(ESTADOS)})'
+
+# %% ../nbs/constants.ipynb 17
+MIN_LAT = -33.7509907  # Arroio Chuy RS
+MAX_LAT = 5.2718317  # Monte Caburaí RR
+MIN_LONG = -73.80658592032779
+MAX_LONG = -32.377816
