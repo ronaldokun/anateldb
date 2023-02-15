@@ -5,16 +5,16 @@ __all__ = ['RE_BW', 'MAX_DIST', 'parse_bw', 'merge_close_rows', 'optimize_floats
            'df_optimize']
 
 # %% ../nbs/format.ipynb 2
-import math
-
 import re
-from typing import Iterable, Tuple
+from typing import Iterable, Tuple, Union
 
 import pandas as pd
+import numpy as np
 from fastcore.utils import listify
-import pandas as pd
+from fastcore.xtras import Path
 from geopy.distance import geodesic
-from tqdm.auto import tqdm
+from rich.progress import Progress
+from pyarrow import ArrowInvalid
 
 from .constants import BW, BW_pattern
 
@@ -22,47 +22,71 @@ RE_BW = re.compile(BW_pattern)
 
 MAX_DIST = 10  # Km
 
-# %% ../nbs/format.ipynb 4
+# %% ../nbs/format.ipynb 3
+def _read_df(folder: Union[str, Path], stem: str) -> pd.DataFrame:
+    """Lê o dataframe formado por folder / stem.[parquet.gzip | fth | xslx]"""
+    file = Path(f"{folder}/{stem}.parquet.gzip")
+    try:
+        df = pd.read_parquet(file)
+    except (ArrowInvalid, FileNotFoundError) as e:
+        raise e(f"Error when reading {file}")
+    return df
+
+
+# %% ../nbs/format.ipynb 5
 def parse_bw(
     bw: str,  # Designação de Emissão (Largura + Classe) codificada como string
-) -> Tuple[str, str]:  # Largura e Classe de Emissão
+) -> Tuple[str, str]:    # Largura e Classe de Emissão
     """Parse the bandwidth string"""
     if match := re.match(RE_BW, bw):
-        multiplier = BW[match.group(2)]
-        if mantissa := match.group(3):
-            number = float(f"{match.group(1)}.{mantissa}")
+        multiplier = BW[match[2]]
+        if mantissa := match[3]:
+            number = float(f"{match[1]}.{mantissa}")
         else:
-            number = float(match.group(1))
-        classe = match.group(4)
+            number = float(match[1])
+        classe = match[4]
         return str(multiplier * number), str(classe)
     return "-1", "-1"
 
-# %% ../nbs/format.ipynb 6
+
+# %% ../nbs/format.ipynb 7
 def merge_close_rows(df_left, df_right):
     """Mescla os registros dos DataFrames `df_left` e `df_right` que estão a uma distância menor que MAX_DIST"""
     df1 = df_left.copy().reset_index(drop=True)
     df2 = df_right.copy().reset_index(drop=True)
-    for c in ["Frequency", "Latitude", "Longitude"]:
+    columns = ["Frequency", "Latitude", "Longitude"]
+    for c in columns:
         df1[c] = df1[c].astype("float")
         df2[c] = df2[c].astype("float")
-    for left in tqdm(df1.itertuples(), total=len(df1) - 1):
-        for right in df2[
-            df2.Frequency.apply(lambda x: math.isclose(x, left.Frequency))
-        ].itertuples():
-            if (
-                geodesic(
-                    (left.Latitude, left.Longitude), (right.Latitude, right.Longitude)
-                ).km
-                <= MAX_DIST
-            ):
-                df1.loc[
-                    left.Index, "Description"
-                ] = f"{left.Description} | {right.Description}"
-                df2 = df2.drop(right.Index)
-                break
-    return pd.concat([df1, df2], ignore_index=True)
+    df1.sort_values(columns, inplace=True)
+    df2.sort_values(columns, inplace=True)
+    with Progress(transient=True, refresh_per_second=2) as progress:
+        task_left = progress.add_task(
+            "[red]Iterando Tabela Principal...", total=len(df1)
+        )
+        for left in df1.itertuples():
+            for right in df2[np.isclose(df2.Frequency, left.Frequency)].itertuples():
+                if (
+                    geodesic(
+                        (left.Latitude, left.Longitude),
+                        (right.Latitude, right.Longitude),
+                    ).km
+                    <= MAX_DIST
+                ):
+                    df1.loc[
+                        left.Index, "Description"
+                    ] = f"{left.Description} | {right.Description}"
+                    df2 = df2.drop(right.Index)
+                    break
+            progress.update(
+                task_left,
+                advance=1,
+                description=f"[green] Comparando Frequências {left.Frequency}MHz",
+            )
+        return pd.concat([df1, df2], ignore_index=True)
 
-# %% ../nbs/format.ipynb 20
+
+# %% ../nbs/format.ipynb 23
 def optimize_floats(
     df: pd.DataFrame,  # DataFrame a ser otimizado
     exclude: Iterable[str] = None,  # Colunas a serem excluidas da otimização
@@ -73,7 +97,8 @@ def optimize_floats(
     df[floats] = df[floats].apply(pd.to_numeric, downcast="float")
     return df
 
-# %% ../nbs/format.ipynb 21
+
+# %% ../nbs/format.ipynb 24
 def optimize_ints(
     df: pd.DataFrame,  # Dataframe a ser otimizado
     exclude: Iterable[str] = None,  # Colunas a serem excluidas da otimização
@@ -84,7 +109,8 @@ def optimize_ints(
     df[ints] = df[ints].apply(pd.to_numeric, downcast="integer")
     return df
 
-# %% ../nbs/format.ipynb 22
+
+# %% ../nbs/format.ipynb 25
 def optimize_objects(
     df: pd.DataFrame,  # DataFrame a ser otimizado
     datetime_features: Iterable[
@@ -112,7 +138,8 @@ def optimize_objects(
             df[col] = pd.to_datetime(df[col]).dt.date
     return df
 
-# %% ../nbs/format.ipynb 23
+
+# %% ../nbs/format.ipynb 26
 def df_optimize(
     df: pd.DataFrame,  # DataFrame a ser otimizado
     datetime_features: Iterable[

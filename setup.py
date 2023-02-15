@@ -10,7 +10,8 @@ cfg = config['DEFAULT']
 
 cfg_keys = 'version description keywords author author_email'.split()
 expected = cfg_keys + "lib_name user branch license status min_python audience language".split()
-for o in expected: assert o in cfg, "missing expected setting: {}".format(o)
+for o in expected:
+    assert o in cfg, f"missing expected setting: {o}"
 setup_cfg = {o:cfg[o] for o in cfg_keys}
 
 licenses = {
@@ -31,27 +32,35 @@ lic = licenses.get(cfg['license'].lower(), (cfg['license'], None))
 dev_requirements = (cfg.get('dev_requirements') or '').split()
 
 setuptools.setup(
-    name = cfg['lib_name'],
-    license = lic[0],
-    classifiers = [
-        'Development Status :: ' + statuses[int(cfg['status'])],
-        'Intended Audience :: ' + cfg['audience'].title(),
-        'Natural Language :: ' + cfg['language'].title(),
-    ] + ['Programming Language :: Python :: '+o for o in py_versions[py_versions.index(min_python):]] + (['License :: ' + lic[1] ] if lic[1] else []),
-    url = cfg['git_url'],
-    packages = setuptools.find_packages(),
-    include_package_data = True,
-    install_requires = requirements,
-    extras_require={ 'dev': dev_requirements },
-    dependency_links = cfg.get('dep_links','').split(),
-    python_requires  = '>=' + cfg['min_python'],
-    long_description = open('README.md').read(),
-    long_description_content_type = 'text/markdown',
-    zip_safe = False,
-    entry_points = {
-        'console_scripts': cfg.get('console_scripts','').split(),
-        'nbdev': [f'{cfg.get("lib_path")}={cfg.get("lib_path")}._modidx:d']
+    name=cfg['lib_name'],
+    license=lic[0],
+    classifiers=(
+        [
+            'Development Status :: ' + statuses[int(cfg['status'])],
+            'Intended Audience :: ' + cfg['audience'].title(),
+            'Natural Language :: ' + cfg['language'].title(),
+        ]
+        + [
+            f'Programming Language :: Python :: {o}'
+            for o in py_versions[py_versions.index(min_python) :]
+        ]
+    )
+    + ([f'License :: {lic[1]}'] if lic[1] else []),
+    url=cfg['git_url'],
+    packages=setuptools.find_packages(),
+    include_package_data=True,
+    install_requires=requirements,
+    extras_require={'dev': dev_requirements},
+    dependency_links=cfg.get('dep_links', '').split(),
+    python_requires='>=' + cfg['min_python'],
+    long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
+    zip_safe=False,
+    entry_points={
+        'console_scripts': cfg.get('console_scripts', '').split(),
+        'nbdev': [f'{cfg.get("lib_path")}={cfg.get("lib_path")}._modidx:d'],
     },
-    **setup_cfg)
+    **setup_cfg,
+)
 
 

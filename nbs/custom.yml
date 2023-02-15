@@ -16,8 +16,6 @@ website:
             href: constants.ipynb
           - text: "Formatação"
             href: format.ipynb
-          - text: "Mesclagem"
-            href: merging.ipynb
       - text: "Ajuda"
         menu:
           - text: "Reporte um problema"
