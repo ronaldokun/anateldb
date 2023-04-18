@@ -36,15 +36,15 @@ def _read_df(folder: Union[str, Path], stem: str) -> pd.DataFrame:
 # %% ../nbs/format.ipynb 5
 def parse_bw(
     bw: str,  # Designação de Emissão (Largura + Classe) codificada como string
-) -> Tuple[str, str]:    # Largura e Classe de Emissão
+) -> Tuple[str, str]:  # Largura e Classe de Emissão
     """Parse the bandwidth string"""
     if match := re.match(RE_BW, bw):
-        multiplier = BW[match[2]]
-        if mantissa := match[3]:
-            number = float(f"{match[1]}.{mantissa}")
+        multiplier = BW[match.group(2)]
+        if mantissa := match.group(3):
+            number = float(f"{match.group(1)}.{mantissa}")
         else:
-            number = float(match[1])
-        classe = match[4]
+            number = float(match.group(1))
+        classe = match.group(4)
         return str(multiplier * number), str(classe)
     return "-1", "-1"
 
@@ -86,7 +86,7 @@ def merge_close_rows(df_left, df_right):
         return pd.concat([df1, df2], ignore_index=True)
 
 
-# %% ../nbs/format.ipynb 23
+# %% ../nbs/format.ipynb 10
 def optimize_floats(
     df: pd.DataFrame,  # DataFrame a ser otimizado
     exclude: Iterable[str] = None,  # Colunas a serem excluidas da otimização
@@ -98,7 +98,7 @@ def optimize_floats(
     return df
 
 
-# %% ../nbs/format.ipynb 24
+# %% ../nbs/format.ipynb 11
 def optimize_ints(
     df: pd.DataFrame,  # Dataframe a ser otimizado
     exclude: Iterable[str] = None,  # Colunas a serem excluidas da otimização
@@ -110,7 +110,7 @@ def optimize_ints(
     return df
 
 
-# %% ../nbs/format.ipynb 25
+# %% ../nbs/format.ipynb 12
 def optimize_objects(
     df: pd.DataFrame,  # DataFrame a ser otimizado
     datetime_features: Iterable[
@@ -139,7 +139,7 @@ def optimize_objects(
     return df
 
 
-# %% ../nbs/format.ipynb 26
+# %% ../nbs/format.ipynb 13
 def df_optimize(
     df: pd.DataFrame,  # DataFrame a ser otimizado
     datetime_features: Iterable[

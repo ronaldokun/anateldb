@@ -8,6 +8,7 @@ import os
 from typing import Iterable
 import pandas as pd
 from dotenv import load_dotenv
+from fastcore.test import test_close
 
 load_dotenv()
 
