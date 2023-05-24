@@ -12,7 +12,7 @@ from pathlib import Path
 import pandas as pd
 import pyodbc
 from pymongo import MongoClient
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 
 from extracao.updates import (
     update_srd,
@@ -29,7 +29,7 @@ from .aisweb import get_aisw
 from .redemet import get_redemet
 from .format import _read_df
 
-load_dotenv()
+load_dotenv(find_dotenv())
 
 # %% ..\nbs\reading.ipynb 4
 def read_srd(

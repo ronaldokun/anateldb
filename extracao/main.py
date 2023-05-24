@@ -132,7 +132,7 @@ def get_db(
     mod_times["AERONAUTICA"] = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     print(":spoon:[yellow]Mesclando os dados da Aeronáutica.")
     df = merge_close_rows(df, aero)
-    df.loc[len(df), :] =  [-1,  -15.7801,  -47.9292, " [TEMP] L, FX, Estação do SMP licenciada (cadastro temporário)", "10", "999999999", 'NI', "-1"] #Paliativo...
+    df.loc[len(df), :] =  [-1,  -15.7801,  -47.9292, "[TEMP] L, FX, Estação do SMP licenciada (cadastro temporário)", "10", "999999999", 'NI', "-1"] #Paliativo...
     df = _format_matlab(df)
     print(":card_file_box:[green]Salvando os arquivos...")
     df.to_parquet(f"{dest}/AnatelDB.parquet.gzip", compression="gzip", index=False)

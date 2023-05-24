@@ -14,6 +14,7 @@ import requests
 import xmltodict
 import pandas as pd
 from fastcore.utils import store_attr
+from fastcore.parallel import parallel
 from dotenv import load_dotenv, find_dotenv
 
 from .icao import map_channels
@@ -25,6 +26,7 @@ SIGLA_AERO = ["MIL", "PRIV/PUB", "PUB", "PUB/MIL", "PUB/REST"]
 URL = "http://aisweb.decea.gov.br/api/?apiKey={}&apiPass={}&area=rotaer&rowend=10000"
 TYPE = ["COM", "NAV"]
 COLUMNS = ["Frequency", "Latitude", "Longitude", "Description"]
+
 
 # %% ..\nbs\aisweb.ipynb 6
 def convert_latitude(
@@ -47,6 +49,7 @@ def convert_longitude(
     return multiplier * (
         float(lon[:3]) + float(lon[3:5]) / 60 + float(lon[6:8]) / 3600.0
     )
+
 
 # %% ..\nbs\aisweb.ipynb 7
 class AisWeb:
@@ -89,7 +92,15 @@ class AisWeb:
         self,
     ) -> pd.DataFrame:  # DataFrame com os dados de aeroportos
         """Retorna a lista de aeroportos"""
-        return pd.concat(self.request_aero(aero_util) for aero_util in self.type_aero)
+        airports = parallel(
+            self.request_aero,
+            self.type_aero,
+            n_workers=1,
+            pause=0.1,
+            progress=True,
+            threadpool=True,
+        )
+        return pd.concat(airports)
 
     def _parse_type(self, df):
         df = df[df["@type"].isin(TYPE)].reset_index(drop=True)
@@ -167,14 +178,16 @@ class AisWeb:
         df = df[COLUMNS]
         df["Frequency"] = df.Frequency.apply(lambda x: "".join(re.findall("\d|\.", x)))
         df = df[~df["Frequency"].isin({"", "0"})].reset_index(drop=True)
-        df['Frequency'] = df.Frequency.str.extract(r'(^\d+\.?\d*)') 
+        df["Frequency"] = df.Frequency.str.extract(r"(^\d+\.?\d*)")
         df["Frequency"] = df.Frequency.astype("float")
         return df
 
     def request_stations(
         self,
         icao_code: str,  # Código ICAO identificando o aeroporto
-    ) -> pd.DataFrame:  # DataFrame com os dados de estações do aeroporto de código `icao_code`
+    ) -> (
+        pd.DataFrame
+    ):  # DataFrame com os dados de estações do aeroporto de código `icao_code`
         """Recebe o código do aeroporto `icao_code` e retorna as estações registradas nele"""
         dict_data = self._get_request("&icaoCode=", icao_code)
         return (
@@ -186,10 +199,19 @@ class AisWeb:
         self,
     ) -> pd.DataFrame:  # DataFrame com os dados de estações emissoras
         """Retorna os registros de estações emissoras de RF contidas nos aeroportos"""
-        df = pd.concat(self.request_stations(code) for code in self.airports.AeroCode)
+        records = parallel(
+            self.request_stations,
+            self.airports.AeroCode,
+            threadpool=True,
+            n_workers=1,
+            pause=0.1,
+            progress=True,
+        )
+        df = pd.concat(records)
         for c in df.columns:
             df[c] = df[c].astype("string")
         return map_channels(df, "AISW")
+
 
 # %% ..\nbs\aisweb.ipynb 8
 def get_aisw() -> pd.DataFrame:  # DataFrame com todos os dados do GEOAISWEB
