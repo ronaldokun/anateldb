@@ -88,7 +88,8 @@ def _format_matlab(
 ) -> pd.DataFrame:  # Arquivo de Dados formatado para leitura no Matlab
     """Formata o arquivo final de dados para o formato esperado pela aplicação em Matlab"""
     for c in ["Latitude", "Longitude"]:
-        df.loc[:, c] = df.loc[:, c].fillna(-1).astype("float32")
+        df[c] = df[c].fillna(-1).astype("float32")
+        
     df["Frequency"] = df["Frequency"].astype("float64")
     df.loc[df.Service.isin(["", "-1"]), "Service"] = pd.NA
     df["Service"] = df.Service.fillna("-1").astype("int16")
