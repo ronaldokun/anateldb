@@ -1,3 +1,4 @@
 *.xlsx filter=lfs diff=lfs merge=lfs -text
 *.parquet.gzip filter=lfs diff=lfs merge=lfs -text
 *.parquet filter=lfs diff=lfs merge=lfs -text
+*.pkl filter=lfs diff=lfs merge=lfs -text
