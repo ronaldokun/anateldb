@@ -36,15 +36,15 @@ def _read_df(folder: Union[str, Path], stem: str) -> pd.DataFrame:
 # %% ..\nbs\format.ipynb 5
 def parse_bw(
     bw: str,  # Designação de Emissão (Largura + Classe) codificada como string
-) -> Tuple[str, str]:  # Largura e Classe de Emissão
+) -> Tuple[str, str]:    # Largura e Classe de Emissão
     """Parse the bandwidth string"""
     if match := re.match(RE_BW, bw):
-        multiplier = BW[match.group(2)]
-        if mantissa := match.group(3):
-            number = float(f"{match.group(1)}.{mantissa}")
+        multiplier = BW[match[2]]
+        if mantissa := match[3]:
+            number = float(f"{match[1]}.{mantissa}")
         else:
-            number = float(match.group(1))
-        classe = match.group(4)
+            number = float(match[1])
+        classe = match[4]
         return str(multiplier * number), str(classe)
     return "-1", "-1"
 
