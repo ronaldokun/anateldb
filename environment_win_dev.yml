@@ -1,8 +1,7 @@
-name: db_dev
+name: db
 channels:
   - conda-forge
 dependencies:
-  - arrow-cpp=12.0.0
   - asttokens=2.2.1
   - astunparse=1.6.3
   - attrs=23.1.0
@@ -17,18 +16,16 @@ dependencies:
   - aws-c-s3=0.3.0
   - aws-c-sdkutils=0.1.9
   - aws-checksums=0.1.14
-  - aws-crt-cpp=0.20.1
+  - aws-crt-cpp=0.20.2
   - aws-sdk-cpp=1.10.57
   - backcall=0.2.0
   - backports=1.0
   - backports.functools_lru_cache=1.6.4
   - black=23.3.0
-  - bottleneck=1.3.7
   - brotli=1.0.9
   - brotli-bin=1.0.9
-  - brotlipy=0.7.0
   - bzip2=1.0.8
-  - c-ares=1.19.0
+  - c-ares=1.19.1
   - ca-certificates=2023.5.7
   - certifi=2023.5.7
   - cffi=1.15.1
@@ -36,10 +33,11 @@ dependencies:
   - click=8.1.3
   - colorama=0.4.6
   - comm=0.1.3
-  - confuse=2.0.1
   - contourpy=1.0.7
-  - cryptography=40.0.2
+  - cryptography=41.0.0
   - cycler=0.11.0
+  - dacite=1.8.0
+  - dataclasses=0.8
   - debugpy=1.6.7
   - decorator=5.1.1
   - dnspython=2.3.0
@@ -66,7 +64,7 @@ dependencies:
   - ipywidgets=8.0.6
   - jedi=0.18.2
   - jinja2=3.1.2
-  - joblib=1.1.0
+  - joblib=1.2.0
   - jupyter_client=8.2.0
   - jupyter_core=5.3.0
   - jupyterlab_widgets=3.0.7
@@ -74,7 +72,7 @@ dependencies:
   - krb5=1.20.1
   - lcms2=2.15
   - lerc=4.0.0
-  - libabseil=20230125.0
+  - libabseil=20230125.2
   - libarrow=12.0.0
   - libblas=3.9.0
   - libbrotlicommon=1.0.9
@@ -82,12 +80,11 @@ dependencies:
   - libbrotlienc=1.0.9
   - libcblas=3.9.0
   - libcrc32c=1.1.2
-  - libcurl=8.1.0
+  - libcurl=8.1.2
   - libdeflate=1.18
   - libevent=2.1.12
-  - libexpat=2.5.0
   - libffi=3.4.2
-  - libgoogle-cloud=2.10.0
+  - libgoogle-cloud=2.10.1
   - libgrpc=1.54.2
   - libhwloc=2.9.1
   - libiconv=1.17
@@ -102,8 +99,8 @@ dependencies:
   - libtiff=4.5.0
   - libutf8proc=2.8.0
   - libwebp-base=1.3.0
-  - libxcb=1.13
-  - libxml2=2.10.4
+  - libxcb=1.15
+  - libxml2=2.11.4
   - libzlib=1.2.13
   - lz4-c=1.9.4
   - m2w64-gcc-libgfortran=5.3.0
@@ -116,7 +113,6 @@ dependencies:
   - matplotlib-base=3.7.1
   - matplotlib-inline=0.1.6
   - mdurl=0.1.0
-  - missingno=0.4.2
   - mkl=2022.1.0
   - msys2-conda-epoch=20160418
   - multimethod=1.4
@@ -126,15 +122,13 @@ dependencies:
   - nbdev=2.2.10
   - nest-asyncio=1.5.6
   - networkx=3.1
-  - numpy=1.24.3
+  - numpy=1.23.5
   - openjpeg=2.5.0
   - openpyxl=3.1.2
-  - openssl=3.1.0
+  - openssl=3.1.1
   - orc=1.8.3
   - packaging=23.1
-  - pandas=2.0.1
-  - pandas-profiling=3.0.0
-  - parquet-cpp=1.5.1
+  - pandas=1.5.3
   - parso=0.8.3
   - pathspec=0.11.1
   - patsy=0.5.3
@@ -153,26 +147,24 @@ dependencies:
   - pyarrow=12.0.0
   - pybind11-abi=4
   - pycparser=2.21
-  - pydantic=1.10.7
+  - pydantic=1.10.8
   - pygments=2.15.1
   - pymongo=4.3.3
   - pyodbc=4.0.39
-  - pyopenssl=23.1.1
   - pyparsing=3.0.9
   - pysocks=1.7.1
   - python=3.10.11
   - python-dateutil=2.8.2
   - python-dotenv=1.0.0
-  - python-tzdata=2023.3
   - python_abi=3.10
   - pytz=2023.3
   - pywavelets=1.4.1
   - pywin32=304
   - pyyaml=6.0
-  - pyzmq=25.0.2
-  - re2=2023.02.02
-  - requests=2.29.0
-  - rich=13.3.5
+  - pyzmq=25.1.0
+  - re2=2023.03.02
+  - requests=2.31.0
+  - rich=13.4.1
   - scipy=1.10.1
   - seaborn=0.12.2
   - seaborn-base=0.12.2
@@ -189,28 +181,36 @@ dependencies:
   - tornado=6.3.2
   - tqdm=4.65.0
   - traitlets=5.9.0
+  - typeguard=2.13.3
   - typer=0.9.0
-  - typing-extensions=4.5.0
-  - typing_extensions=4.5.0
+  - typing-extensions=4.6.2
+  - typing_extensions=4.6.2
   - tzdata=2023c
   - ucrt=10.0.22621.0
   - unicodedata2=15.0.0
-  - urllib3=1.26.15
+  - urllib3=2.0.2
   - vc=14.3
   - vc14_runtime=14.34.31931
-  - visions=0.7.1
+  - visions=0.7.5
   - vs2015_runtime=14.34.31931
   - wcwidth=0.2.6
   - wheel=0.40.0
   - widgetsnbextension=4.0.7
   - win_inet_pton=1.1.0
+  - wordcloud=1.9.2
   - xmltodict=0.13.0
-  - xorg-libxau=1.0.9
+  - xorg-libxau=1.0.11
   - xorg-libxdmcp=1.1.3
   - xz=5.2.6
   - yaml=0.2.5
+  - ydata-profiling=4.2.0
   - zeromq=4.3.4
   - zipp=3.15.0
   - zlib=1.2.13
   - zstd=1.5.2
-prefix: C:\Users\rsilva\scoop\apps\mambaforge\current\envs\db_dev
+  - pip:
+      - bcrypt==4.0.1
+      - paramiko==3.2.0
+      - pinggy==0.0.4
+      - pynacl==1.5.0
+prefix: C:\Users\rsilva\scoop\apps\mambaforge\current\envs\db

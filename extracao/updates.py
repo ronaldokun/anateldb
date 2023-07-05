@@ -21,17 +21,17 @@ from fastcore.test import test_eq
 from fastcore.parallel import parallel
 import pyodbc
 from pymongo import MongoClient
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 
 from .icao import get_icao
 from .aisgeo import get_aisg
 from .aisweb import get_aisw
 from .redemet import get_redemet
 from .constants import *
-from .format import parse_bw, merge_close_rows, _read_df
+from .format import parse_bw, merge_on_frequency, _read_df
 
 getcontext().prec = 5
-load_dotenv()
+load_dotenv(find_dotenv())
 
 
 # %% ..\nbs\updates.ipynb 4
@@ -300,7 +300,11 @@ def update_aero(
     redemet = get_redemet()
     radares = pd.read_excel(os.environ["PATH_RADAR"])
     for df in [aisw, aisg, redemet, radares]:
-        icao = merge_close_rows(icao, df)
+        icao = merge_on_frequency(icao, df)
+    icao = icao.astype({"Frequency": 'float64', 
+                 "Latitude": 'float32',
+                 "Longitude": 'float32',
+                 "Description": 'string'})
     # TODO: Eliminate this eventually
     icao.loc[np.isclose(icao.Longitude, -472.033447), "Longitude"] = -47.2033447
     icao.loc[np.isclose(icao.Longitude, 69.934998), "Longitude"] = -69.934998

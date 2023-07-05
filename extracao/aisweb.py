@@ -166,9 +166,11 @@ class AisWeb:
         self,
         dict_data,  # xml com os dados não processados
     ) -> pd.DataFrame:  # DataFrame com os dados pós-processados
-        airport_data = pd.json_normalize(dict_data["aisweb"])[
-            ["AeroCode", "name", "lat", "lng"]
-        ].iloc[0]
+        airport_data = pd.json_normalize(dict_data["aisweb"])
+        columns = {"AeroCode", "name", "lat", "lng"}
+        if not columns.issubset(airport_data.columns):
+            return pd.DataFrame()
+        airport_data = airport_data[list(columns)].iloc[0]
         df = pd.json_normalize(dict_data, ["aisweb", ["services", "service"]])
         df[COLUMNS] = ""
         df = self._parse_type(df)
@@ -203,13 +205,11 @@ class AisWeb:
             self.request_stations,
             self.airports.AeroCode,
             threadpool=True,
-            n_workers=1,
+            n_workers=8,
             pause=0.1,
             progress=True,
         )
-        df = pd.concat(records)
-        for c in df.columns:
-            df[c] = df[c].astype("string")
+        df = pd.concat(records).astype('string')
         return map_channels(df, "AISW")
 
 
