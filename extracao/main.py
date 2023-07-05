@@ -18,7 +18,7 @@ from pymongo import MongoClient
 from dotenv import load_dotenv, find_dotenv
 
 from .reading import read_base, read_aero
-from .format import merge_on_frequency, _filter_matlab
+from .format import merge_on_frequency, _filter_matlab, _format_matlab
 
 load_dotenv(find_dotenv())
 
@@ -42,7 +42,7 @@ def get_db(
     aero = read_aero(path, update=update)
     mod_times["AERONAUTICA"] = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     print(":spoon:[yellow]Mesclando os dados da Aeronáutica.")
-    df = merge_on_frequency(df, aero)
+    df = _format_matlab(merge_on_frequency(df, aero))
     print(":card_file_box:[green]Salvando os arquivos...")
     df.to_parquet(f"{dest}/AnatelDB.parquet.gzip", compression="gzip", index=False)
     versiondb = json.loads((dest / "VersionFile.json").read_text())

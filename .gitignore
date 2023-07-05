@@ -145,6 +145,7 @@ checklink/cookies.txt
 *.zip
 *.aisweb
 mosaico*
+srd*
 radcom*
 stel*
 telecom*

@@ -1,9 +1,0 @@
-project:
-  output-dir: _docs
-
-website:
-  title: "Estações Licenciadas de Telecomunicações e Radiodifusão"
-  site-url: "https://ronaldokun.github.io/anateldb/"
-  description: "This repository hold automation scripts to fetch, clean and merge data from licensed telecomunications entities available at ANATEL Database Systems."
-  repo-branch: master
-  repo-url: "https://github.com/ronaldokun/anateldb"

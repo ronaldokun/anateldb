@@ -158,7 +158,13 @@ def merge_on_frequency(
     suffixes: Tuple[str] = ("_x", "_y"),  # Sufixo para as colunas que foram criadas
 ) -> pd.DataFrame:  # DataFrame resultante da mesclagem
     df: pd.DataFrame = pd.merge(
-        df_left, df_right, on=on, how="outer", suffixes=suffixes, indicator=True
+        df_left.astype("string"),
+        df_right.astype("string"),
+        on=on,
+        how="outer",
+        suffixes=suffixes,
+        indicator=True,
+        copy=False,
     )
 
     x, y = suffixes
@@ -184,8 +190,8 @@ def merge_on_frequency(
 
     close = df.loc[both, "Distance"] <= MAX_DIST
     df_close = df.loc[(both & close)].drop_duplicates().reset_index(drop=True)
-    df_close[f"Description{x}"] = (
-        df_close[f"Description{x}"] + " | " + df_close[f"Description{y}"]
+    df_close[f"{description}{x}"] = (
+        df_close[f"{description}{x}"] + " | " + df_close[f"{description}{y}"]
     )
     df_close = df_close[left_cols]
     df_close.columns = only_left.columns
@@ -204,4 +210,5 @@ def merge_on_frequency(
         [df_left, df_right, df_close, df_far_right, df_far_left], ignore_index=True
     )
     merged_df.drop(columns=["_merge"], inplace=True)
-    return _format_matlab(merged_df)
+    
+    return merged_df.astype('string')
