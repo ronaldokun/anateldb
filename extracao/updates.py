@@ -427,8 +427,10 @@ def update_base(
     df.loc[:, ["Latitude", "Longitude"]] = df.loc[:, ["Latitude", "Longitude"]].fillna(
         "0"
     )
-
-    df_cache = _read_df(folder, "base")
+    try:
+        df_cache = _read_df(folder, "base")
+    except FileNotFoundError:
+        df_cache = pd.DataFrame(columns=df.columns.to_list() + ['Coords_Valida_IBGE'])
 
     df_cache = _validar_coords_base(df, df_cache)
 
