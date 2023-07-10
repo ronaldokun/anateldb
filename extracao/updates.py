@@ -409,8 +409,11 @@ def _validar_coords_base(
 
     func = partialler(validar_coords, connector=connector)
 
+    # Gambiarra para evitar compartilhamento da mesma conexão de banco em diferentes threads
+    n_workers = 1 if connector is not None else 20
+
     df_cache.loc[subset, ibge] = parallel(
-        func, linhas, threadpool=True, n_workers=20, progress=True
+        func, linhas, threadpool=True, n_workers=n_workers, progress=True
     )
 
     df_cache = df_cache.astype("string")
@@ -425,6 +428,7 @@ def update_base(
     conn: pyodbc.Connection,  # Objeto de conexão de banco
     clientMongoDB: MongoClient,  # Objeto de conexão com o MongoDB
     folder: Union[str, Path],  # Pasta onde salvar os arquivos
+    conn_threads: bool = False,  # Flag para criar uma conexão de banco por thread
 ) -> pd.DataFrame:  # DataFrame com os dados atualizados
     # sourcery skip: use-fstring-for-concatenation
     """Wrapper que atualiza opcionalmente lê e atualiza as 4 bases indicadas anteriormente, as combina e salva o arquivo consolidado na folder `folder`"""
@@ -448,6 +452,8 @@ def update_base(
     except FileNotFoundError:
         df_cache = pd.DataFrame(columns=df.columns.to_list() + ["Coords_Valida_IBGE"])
 
-    df_cache = _validar_coords_base(df, df_cache, conn)
+    connector = None if conn_threads else conn
+
+    df_cache = _validar_coords_base(df, df_cache, connector)
 
     return _save_df(df_cache, folder, "base")
