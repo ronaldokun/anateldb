@@ -144,12 +144,10 @@ checklink/cookies.txt
 *.csv
 *.zip
 *.aisweb
-mosaico*
-srd*
-radcom*
-stel*
-telecom*
-AnatelDB*
+*.parquet
+*.parquet.gzip
+*.xlsx
+*.html
 
 
 # VSCODE Files
